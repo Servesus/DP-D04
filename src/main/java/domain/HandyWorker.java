@@ -19,15 +19,15 @@ public class HandyWorker extends Actor {
 	private Collection<Application>	applications;
 	private Collection<Phase>		phases;
 	private Curricula				curricula;
-	private Collection<Finder>		finder;
+	private Finder					finder;
 
 
-	@OneToMany
-	public Collection<Finder> getFinder() {
+	@OneToOne
+	public Finder getFinder() {
 		return this.finder;
 	}
 
-	public void setFinder(final Collection<Finder> finder) {
+	public void setFinder(final Finder finder) {
 		this.finder = finder;
 	}
 

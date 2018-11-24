@@ -522,7 +522,11 @@
 	<!-- Message --> 
 	<bean id="message1" class="domain.Message">
 		<property name="sendDate" value="11/11/2018" />
-		<property name="recipient" ref="handyWorker1" />
+		<property name="recipient">
+			<list>
+			<ref bean="handyWorker1"/>
+			</list>
+		</property>
 		<property name="sender" ref="admin1" />
 		<property name="subject" value="subject1"/>
 		<property name="body" value="body1"/>
@@ -565,11 +569,7 @@
 		</list>
 		</property>
 		<property name="curricula" ref="curricula1"/>
-		<property name="finder">
-		<list>
-			<ref bean="finder1"/>
-		</list>
-		</property>
+		<property name="finder" ref="finder1"/>
 	</bean>
 	<bean id="handyWorker2" class="domain.HandyWorker">
 		<property name="name" value="handyWorker2" />
@@ -606,11 +606,7 @@
 		</list>
 		</property>
 		<property name="curricula" ref="curricula2"/>
-		<property name="finder">
-		<list>
-			<ref bean="finder2"/>
-		</list>
-		</property>
+		<property name="finder" ref="finder2"/>
 	</bean>
 	<bean id="handyWorker3" class="domain.HandyWorker">
 		<property name="name" value="handyWorker3" />
@@ -644,11 +640,7 @@
 		</list>
 		</property>
 		<property name="curricula" ref="curricula3"/>
-		<property name="finder">
-		<list>
-			<ref bean="finder3"/>
-		</list>
-		</property>
+		<property name="finder" ref="finder3"/>
 	</bean>
 	<bean id="handyWorker4" class="domain.HandyWorker">
 		<property name="name" value="handyWorker4" />
@@ -682,10 +674,7 @@
 		</list>
 		</property>
 		<property name="curricula" ref="curricula4"/>
-		<property name="finder">
-		<list>
-		</list>
-		</property>
+		<property name="finder" ref="finder4"/>
 	</bean>
 	<bean id="handyWorker5" class="domain.HandyWorker">
 		<property name="name" value="handyWorker5" />
@@ -717,10 +706,7 @@
 		</list>
 		</property>
 		<property name="curricula" ref="curricula5"/>
-		<property name="finder">
-		<list>
-		</list>
-		</property>
+		<property name="finder" ref="finder5"/>
 	</bean>
 	
 	<!-- Configuration -->
@@ -790,6 +776,50 @@
 		</property>
 	</bean>
 	<bean id="finder3" class="domain.Finder">
+		<property name="singleKeyWord" value="keyWord3"/>
+		<property name="rangeStart"><null/></property>
+		<property name="rangeFinish"><null/></property>
+		<property name="dateStartRange" value="12/11/2018"/>
+		<property name="dateFinishRange" value="13/11/2018"></property>
+		<property name="configuration" ref="configuration3"/>
+		<property name="fixUpTask">
+			<list>
+			</list>
+		</property>
+		<property name="warranties">
+		<list>
+				<ref bean="warranty1"/>
+			</list>
+		</property>
+		<property name="categories">
+		<list>
+				<ref bean="category1"/>
+			</list>
+		</property>
+	</bean>
+	<bean id="finder4" class="domain.Finder">
+		<property name="singleKeyWord" value="keyWord3"/>
+		<property name="rangeStart"><null/></property>
+		<property name="rangeFinish"><null/></property>
+		<property name="dateStartRange" value="12/11/2018"/>
+		<property name="dateFinishRange" value="13/11/2018"></property>
+		<property name="configuration" ref="configuration3"/>
+		<property name="fixUpTask">
+			<list>
+			</list>
+		</property>
+		<property name="warranties">
+		<list>
+				<ref bean="warranty1"/>
+			</list>
+		</property>
+		<property name="categories">
+		<list>
+				<ref bean="category1"/>
+			</list>
+		</property>
+	</bean>
+	<bean id="finder5" class="domain.Finder">
 		<property name="singleKeyWord" value="keyWord3"/>
 		<property name="rangeStart"><null/></property>
 		<property name="rangeFinish"><null/></property>

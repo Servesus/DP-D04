@@ -1,11 +1,13 @@
 
 package domain;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,12 +22,12 @@ import org.hibernate.validator.constraints.Range;
 public class Message extends DomainEntity {
 
 	//Attributes
-	private Date	sendDate;
-	private Actor	recipient;
-	private Actor	sender;
-	private String	subject;
-	private String	body;
-	private int		priority;
+	private Date				sendDate;
+	private Collection<Actor>	recipient;
+	private Actor				sender;
+	private String				subject;
+	private String				body;
+	private int					priority;
 
 
 	//Getters and Setters
@@ -40,12 +42,12 @@ public class Message extends DomainEntity {
 	}
 	@NotNull
 	@Valid
-	@ManyToOne(optional = false)
-	public Actor getRecipient() {
+	@ManyToMany
+	public Collection<Actor> getRecipient() {
 		return this.recipient;
 	}
 
-	public void setRecipient(final Actor recipient) {
+	public void setRecipient(final Collection<Actor> recipient) {
 		this.recipient = recipient;
 	}
 	@NotNull
