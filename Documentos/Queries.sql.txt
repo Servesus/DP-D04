@@ -147,7 +147,7 @@ we multiply by 1.1. Then we order them from more to less by the number of applic
 
 
 
-/*Query C/10: The listing of handy workers who have got accepted at least 10% more ap-plications than the average, ordered by number of applications.*/
+/*Query C/10: The listing of handy workers who have got accepted at least 10% more applications than the average, ordered by number of applications.*/
 
 select h.name from HandyWorker h join h.applications a where 
 ((select count(a) from HandyWorker h where a.status=1 and a.handyWorker=h)/
