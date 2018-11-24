@@ -37,11 +37,14 @@ public class BoxService {
 	}
 
 	public Box save(final Box box) {
+		Assert.isNull(box);
 		Assert.isTrue(!box.getIsSystem());
 		return this.boxRepository.save(box);
 	}
 
 	public void delete(final Box box) {
+		Assert.isNull(box);
+		Assert.isTrue(box.getId() == 0);
 		Assert.isTrue(!box.getIsSystem());
 		this.boxRepository.delete(box);
 	}
