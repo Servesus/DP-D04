@@ -1,6 +1,8 @@
 
 package services;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +25,22 @@ public class RefereeService {
 
 
 	//Simple CRUD methods
-	//TODO
 	public Referee create() {
 		Referee result;
 		UserAccount userAccount;
 		Authority aut;
+		Collection<Authority> auts;
 
-		result = new Referee();
-		userAccount = new UserAccount();
+		auts = new ArrayList<Authority>();
 		aut = new Authority();
-		result.setUserAccount(userAccount);
+		userAccount = new UserAccount();
+		result = new Referee();
+
 		aut.setAuthority(Authority.REFEREE);
+		auts.add(aut);
+		userAccount.setAuthorities(auts);
+
+		result.setUserAccount(userAccount);
 		result.setIsBanned(false);
 		result.setIsSuspicious(false);
 
