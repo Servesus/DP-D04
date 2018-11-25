@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.MessageRepository;
+import security.LoginService;
+import security.UserAccount;
+import domain.Actor;
 import domain.Message;
 
 @Service
@@ -20,6 +23,7 @@ public class MessageService {
 	@Autowired
 	private MessageRepository	messageRepository;
 	//Services
+	@Autowired
 	private ActorService		actorService;
 
 
@@ -35,7 +39,9 @@ public class MessageService {
 	public Message create() {
 		Message result;
 		result = new Message();
-		//TODO result.setSender = actor logeado
+		final UserAccount u = LoginService.getPrincipal();
+		final Actor sender = this.actorService.findByUserAccount(u);
+		result.setSender(sender);
 		return result;
 	}
 

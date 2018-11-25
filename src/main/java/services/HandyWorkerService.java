@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.HandyWorkerRepository;
+import security.Authority;
+import security.UserAccount;
+import domain.Finder;
 import domain.HandyWorker;
 
 @Service
@@ -18,13 +22,34 @@ public class HandyWorkerService {
 	//Managed repository
 	@Autowired
 	private HandyWorkerRepository	handyWorkerRepository;
+	//Servicios
+	@Autowired
+	private FinderService			finderService;
 
 
 	//Simple CRUD Methods
 
 	public HandyWorker create() {
 		HandyWorker result;
+		UserAccount user;
+		Authority aut;
+		Collection<Authority> auts;
+		Finder finder;
+
+		auts = new ArrayList<Authority>();
+		aut = new Authority();
+		user = new UserAccount();
 		result = new HandyWorker();
+		finder = this.finderService.create();
+
+		aut.setAuthority(Authority.HANDYWORKER);
+		auts.add(aut);
+		user.setAuthorities(auts);
+
+		result.setUserAccount(user);
+		result.setIsBanned(false);
+		result.setIsSuspicious(false);
+		result.setFinder(finder);
 		return result;
 	}
 

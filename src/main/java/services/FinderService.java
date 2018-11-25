@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class FinderService {
 	public void delete(final Finder finder) {
 		Assert.notNull(finder);
 		Assert.isTrue(finder.getId() != 0);
+		final Date moment = new Date();
+		final Date updateFinder = new Date(moment.getTime() + finder.getConfiguration().getMaxTime());
+		Assert.isTrue(finder.getConfiguration().getLastUpdate().after(updateFinder));
 		this.finderRepository.delete(finder);
 	}
 
@@ -46,6 +50,18 @@ public class FinderService {
 		return this.finderRepository.findOne(id);
 	}
 
-	//TODO public Finder save(Finder finder){
+	/*
+	 * public Finder save(Finder finder){
+	 * Assert.notNull(finder);
+	 * Configuration config;
+	 * Configuration configuration = finder.getConfiguration();
+	 * config = this.configurationService.save(configuration);
+	 * finder.setConfiguration(config);
+	 * Double minPrice = finder.getRangeStart()*1.0;
+	 * Double maxPrice = finder.getRangeFinish()*1.0;
+	 * //TODO CAMBIAR MULTIPLICIDADES DE CATEGORY Y WARRANTY EN FINDER
+	 * //List<FixUpTask> fixUps = this.finderRepository.searchFixUpTasks(finder.getSingleKeyWord(), finder.getDateStartRange(), finder.getDateFinishRange(), minPrice, maxPrice, finder.getCategories(), warrantyName);
+	 * }
+	 */
 
 }
