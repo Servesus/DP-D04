@@ -23,8 +23,9 @@ public class CategoryService {
 	//Simple CRUD methods
 	//TODO
 	public Category create() {
-		final Category c = new Category();
-		return c;
+		Category result;
+		result = new Category();
+		return result;
 	}
 
 	public List<Category> findAll() {
@@ -32,18 +33,27 @@ public class CategoryService {
 	}
 
 	public Category findOne(final Integer categoryId) {
+		Assert.isTrue(categoryId != 0);
 		return this.categoryRepository.findOne(categoryId);
 	}
 
 	public Category save(final Category c) {
 		Assert.notNull(c);
-		final Category saved = this.categoryRepository.save(c);
-		return saved;
+
+		Category result;
+		result = this.categoryRepository.save(c);
+
+		return result;
 	}
 
 	//TODO
 	public void delete(final Category c) {
 		Assert.notNull(c);
-		this.categoryRepository.delete(c);
+		if (!(c.getChilds().isEmpty())) {
+			for (final Category c1 : c.getChilds())
+				this.categoryRepository.delete(c1);
+			this.categoryRepository.delete(c);
+		} else
+			this.categoryRepository.delete(c);
 	}
 }
