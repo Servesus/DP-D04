@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.FixUpTaskRepository;
+import domain.Category;
 import domain.FixUpTask;
+import domain.Warranty;
 
 @Service
 @Transactional
@@ -17,11 +19,20 @@ public class FixUpTaskService {
 
 	@Autowired
 	private FixUpTaskRepository	fixUpTaskRepository;
+	//Supporting services
+	@Autowired
+	private WarrantyService		warrantyService;
+	@Autowired
+	private CategoryService		categoryService;
 
 
 	public FixUpTask create() {
-		FixUpTask result;
-		result = new FixUpTask();
+		final FixUpTask result = new FixUpTask();
+		final Warranty warranty = this.warrantyService.create();
+		final Category category = this.categoryService.create();
+		result.setTicker(CurriculaService.generadorDeTickers());
+		result.setWarranty(warranty);
+		result.setCategory(category);
 		return result;
 	}
 

@@ -42,8 +42,8 @@ public class WarrantyService {
 
 	public Warranty save(final Warranty warranty) {
 
-		Warranty result;
 		Assert.notNull(warranty);
+		Warranty result;
 		result = this.warrantyRepository.save(warranty);
 		return result;
 	}

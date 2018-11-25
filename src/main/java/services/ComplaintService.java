@@ -10,6 +10,8 @@ import org.springframework.util.Assert;
 
 import repositories.ComplaintRepository;
 import domain.Complaint;
+import domain.Customer;
+import domain.FixUpTask;
 
 @Service
 @Transactional
@@ -18,10 +20,20 @@ public class ComplaintService {
 	@Autowired
 	private ComplaintRepository	complaintRepository;
 
+	//Supporting services
+	@Autowired
+	private CustomerService		customerService;
+	@Autowired
+	private FixUpTaskService	fixUpTaskService;
+
 
 	public Complaint create() {
-		Complaint result;
-		result = new Complaint();
+		final Complaint result = new Complaint();
+		final Customer customer = this.customerService.create();
+		final FixUpTask fixUpTask = this.fixUpTaskService.create();
+		result.setTicker(CurriculaService.generadorDeTickers());
+		result.setCustomer(customer);
+		result.setFixUpTasks(fixUpTask);
 		return result;
 	}
 
