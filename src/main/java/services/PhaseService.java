@@ -2,6 +2,7 @@
 package services;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,13 @@ public class PhaseService {
 		result = this.phaseRepository.save(phase);
 
 		return result;
+	}
+	public List<Phase> findAll() {
+		return this.phaseRepository.findAll();
+	}
+
+	public Phase findOne(final Integer phaseId) {
+		return this.phaseRepository.findOne(phaseId);
 	}
 
 	public void delete(final Phase phase) {
