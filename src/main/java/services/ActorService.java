@@ -11,6 +11,7 @@ import org.springframework.util.Assert;
 import domain.Actor;
 
 import repositories.ActorRepository;
+import security.LoginService;
 import security.UserAccount;
 import security.UserAccountService;
 
@@ -73,4 +74,17 @@ public class ActorService {
 
 		return result;
 	}
+	
+	public Actor getActorLogged(){
+		UserAccount userAccount;
+		Actor actor;
+		
+		userAccount= LoginService.getPrincipal();
+		Assert.notNull(userAccount);
+		
+		actor= findByUserAccount(userAccount);
+		
+		return actor;
+	}
+	
 }
