@@ -1,6 +1,8 @@
 
 package services;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +26,26 @@ public class AdministratorService {
 
 
 	//Simple CRUD methods
-	//TODO
 	public Administrator create() {
 		UserAccount userAccount;
 		UserAccount nowUserAccount;
 		Authority aut;
 		Administrator result;
+		Collection<Authority> auts;
 
 		userAccount = LoginService.getPrincipal();
 		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
-		result = new Administrator();
-		nowUserAccount = new UserAccount();
-		result.setUserAccount(nowUserAccount);
+
+		auts = new ArrayList<Authority>();
 		aut = new Authority();
+		nowUserAccount = new UserAccount();
+		result = new Administrator();
+
 		aut.setAuthority(Authority.ADMIN);
+		auts.add(aut);
+		userAccount.setAuthorities(auts);
+
+		result.setUserAccount(nowUserAccount);
 		result.setIsBanned(false);
 		result.setIsSuspicious(false);
 
