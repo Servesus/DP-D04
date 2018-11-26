@@ -68,26 +68,32 @@ public class BoxService {
 
 	public Collection<Box> createSystemBoxes() {
 		final Collection<Box> res = Collections.emptyList();
+		//crear cajas memoria vacias
 		final Box inBox = this.create();
 		final Box outBox = this.create();
 		final Box trashBox = this.create();
 		final Box spamBox = this.create();
+		//poner nombres cajas
 		inBox.setName("INBOX");
 		outBox.setName("OUTBOX");
 		trashBox.setName("TRASHBOX");
 		spamBox.setName("SPAMBOX");
+		//hacer cajas del sistema
 		inBox.setIsSystem(true);
 		outBox.setIsSystem(true);
 		trashBox.setIsSystem(true);
 		spamBox.setIsSystem(true);
+		//guardar cajas en BD
 		this.boxRepository.save(inBox);
 		this.boxRepository.save(outBox);
 		this.boxRepository.save(trashBox);
 		this.boxRepository.save(spamBox);
+		//añadir cajas al result
 		res.add(inBox);
 		res.add(outBox);
 		res.add(trashBox);
 		res.add(spamBox);
+		//result
 		return res;
 	}
 
