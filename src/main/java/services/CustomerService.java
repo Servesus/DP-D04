@@ -2,6 +2,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -9,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import domain.Actor;
+import domain.Box;
 import domain.Customer;
+import domain.FixUpTask;
 
 import repositories.CustomerRepository;
 import security.Authority;
@@ -23,9 +27,15 @@ public class CustomerService {
 	@Autowired
 	private CustomerRepository customerRepository;
 	
-	//Supporting repositories
+	//Supporting services
 	@Autowired
-	private FixUpTaskRepository fixUpTaskRepository;
+	private FixUpTaskService fixUpTaskService;
+	
+	@Autowired
+	private BoxService boxService;
+	
+	@Autowired
+	private ActorService actorService;
 	
 	public Customer create() {
 		Customer result;
@@ -73,6 +83,11 @@ public class CustomerService {
 		Assert.notNull(customer);
 
 		Customer result;
+		
+		if(customer.getId()==0){
+			Collection<Box> systemBox = boxService.createSystemBoxes();
+			customer.setBoxes(systemBox);
+		}
 
 		result = customerRepository.save(customer);
 
@@ -87,7 +102,47 @@ public class CustomerService {
 	}
 	
 	//TODO Hay que hacer que pueda mostrar fixUpTasks y eso, hay que esperar a que Sergio lo haga
+	public List<FixUpTask> showFixUpTasks(){
+		Actor actor;
+		List <FixUpTask> result;
+		
+		actor = actorService.getActorLogged();
+		int userAccountId= actor.getUserAccount().getId();
+		
+		result= customerRepository.getFixUpTasks(userAccountId);
+		
+		return result; 
+	}
 	
-	//TODO Lo mismo pero con complaint, hay que esperar a Sergio
+	public FixUpTask getFixUpTask(int fixUpTaskId){
+		FixUpTask result;
+		List<FixUpTask> fixUpTasks;
+		List<Integer> ids = new ArrayList<Integer>();
+		int i= 0;
+		
+		fixUpTasks= showFixUpTasks();
+		
+		while(i<fixUpTasks.size()){
+			ids.add(fixUpTasks.get(i).getId());
+			i++;
+		}
+		
+		Assert.isTrue(ids.contains(fixUpTaskId));
+		
+		result= fixUpTaskService.findOne(fixUpTaskId);
+		
+		return result;
+	}
+	
+	public Customer getCustomerLogged(){
+		Actor actor;
+		Customer result;
+		
+		actor= actorService.getActorLogged();
+		
+		result= findOne(actor.getId());
+		
+		return result;
+	}
 
 }

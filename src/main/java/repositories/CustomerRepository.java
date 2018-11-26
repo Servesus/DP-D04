@@ -1,11 +1,14 @@
 package repositories;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import domain.Application;
 import domain.Customer;
+import domain.FixUpTask;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer>{
 	
@@ -27,4 +30,14 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer>{
 	//The top-three customers in terms of complaints.
 	@Query("select c.name from Customer c join c.complaints com group by c.id order by com.size DESC")
 	Collection<Customer> getTopCustomersByComplaints();
+	
+	//A customer must be able to: Manage an arbitrary number of fix-up tasks,
+	//which includes listing, showing, creating, updating, and deleting them
+	@Query("select f from Customer c join c.fixUpTasks f where c.userAccount.id=?1")
+	List<FixUpTask> getFixUpTasks(int userAccountId);
+	
+	//Manage the applications for his or her fix-up tasks, which includes listing and updating
+	//them
+	@Query("select a from Customer c join c.fixUpTasks f join f.applications a where c.userAccount.id=?2")
+	List<Application> getApplications(int userAccountId);
 }

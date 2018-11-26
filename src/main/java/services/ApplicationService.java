@@ -24,8 +24,14 @@ public class ApplicationService {
 
 	public Application create() {
 		Application result;
+		
+		final Date moment = new Date();
+		final Integer status = 0;
 
 		result = new Application();
+		
+		result.setMoment(moment);
+		result.setStatus(status);
 
 		return result;
 	}
@@ -52,12 +58,7 @@ public class ApplicationService {
 		Assert.notNull(application);
 
 		Application result;
-		final Date moment = new Date();
-		final Integer status = 0;
-
-		application.setMoment(moment);
-		application.setStatus(status);
-
+		
 		result = this.applicationRepository.save(application);
 
 		return result;
