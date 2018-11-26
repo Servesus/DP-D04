@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -10,8 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.FinderRepository;
+import security.Authority;
+import security.LoginService;
+import security.UserAccount;
 import domain.Configuration;
 import domain.Finder;
+import domain.FixUpTask;
 
 @Service
 @Transactional
@@ -38,7 +43,7 @@ public class FinderService {
 		Assert.isTrue(finder.getId() != 0);
 		final Date moment = new Date();
 		final Date updateFinder = new Date(moment.getTime() + finder.getConfiguration().getMaxTime());
-		Assert.isTrue(finder.getConfiguration().getLastUpdate().after(updateFinder));
+		Assert.isTrue(finder.getLastUpdate().after(updateFinder));
 		this.finderRepository.delete(finder);
 	}
 
@@ -50,18 +55,17 @@ public class FinderService {
 		return this.finderRepository.findOne(id);
 	}
 
-	/*
-	 * public Finder save(Finder finder){
-	 * Assert.notNull(finder);
-	 * Configuration config;
-	 * Configuration configuration = finder.getConfiguration();
-	 * config = this.configurationService.save(configuration);
-	 * finder.setConfiguration(config);
-	 * Double minPrice = finder.getRangeStart()*1.0;
-	 * Double maxPrice = finder.getRangeFinish()*1.0;
-	 * //TODO CAMBIAR MULTIPLICIDADES DE CATEGORY Y WARRANTY EN FINDER
-	 * //List<FixUpTask> fixUps = this.finderRepository.searchFixUpTasks(finder.getSingleKeyWord(), finder.getDateStartRange(), finder.getDateFinishRange(), minPrice, maxPrice, finder.getCategories(), warrantyName);
-	 * }
-	 */
+	public Finder save(Finder finder) {
+		Assert.notNull(finder);
+		final UserAccount user = LoginService.getPrincipal();
+		final String a = Authority.HANDYWORKER;
+		Assert.isTrue(user.getAuthorities().contains(a));
+		final Double minPrice = finder.getRangeStart() * 1.0;
+		final Double maxPrice = finder.getRangeFinish() * 1.0;
+		final Collection<FixUpTask> fixUps = this.finderRepository.searchFixUpTasks(finder.getSingleKeyWord(), finder.getDateStartRange(), finder.getDateFinishRange(), minPrice, maxPrice, finder.getCategories().getName(), finder.getCategories().getName());
+		finder.setFixUpTask(fixUps);
+		finder = this.finderRepository.save(finder);
+		return finder;
+	}
 
 }

@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 import repositories.HandyWorkerRepository;
 import security.Authority;
 import security.UserAccount;
+import domain.Box;
 import domain.Finder;
 import domain.HandyWorker;
 
@@ -25,6 +26,8 @@ public class HandyWorkerService {
 	//Servicios
 	@Autowired
 	private FinderService			finderService;
+	@Autowired
+	private BoxService				boxService;
 
 
 	//Simple CRUD Methods
@@ -73,11 +76,17 @@ public class HandyWorkerService {
 
 	public HandyWorker save(final HandyWorker handyWorker) {
 		Assert.notNull(handyWorker);
-
+		if (handyWorker.getId() == 0) {
+			Collection<Box> boxSystem;
+			boxSystem = this.boxService.createSystemBoxes();
+			handyWorker.setBoxes(boxSystem);
+			Finder finder;
+			finder = handyWorker.getFinder();
+			finder = this.finderService.save(finder);
+			handyWorker.setFinder(finder);
+		}
 		HandyWorker result;
-
 		result = this.handyWorkerRepository.save(handyWorker);
-
 		return result;
 	}
 
