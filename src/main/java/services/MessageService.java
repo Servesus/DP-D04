@@ -13,6 +13,7 @@ import repositories.MessageRepository;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import security.LoginService;
 import security.UserAccount;
 import domain.Actor;
@@ -25,6 +26,11 @@ import security.LoginService;
 import security.UserAccount;
 import domain.Actor;
 >>>>>>> origin/juanma
+=======
+import security.LoginService;
+import security.UserAccount;
+import domain.Actor;
+>>>>>>> origin/sergio
 import domain.Box;
 import domain.Message;
 

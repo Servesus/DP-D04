@@ -2,6 +2,7 @@
 package services;
 
 import java.util.Collection;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.ComplaintRepository;
+import security.LoginService;
+import security.UserAccount;
 import domain.Complaint;
-import domain.Customer;
-import domain.FixUpTask;
 
 @Service
 @Transactional
@@ -20,20 +21,14 @@ public class ComplaintService {
 	@Autowired
 	private ComplaintRepository	complaintRepository;
 
-	//Supporting services
-	@Autowired
-	private CustomerService		customerService;
-	@Autowired
-	private FixUpTaskService	fixUpTaskService;
 
+	//Supporting services
 
 	public Complaint create() {
 		final Complaint result = new Complaint();
-		final Customer customer = this.customerService.create();
-		final FixUpTask fixUpTask = this.fixUpTaskService.create();
 		result.setTicker(CurriculaService.generadorDeTickers());
-		result.setCustomer(customer);
-		result.setFixUpTasks(fixUpTask);
+		final Date moment = new Date();
+		result.setMoment(moment);
 		return result;
 	}
 
@@ -55,13 +50,20 @@ public class ComplaintService {
 	public Complaint save(final Complaint complaint) {
 
 		Complaint result;
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER"));
 		Assert.notNull(complaint);
 		result = this.complaintRepository.save(complaint);
 		return result;
 	}
 
 	public void delete(final Complaint complaint) {
+
 		Assert.notNull(complaint);
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER"));
 		assert complaint.getId() != 0;
 		Assert.isTrue(this.complaintRepository.exists(complaint.getId()));
 		this.complaintRepository.delete(complaint);

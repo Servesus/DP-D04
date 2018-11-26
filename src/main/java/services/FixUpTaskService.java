@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.FixUpTaskRepository;
-import domain.Category;
+import security.LoginService;
+import security.UserAccount;
 import domain.FixUpTask;
-import domain.Warranty;
 
 @Service
 @Transactional
@@ -19,20 +19,10 @@ public class FixUpTaskService {
 
 	@Autowired
 	private FixUpTaskRepository	fixUpTaskRepository;
-	//Supporting services
-	@Autowired
-	private WarrantyService		warrantyService;
-	@Autowired
-	private CategoryService		categoryService;
 
 
 	public FixUpTask create() {
 		final FixUpTask result = new FixUpTask();
-		final Warranty warranty = this.warrantyService.create();
-		final Category category = this.categoryService.create();
-		result.setTicker(CurriculaService.generadorDeTickers());
-		result.setWarranty(warranty);
-		result.setCategory(category);
 		return result;
 	}
 
@@ -54,12 +44,19 @@ public class FixUpTaskService {
 	public FixUpTask save(final FixUpTask fixUpTask) {
 
 		FixUpTask result;
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER"));
 		Assert.notNull(fixUpTask);
 		result = this.fixUpTaskRepository.save(fixUpTask);
 		return result;
 	}
 
 	public void delete(final FixUpTask fixUpTask) {
+
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER"));
 		Assert.notNull(fixUpTask);
 		assert fixUpTask.getId() != 0;
 		Assert.isTrue(this.fixUpTaskRepository.exists(fixUpTask.getId()));
