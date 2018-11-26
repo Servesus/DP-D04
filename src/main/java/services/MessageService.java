@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 import repositories.MessageRepository;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import security.LoginService;
 import security.UserAccount;
 import domain.Actor;
@@ -19,8 +20,12 @@ import domain.Actor;
 =======
 import domain.Actor;
 >>>>>>> origin/manuercaximba
+=======
+import security.LoginService;
+import security.UserAccount;
+import domain.Actor;
+>>>>>>> origin/juanma
 import domain.Box;
->>>>>>> origin/manuercaximba
 import domain.Message;
 
 @Service

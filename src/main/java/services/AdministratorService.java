@@ -15,6 +15,7 @@ import security.Authority;
 import security.LoginService;
 import security.UserAccount;
 import domain.Administrator;
+import domain.Box;
 
 @Service
 @Transactional
@@ -23,6 +24,10 @@ public class AdministratorService {
 	//Managed repository
 	@Autowired
 	private AdministratorRepository	administratorRepository;
+
+	//Supporting services
+	@Autowired
+	private BoxService				boxService;
 
 
 	//Simple CRUD methods
@@ -61,15 +66,28 @@ public class AdministratorService {
 	}
 
 	public Administrator save(final Administrator a) {
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+
+		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		Assert.notNull(a);
 
-		Administrator result;
-		result = this.administratorRepository.save(a);
+		final Administrator result;
 
+		if (a.getId() == 0) {
+			Collection<Box> boxSystem;
+			boxSystem = this.boxService.createSystemBoxes();
+			a.setBoxes(boxSystem);
+		}
+
+		result = this.administratorRepository.save(a);
 		return result;
 	}
-
 	public void delete(final Administrator a) {
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+
+		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		Assert.notNull(a);
 		this.administratorRepository.delete(a);
 	}

@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.CategoryRepository;
+import security.LoginService;
+import security.UserAccount;
 import domain.Category;
 
 @Service
@@ -21,7 +23,6 @@ public class CategoryService {
 
 
 	//Simple CRUD methods
-	//TODO
 	public Category create() {
 		Category result;
 		result = new Category();
@@ -29,15 +30,27 @@ public class CategoryService {
 	}
 
 	public List<Category> findAll() {
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+
+		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		return this.categoryRepository.findAll();
 	}
 
 	public Category findOne(final Integer categoryId) {
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+
+		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		Assert.isTrue(categoryId != 0);
 		return this.categoryRepository.findOne(categoryId);
 	}
 
 	public Category save(final Category c) {
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+
+		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		Assert.notNull(c);
 
 		Category result;
@@ -46,9 +59,14 @@ public class CategoryService {
 		return result;
 	}
 
-	//TODO
 	public void delete(final Category c) {
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+
+		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
+
 		Assert.notNull(c);
+		Assert.isTrue(c.getName() != "CATEGORY");
 		if (!(c.getChilds().isEmpty())) {
 			for (final Category c1 : c.getChilds())
 				this.categoryRepository.delete(c1);
