@@ -1,7 +1,6 @@
 
 package services;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +45,6 @@ public class ConfigurationService {
 	public Configuration save(final Configuration configuration) {
 		Assert.notNull(configuration);
 		Configuration result;
-		Date currentMoment;
-		currentMoment = new Date();
-		configuration.setLastUpdate(currentMoment);
 		result = this.configurationRepository.save(configuration);
 		return result;
 	}
