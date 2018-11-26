@@ -20,4 +20,7 @@ public interface HandyWorkerRepository extends JpaRepository<HandyWorker, Intege
 	//top-three handy workers in terms of complaints
 	@Query("select h.name from HandyWorker h join h.applications a join a.fixUpTasks t group by h.id order by t.complaints.size DESC;")
 	List<HandyWorker> top3HandyWorker();
+
+	@Query("select h.applications from HandyWorker h where h.id=?1")
+	List<HandyWorker> getApplicationsById(Integer id);
 }

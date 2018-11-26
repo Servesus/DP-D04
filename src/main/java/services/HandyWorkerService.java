@@ -96,4 +96,6 @@ public class HandyWorkerService {
 
 		this.handyWorkerRepository.delete(handyWorker);
 	}
+
+	//TODO METODO QUE SACA LAS APPLICATIONS DEL HANDY WORKER LOGGEADO
 }
