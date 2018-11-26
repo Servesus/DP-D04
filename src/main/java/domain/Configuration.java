@@ -1,15 +1,10 @@
 
 package domain;
 
-import java.util.Date;
-
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Range;
 
@@ -18,9 +13,8 @@ import org.hibernate.validator.constraints.Range;
 public class Configuration extends DomainEntity {
 
 	//Attributes
-	private int		maxResults	= 10;
-	private int		maxTime		= 1;
-	private Date	lastUpdate;
+	private int	maxResults	= 10;
+	private int	maxTime		= 1;
 
 
 	@Range(min = 10, max = 100)
@@ -38,15 +32,6 @@ public class Configuration extends DomainEntity {
 
 	public void setMaxTime(final int maxTime) {
 		this.maxTime = maxTime;
-	}
-	@NotNull
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date getLastUpdate() {
-		return this.lastUpdate;
-	}
-
-	public void setLastUpdate(final Date lastUpdate) {
-		this.lastUpdate = lastUpdate;
 	}
 
 

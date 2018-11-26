@@ -713,19 +713,16 @@
 	<bean id="configuration1" class="domain.Configuration">
 		<property name="maxResults" value="10"/>
 		<property name="maxTime" value="1"/>
-		<property name="lastUpdate" value="11/11/2018 10:00"/>
 		<property name="finder" ref="finder1"/>
 	</bean>
 	<bean id="configuration2" class="domain.Configuration">
 		<property name="maxResults" value="10"/>
 		<property name="maxTime" value="1"/>
-		<property name="lastUpdate" value="12/11/2018 10:00"/>
 		<property name="finder" ref="finder2"/>
 	</bean>
 	<bean id="configuration3" class="domain.Configuration">
 		<property name="maxResults" value="10"/>
 		<property name="maxTime" value="1"/>
-		<property name="lastUpdate" value="13/11/2018 10:00"/>
 		<property name="finder" ref="finder3"/>
 	</bean>
 	
@@ -737,21 +734,14 @@
 		<property name="dateStartRange" value="12/11/2018"/>
 		<property name="dateFinishRange" value="13/11/2018"></property>
 		<property name="configuration" ref="configuration1"/>
+		<property name="lastUpdate" value="11/11/2018 10:00"/>
 		<property name="fixUpTask">
 			<list>
 				<ref bean="fixUpTask1"/>
 			</list>
 		</property>
-		<property name="warranties">
-		<list>
-				<ref bean="warranty1"/>
-			</list>
-		</property>
-		<property name="categories">
-		<list>
-				<ref bean="category1"/>
-			</list>
-		</property>
+		<property name="warranties" ref="warranty1"/>
+		<property name="categories" ref="category1"/>
 	</bean>
 	<bean id="finder2" class="domain.Finder">
 		<property name="singleKeyWord" value="keyWord2"/>
@@ -760,20 +750,13 @@
 		<property name="dateStartRange" value="12/11/2018"/>
 		<property name="dateFinishRange" value="13/11/2018"></property>
 		<property name="configuration" ref="configuration2"/>
+		<property name="lastUpdate" value="11/11/2018 10:00"/>
 		<property name="fixUpTask">
 			<list>
 			</list>
 		</property>
-		<property name="warranties">
-		<list>
-				<ref bean="warranty4"/>
-			</list>
-		</property>
-		<property name="categories">
-		<list>
-				<ref bean="category1"/>
-			</list>
-		</property>
+		<property name="warranties" ref="warranty4"/>
+		<property name="categories" ref="category1"/>
 	</bean>
 	<bean id="finder3" class="domain.Finder">
 		<property name="singleKeyWord" value="keyWord3"/>
@@ -782,20 +765,13 @@
 		<property name="dateStartRange" value="12/11/2018"/>
 		<property name="dateFinishRange" value="13/11/2018"></property>
 		<property name="configuration" ref="configuration3"/>
+		<property name="lastUpdate" value="11/11/2018 10:00"/>
 		<property name="fixUpTask">
 			<list>
 			</list>
 		</property>
-		<property name="warranties">
-		<list>
-				<ref bean="warranty1"/>
-			</list>
-		</property>
-		<property name="categories">
-		<list>
-				<ref bean="category1"/>
-			</list>
-		</property>
+		<property name="warranties" ref="warranty1"/>
+		<property name="categories" ref="category1"/>
 	</bean>
 	<bean id="finder4" class="domain.Finder">
 		<property name="singleKeyWord" value="keyWord3"/>
@@ -804,20 +780,13 @@
 		<property name="dateStartRange" value="12/11/2018"/>
 		<property name="dateFinishRange" value="13/11/2018"></property>
 		<property name="configuration" ref="configuration3"/>
+		<property name="lastUpdate" value="11/11/2018 10:00"/>
 		<property name="fixUpTask">
 			<list>
 			</list>
 		</property>
-		<property name="warranties">
-		<list>
-				<ref bean="warranty1"/>
-			</list>
-		</property>
-		<property name="categories">
-		<list>
-				<ref bean="category1"/>
-			</list>
-		</property>
+		<property name="warranties" ref="warranty1"/>
+		<property name="categories" ref="category1"/>
 	</bean>
 	<bean id="finder5" class="domain.Finder">
 		<property name="singleKeyWord" value="keyWord3"/>
@@ -826,20 +795,13 @@
 		<property name="dateStartRange" value="12/11/2018"/>
 		<property name="dateFinishRange" value="13/11/2018"></property>
 		<property name="configuration" ref="configuration3"/>
+		<property name="lastUpdate" value="11/11/2018 10:00"/>
 		<property name="fixUpTask">
 			<list>
 			</list>
 		</property>
-		<property name="warranties">
-		<list>
-				<ref bean="warranty1"/>
-			</list>
-		</property>
-		<property name="categories">
-		<list>
-				<ref bean="category1"/>
-			</list>
-		</property>
+		<property name="warranties" ref="warranty1"/>
+		<property name="categories" ref="category1"/>
 	</bean>
 	
 	<!-- Box -->

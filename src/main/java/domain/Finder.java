@@ -9,6 +9,7 @@ import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,7 +25,18 @@ public class Finder extends DomainEntity {
 	private Integer	rangeFinish;
 	private Date	dateStartRange;
 	private Date	dateFinishRange;
+	private Date	lastUpdate;
 
+
+	@NotNull
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getLastUpdate() {
+		return this.lastUpdate;
+	}
+
+	public void setLastUpdate(final Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
 
 	public String getSingleKeyWord() {
 		return this.singleKeyWord;
@@ -72,8 +84,8 @@ public class Finder extends DomainEntity {
 	//Relationships
 	private Configuration			configuration;
 	private Collection<FixUpTask>	fixUpTask;
-	private Collection<Warranty>	warranties;
-	private Collection<Category>	categories;
+	private Warranty				warranties;
+	private Category				categories;
 
 
 	@NotNull
@@ -96,21 +108,21 @@ public class Finder extends DomainEntity {
 		this.fixUpTask = fixUpTask;
 	}
 
-	@ManyToMany
-	public Collection<Warranty> getWarranties() {
+	@ManyToOne
+	public Warranty getWarranties() {
 		return this.warranties;
 	}
 
-	public void setWarranties(final Collection<Warranty> warranties) {
+	public void setWarranties(final Warranty warranties) {
 		this.warranties = warranties;
 	}
 
-	@ManyToMany
-	public Collection<Category> getCategories() {
+	@ManyToOne
+	public Category getCategories() {
 		return this.categories;
 	}
 
-	public void setCategories(final Collection<Category> categories) {
+	public void setCategories(final Category categories) {
 		this.categories = categories;
 	}
 
