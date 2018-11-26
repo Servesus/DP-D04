@@ -18,9 +18,12 @@ public class ProfessionalRecordService {
 	//Managed repository
 	@Autowired
 	private ProfessionalRecordRepository	professionalRecordRepository;
-
-
 	//Supporting repositories
+	@Autowired
+	private ActorService					actorService;
+	@Autowired
+	private HandyWorkerService				handyWorkerService;
+
 
 	//Simple CRUD methods
 	public ProfessionalRecord create() {
@@ -38,6 +41,12 @@ public class ProfessionalRecordService {
 
 	public ProfessionalRecord save(final ProfessionalRecord professionalRecord) {
 		Assert.isNull(professionalRecord);
+		if (professionalRecord.getId() == 0)
+			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getProfessionalRecord().add(professionalRecord);
+		else {
+			Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getProfessionalRecord().contains(professionalRecord));
+			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getProfessionalRecord().add(professionalRecord);
+		}
 		return this.professionalRecordRepository.save(professionalRecord);
 	}
 

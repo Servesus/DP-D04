@@ -21,6 +21,7 @@ public class BoxService {
 	private BoxRepository	boxRepository;
 
 	//Supporting service
+	@Autowired
 	private ActorService	actorService;
 
 
@@ -41,7 +42,14 @@ public class BoxService {
 	public Box save(final Box box) {
 		Assert.isNull(box);
 		Assert.isTrue(!box.getIsSystem());
-		Assert.isTrue();
+		if (box.getId() == 0) {
+			box.setIsSystem(false);
+			this.actorService.getActorLogged().getBoxes().add(box);
+		} else {
+			Assert.isTrue(this.actorService.getActorLogged().getBoxes().contains(box));
+			this.actorService.getActorLogged().getBoxes().remove(box);
+			this.actorService.getActorLogged().getBoxes().add(box);
+		}
 		return this.boxRepository.save(box);
 	}
 	public void delete(final Box box) {
@@ -72,6 +80,10 @@ public class BoxService {
 		outBox.setIsSystem(true);
 		trashBox.setIsSystem(true);
 		spamBox.setIsSystem(true);
+		this.boxRepository.save(inBox);
+		this.boxRepository.save(outBox);
+		this.boxRepository.save(trashBox);
+		this.boxRepository.save(spamBox);
 		res.add(inBox);
 		res.add(outBox);
 		res.add(trashBox);

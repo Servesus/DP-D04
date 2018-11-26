@@ -18,9 +18,12 @@ public class EducationalRecordService {
 	//Managed repository
 	@Autowired
 	private EducationalRecordRepository	educationalRecordRepository;
-
-
 	//Supporting repositories
+	@Autowired
+	private ActorService				actorService;
+	@Autowired
+	private HandyWorkerService			handyWorkerService;
+
 
 	//Simple CRUD methods
 	public EducationalRecord create() {
@@ -38,6 +41,12 @@ public class EducationalRecordService {
 
 	public EducationalRecord save(final EducationalRecord educationalRecord) {
 		Assert.isNull(educationalRecord);
+		if (educationalRecord.getId() == 0)
+			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getEducationalRecord().add(educationalRecord);
+		else {
+			Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getEducationalRecord().contains(educationalRecord));
+			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getEducationalRecord().add(educationalRecord);
+		}
 		return this.educationalRecordRepository.save(educationalRecord);
 	}
 

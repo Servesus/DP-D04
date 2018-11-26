@@ -18,9 +18,12 @@ public class PersonalRecordService {
 	//Managed repository
 	@Autowired
 	private PersonalRecordRepository	personalRecordRepository;
-
-
 	//Supporting repositories
+	@Autowired
+	private ActorService				actorService;
+	@Autowired
+	private HandyWorkerService			handyWorkerService;
+
 
 	//Simple CRUD methods
 	public PersonalRecord create() {
@@ -38,6 +41,12 @@ public class PersonalRecordService {
 
 	public PersonalRecord save(final PersonalRecord personalRecord) {
 		Assert.isNull(personalRecord);
+		if (personalRecord.getId() == 0)
+			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().setPersonalRecord(personalRecord);
+		else {
+			Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getPersonalRecord().getId() == personalRecord.getId());
+			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().setPersonalRecord(personalRecord);
+		}
 		return this.personalRecordRepository.save(personalRecord);
 	}
 
