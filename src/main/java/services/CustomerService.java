@@ -13,6 +13,7 @@ import org.springframework.util.Assert;
 import domain.Actor;
 import domain.Application;
 import domain.Box;
+import domain.Complaint;
 import domain.Customer;
 import domain.FixUpTask;
 
@@ -37,6 +38,9 @@ public class CustomerService {
 	
 	@Autowired
 	private ActorService actorService;
+	
+	@Autowired
+	private ComplaintService complaintService;
 	
 	public Customer create() {
 		Customer result;
@@ -156,6 +160,35 @@ public class CustomerService {
 		return result;
 	}
 	
-	//TODO Hay que hacer lo mismo con complaints
+	public List<Complaint> showComplaints(){
+		List<Complaint> result;
+		Customer customer;
+			
+		customer= getCustomerLogged();
+		
+		result= customerRepository.getComplaints(customer.getUserAccount().getId());
+		
+		return result;
+	}
+	
+	public Complaint getComplaint(int complaintId){
+		Complaint result;
+		List<Complaint> complaints;
+		List<Integer> ids = new ArrayList<Integer>();
+		int i= 0;
+		
+		complaints= showComplaints();
+		
+		while(i<complaints.size()){
+			ids.add(complaints.get(i).getId());
+			i++;
+		}
+		
+		Assert.isTrue(ids.contains(complaintId));
+		
+		result= complaintService.findOne(complaintId);
+		
+		return result;
+	}
 
 }

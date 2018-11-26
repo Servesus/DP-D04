@@ -13,7 +13,6 @@ import org.springframework.util.Assert;
 import repositories.ApplicationRepository;
 import security.LoginService;
 import security.UserAccount;
-import domain.Actor;
 import domain.Application;
 
 @Service
@@ -23,10 +22,6 @@ public class ApplicationService {
 	//Managed respositories
 	@Autowired
 	private ApplicationRepository	applicationRepository;
-	
-	@Autowired
-	private ActorService actorService;
-
 	
 	public Application create() {
 		Application result;
@@ -65,7 +60,8 @@ public class ApplicationService {
 		UserAccount userAccount;
 		
 		userAccount= LoginService.getPrincipal();
-		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER"));
+		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER") || 
+				userAccount.getAuthorities().contains("HANDYWORKER"));
 
 		Application result;
 		
