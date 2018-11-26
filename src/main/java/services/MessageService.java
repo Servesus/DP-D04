@@ -10,9 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.MessageRepository;
+<<<<<<< HEAD
 import security.LoginService;
 import security.UserAccount;
 import domain.Actor;
+=======
+import domain.Box;
+>>>>>>> origin/manuercaximba
 import domain.Message;
 
 @Service
@@ -58,6 +62,14 @@ public class MessageService {
 		Assert.isTrue(message.getId() != 0);
 
 		this.messageRepository.delete(message);
+	}
+
+	//Other business methods
+
+	public void sendMessage(final Message message){
+		final Box senderBoxes = (Box) message.getSender().getBoxes().toArray()[1];
+		senderBoxes.set
+		
 	}
 
 }
