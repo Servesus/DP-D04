@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import domain.Actor;
+import domain.Application;
 import domain.Box;
 import domain.Customer;
 import domain.FixUpTask;
@@ -101,7 +102,6 @@ public class CustomerService {
 		customerRepository.delete(customer);
 	}
 	
-	//TODO Hay que hacer que pueda mostrar fixUpTasks y eso, hay que esperar a que Sergio lo haga
 	public List<FixUpTask> showFixUpTasks(){
 		Actor actor;
 		List <FixUpTask> result;
@@ -144,5 +144,18 @@ public class CustomerService {
 		
 		return result;
 	}
+	
+	public List<Application> showApplications(){
+		List<Application> result;
+		Customer customer;
+		
+		customer= getCustomerLogged();
+		
+		result= customerRepository.getApplications(customer.getUserAccount().getId());
+		
+		return result;
+	}
+	
+	//TODO Hay que hacer lo mismo con complaints
 
 }
