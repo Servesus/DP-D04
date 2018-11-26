@@ -10,27 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.MessageRepository;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 import security.LoginService;
 import security.UserAccount;
 import domain.Actor;
-=======
-=======
 import domain.Actor;
->>>>>>> origin/manuercaximba
-=======
 import security.LoginService;
 import security.UserAccount;
 import domain.Actor;
->>>>>>> origin/juanma
-=======
 import security.LoginService;
 import security.UserAccount;
 import domain.Actor;
->>>>>>> origin/sergio
 import domain.Box;
 import domain.Message;
 
