@@ -26,10 +26,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer>{
 	
 	@Query("select stddev(c.fixUpTasks.size) from Customer c")
 	Double getStddevOfFixUpTasks();
-
-	//The top-three customers in terms of complaints.
-	@Query("select c.name from Customer c join c.complaints com group by c.id order by com.size DESC")
-	Collection<Customer> getTopCustomersByComplaints();
 	
 	//A customer must be able to: Manage an arbitrary number of fix-up tasks,
 	//which includes listing, showing, creating, updating, and deleting them
