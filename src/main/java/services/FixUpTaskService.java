@@ -23,6 +23,7 @@ public class FixUpTaskService {
 
 	public FixUpTask create() {
 		final FixUpTask result = new FixUpTask();
+		result.setTicker(CurriculaService.generadorDeTickers());
 		return result;
 	}
 

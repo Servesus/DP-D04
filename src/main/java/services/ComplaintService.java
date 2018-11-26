@@ -21,14 +21,23 @@ public class ComplaintService {
 	@Autowired
 	private ComplaintRepository	complaintRepository;
 
-
 	//Supporting services
+	@Autowired
+	private FixUpTaskService	fixUpTaskService;
+	@Autowired
+	private CustomerService		customerService;
+	@Autowired
+	private ActorService		actorService;
 
-	public Complaint create() {
+
+	public Complaint create(final Integer idFixUpTask) {
 		final Complaint result = new Complaint();
 		result.setTicker(CurriculaService.generadorDeTickers());
 		final Date moment = new Date();
+		final Integer idCustomer = this.actorService.getActorLogged().getId();
 		result.setMoment(moment);
+		result.setFixUpTasks(this.fixUpTaskService.findOne(idFixUpTask));
+		result.setCustomer(this.customerService.findOne(idCustomer));
 		return result;
 	}
 
