@@ -26,6 +26,10 @@ public class CurriculaService {
 	//Supporting services
 	@Autowired
 	private PersonalRecordService	personalRecordService;
+	@Autowired
+	private ActorService			actorService;
+	@Autowired
+	private HandyWorkerService		handyWorkerService;
 
 
 	//Simple CRUD methods
@@ -47,9 +51,14 @@ public class CurriculaService {
 
 	public Curricula save(final Curricula curricula) {
 		Assert.isNull(curricula);
+		if (curricula.getId() == 0)
+			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).setCurricula(curricula);
+		else {
+			Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getId() == curricula.getId());
+			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).setCurricula(curricula);
+		}
 		return this.curriculaRepository.save(curricula);
 	}
-
 	public void delete(final Curricula curricula) {
 		Assert.isNull(curricula);
 		Assert.isTrue(curricula.getId() == 0);

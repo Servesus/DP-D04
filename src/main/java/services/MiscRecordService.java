@@ -18,9 +18,12 @@ public class MiscRecordService {
 	//Managed repository
 	@Autowired
 	private MiscRecordRepository	miscRecordRepository;
-
-
 	//Supporting repositories
+	@Autowired
+	private ActorService			actorService;
+	@Autowired
+	private HandyWorkerService		handyWorkerService;
+
 
 	//Simple CRUD methods
 	public MiscRecord create() {
@@ -38,6 +41,12 @@ public class MiscRecordService {
 
 	public MiscRecord save(final MiscRecord miscRecord) {
 		Assert.isNull(miscRecord);
+		if (miscRecord.getId() == 0)
+			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getMiscRecord().add(miscRecord);
+		else {
+			Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getMiscRecord().contains(miscRecord));
+			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getMiscRecord().add(miscRecord);
+		}
 		return this.miscRecordRepository.save(miscRecord);
 	}
 

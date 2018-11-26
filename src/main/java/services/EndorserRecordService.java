@@ -18,9 +18,12 @@ public class EndorserRecordService {
 	//Managed repository
 	@Autowired
 	private EndorserRecordRepository	endorserRecordRepository;
-
-
 	//Supporting repositories
+	@Autowired
+	private ActorService				actorService;
+	@Autowired
+	private HandyWorkerService			handyWorkerService;
+
 
 	//Simple CRUD methods
 	public EndorserRecord create() {
@@ -38,6 +41,12 @@ public class EndorserRecordService {
 
 	public EndorserRecord save(final EndorserRecord endorserRecord) {
 		Assert.isNull(endorserRecord);
+		if (endorserRecord.getId() == 0)
+			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getEndorserRecord().add(endorserRecord);
+		else {
+			Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getEndorserRecord().contains(endorserRecord));
+			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getEndorserRecord().add(endorserRecord);
+		}
 		return this.endorserRecordRepository.save(endorserRecord);
 	}
 

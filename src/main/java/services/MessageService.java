@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.MessageRepository;
+import domain.Actor;
 import domain.Box;
 import domain.Message;
 
@@ -42,10 +43,18 @@ public class MessageService {
 
 	public Message save(final Message message) {
 		Assert.notNull(message);
-		final Date currentMoment = new Date();
-		message.setSendDate(currentMoment);
-		final Message result = this.messageRepository.save(message);
-		return result;
+		final Actor sender = this.actorService.getActorLogged();
+		if (message.getId() == 0) {
+
+		}
+
+		return this.messageRepository.save(message);
+		/*
+		 * final Date currentMoment = new Date();
+		 * message.setSendDate(currentMoment);
+		 * final Message result = this.messageRepository.save(message);
+		 * return result;
+		 */
 	}
 
 	public void delete(final Message message) {
@@ -62,5 +71,4 @@ public class MessageService {
 		senderBoxes.set
 		
 	}
-
 }
