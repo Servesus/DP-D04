@@ -29,6 +29,9 @@ public class WarrantyService {
 
 	public Collection<Warranty> findAll() {
 		Collection<Warranty> result;
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		Assert.notNull(this.warrantyRepository);
 		result = this.warrantyRepository.findAll();
 		return result;
@@ -36,6 +39,9 @@ public class WarrantyService {
 
 	public Warranty findOne(final int warrantyId) {
 		Warranty result;
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		Assert.notNull(this.warrantyRepository);
 		result = this.warrantyRepository.findOne(warrantyId);
 		return result;
@@ -48,8 +54,7 @@ public class WarrantyService {
 		userAccount = LoginService.getPrincipal();
 		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		Assert.notNull(warranty);
-		if (warranty.getId() != 0)
-			Assert.isTrue(warranty.getIsFinal() == false);
+		Assert.isTrue(warranty.getIsFinal() == true);
 		Warranty result;
 		result = this.warrantyRepository.save(warranty);
 		return result;
@@ -62,6 +67,7 @@ public class WarrantyService {
 		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		Assert.notNull(warranty);
 		assert warranty.getId() != 0;
+		Assert.isTrue(warranty.getIsFinal() == true);
 		Assert.isTrue(this.warrantyRepository.exists(warranty.getId()));
 		this.warrantyRepository.delete(warranty);
 	}
