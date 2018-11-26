@@ -3,6 +3,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,11 @@ import org.springframework.util.Assert;
 import repositories.HandyWorkerRepository;
 import security.Authority;
 import security.UserAccount;
+import domain.Application;
 import domain.Box;
+import domain.Complaint;
 import domain.Finder;
+import domain.FixUpTask;
 import domain.HandyWorker;
 
 @Service
@@ -28,6 +32,8 @@ public class HandyWorkerService {
 	private FinderService			finderService;
 	@Autowired
 	private BoxService				boxService;
+	@Autowired
+	private ActorService			actorService;
 
 
 	//Simple CRUD Methods
@@ -97,5 +103,20 @@ public class HandyWorkerService {
 		this.handyWorkerRepository.delete(handyWorker);
 	}
 
-	//TODO METODO QUE SACA LAS APPLICATIONS DEL HANDY WORKER LOGGEADO
+	public List<Application> showApplicationsByHandyWorker() {
+		final Integer id = this.actorService.getActorLogged().getId();
+		return this.handyWorkerRepository.getApplicationsById(id);
+	}
+	public Collection<FixUpTask> showFixUpTasksInFinder() {
+		final Integer id = this.actorService.getActorLogged().getId();
+		return this.handyWorkerRepository.fixUpTasksInFinder(id);
+	}
+	public Collection<Complaint> showComplaintsByHW() {
+		final Collection<Complaint> result = new ArrayList<Complaint>();
+		final Integer id = this.actorService.getActorLogged().getId();
+		final List<Application> applications = this.handyWorkerRepository.getAcceptedApplicationsByHW(id);
+		for (final Application a : applications)
+			result.addAll(a.getFixUpTasks().getComplaints());
+		return result;
+	}
 }
