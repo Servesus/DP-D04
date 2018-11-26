@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.WarrantyRepository;
+import security.LoginService;
+import security.UserAccount;
 import domain.Warranty;
 
 @Service
@@ -42,13 +44,22 @@ public class WarrantyService {
 
 	public Warranty save(final Warranty warranty) {
 
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		Assert.notNull(warranty);
+		if (warranty.getId() != 0)
+			Assert.isTrue(warranty.getIsFinal() == false);
 		Warranty result;
 		result = this.warrantyRepository.save(warranty);
 		return result;
 	}
 
 	public void delete(final Warranty warranty) {
+
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		Assert.notNull(warranty);
 		assert warranty.getId() != 0;
 		Assert.isTrue(this.warrantyRepository.exists(warranty.getId()));
