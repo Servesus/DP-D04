@@ -1,0 +1,2 @@
+Multiplicidades de FINDER->CATEGORY, FINDER->WARRANTY cambiadas de 0..*->0..* a 0..*->1
+Make de todos los actores a handy Worker solo

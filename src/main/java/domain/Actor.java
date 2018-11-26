@@ -29,7 +29,6 @@ public abstract class Actor extends DomainEntity {
 	private String				email;
 	private String				phoneNumber;
 	private String				address;
-	private String				make	= this.name + this.middleName + this.surname;
 	private boolean				isSuspicious;
 	private boolean				isBanned;
 	private UserAccount			userAccount;
@@ -67,10 +66,6 @@ public abstract class Actor extends DomainEntity {
 
 	public String getAddress() {
 		return this.address;
-	}
-
-	public String getMake() {
-		return this.make;
 	}
 
 	public boolean getIsSuspicious() {
@@ -111,10 +106,6 @@ public abstract class Actor extends DomainEntity {
 
 	public void setAddress(final String address) {
 		this.address = address;
-	}
-
-	public void setMake(final String make) {
-		this.make = make;
 	}
 
 	public void setIsSuspicious(final boolean isSuspicious) {

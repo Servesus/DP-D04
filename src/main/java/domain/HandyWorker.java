@@ -15,6 +15,18 @@ import javax.validation.constraints.NotNull;
 @Access(AccessType.PROPERTY)
 public class HandyWorker extends Actor {
 
+	private String	make;
+
+
+	public String getMake() {
+		return this.make;
+	}
+
+	public void setMake(final String make) {
+		this.make = make;
+	}
+
+
 	//Relationships
 	private Collection<Application>	applications;
 	private Collection<Phase>		phases;

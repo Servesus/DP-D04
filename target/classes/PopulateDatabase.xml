@@ -199,7 +199,6 @@
 		<property name="email" value="customer1@gmail.com"/>
 		<property name="phoneNumber" value="617910517"/>
 		<property name="address" value="Reina Mercedes"/>
-		<property name="make" value=""/>
 		<property name="isSuspicious" value="false"/>
 		<property name="isBanned" value="false"/>
 		<property name="userAccount" ref="userAccount2"/>
@@ -238,7 +237,6 @@
 		<property name="email" value="customer2@hotmail.com"/>
 		<property name="phoneNumber" value="617910615"/>
 		<property name="address" value="Gran Vía"/>
-		<property name="make" value="Anonymous"/>
 		<property name="isSuspicious" value="true"/>
 		<property name="isBanned" value="false"/>
 		<property name="userAccount" ref="customerAccount2"/>
@@ -278,7 +276,6 @@
 		<property name="email" value="customer3@yahoo.es"/>
 		<property name="phoneNumber" value="954356441"/>
 		<property name="address" value="Benito Villamarín"/>
-		<property name="make" value=""/>
 		<property name="isSuspicious" value="true"/>
 		<property name="isBanned" value="true"/>
 		<property name="userAccount" ref="customerAccount3"/>
@@ -315,7 +312,6 @@
 		<property name="email" value="helechito99@gmail.com"/>
 		<property name="phoneNumber" value="715845017"/>
 		<property name="address" value="Barriada la Oliva"/>
-		<property name="make" value="Helechito"/>
 		<property name="isSuspicious" value="false"/>
 		<property name="isBanned" value="false"/>
 		<property name="userAccount" ref="customerAccount4"/>
@@ -350,7 +346,6 @@
 		<property name="email" value="customer5@outlook.com"/>
 		<property name="phoneNumber" value="617981524"/>
 		<property name="address" value="Carretera Carmona"/>
-		<property name="make" value=""/>
 		<property name="isSuspicious" value="true"/>
 		<property name="isBanned" value="false"/>
 		<property name="userAccount" ref="customerAccount5"/>
@@ -1330,7 +1325,6 @@
 		<property name="email" value="admin1@gmail.com"/>
 		<property name="phoneNumber" value="684143460"/>
 		<property name="address" value = "Torreperojil 4"/>
-		<property name="make" value=""/>
 		<property name="isSuspicious" value= "false"/>
 		<property name="isBanned" value = "false"/>
 		<property name="userAccount" ref="userAccount1"/>
@@ -1393,7 +1387,6 @@
 		<property name="email" value="referee@gmail.com"/>
 		<property name="phoneNumber" value="684123461"/>
 		<property name="address" value = "Roma 4"/>
-		<property name="make" value=""/>
 		<property name="isSuspicious" value= "false"/>
 		<property name="isBanned" value = "false"/>
 		<property name="userAccount" ref="userAccount3"/>
@@ -1421,7 +1414,6 @@
 		<property name="email" value="referee2@gmail.com"/>
 		<property name="phoneNumber" value="684123462"/>
 		<property name="address" value = "Roma 5"/>
-		<property name="make" value=""/>
 		<property name="isSuspicious" value= "false"/>
 		<property name="isBanned" value = "false"/>
 		<property name="userAccount" ref="userAccount9"/>
@@ -1448,7 +1440,6 @@
 		<property name="email" value="referee3@gmail.com"/>
 		<property name="phoneNumber" value="684144463"/>
 		<property name="address" value = "Roma 6"/>
-		<property name="make" value=""/>
 		<property name="isSuspicious" value= "false"/>
 		<property name="isBanned" value = "false"/>
 		<property name="userAccount" ref="userAccount10"/>
@@ -1475,7 +1466,6 @@
 		<property name="email" value="referee4@gmail.com"/>
 		<property name="phoneNumber" value="684195464"/>
 		<property name="address" value = "Creus 9"/>
-		<property name="make" value=""/>
 		<property name="isSuspicious" value= "false"/>
 		<property name="isBanned" value = "false"/>
 		<property name="userAccount" ref="userAccount11"/>
