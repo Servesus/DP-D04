@@ -176,5 +176,21 @@ public interface AdministratorRepository extends JpaRepository<Administrator, In
 	//The top-three handy workers in terms of complaints.
 	@Query("select h.name from HandyWorker h join h.applications a join a.fixUpTasks t group by h.id order by t.complaints.size DESC")
 	List<HandyWorker> getTop3HandyWorkerOfComplaints();
+	
+	//The average of the number of notes per referee report
+		@Query("select avg(r.notes.size) from Report r")
+		Double getAvgNotes();
+
+		//The maximum of the number of notes per referee report
+		@Query("select max(r.notes.size) from Report r")
+		Integer getMaxNotes();
+
+		//The minimum of the number of notes per referee report
+		@Query("select min(r.notes.size) from Report r")
+		Integer getMinNotes();
+
+		//The standard deviation of the number of notes per referee report
+		@Query("select stddev(r.notes.size) from Report r")
+		Double getSteddevNotes();
 
 }
