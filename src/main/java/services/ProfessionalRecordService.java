@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class ProfessionalRecordService {
 	//Simple CRUD methods
 	public ProfessionalRecord create() {
 		final ProfessionalRecord professionalRecord = new ProfessionalRecord();
+		professionalRecord.setComment(new ArrayList<String>());
 		return professionalRecord;
 	}
 

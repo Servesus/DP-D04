@@ -1,8 +1,10 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.BoxRepository;
+import domain.Actor;
 import domain.Box;
+import domain.Message;
 
 @Service
 @Transactional
@@ -28,6 +32,9 @@ public class BoxService {
 	//Simple CRUD methods
 	public Box create() {
 		final Box box = new Box();
+		box.setParentBoxes(new ArrayList<Box>());
+		box.setChildBoxes(new ArrayList<Box>());
+		box.setMessages(new ArrayList<Message>());
 		return box;
 	}
 
@@ -40,17 +47,24 @@ public class BoxService {
 	}
 
 	public Box save(final Box box) {
-		Assert.isNull(box);
-		Assert.isTrue(!box.getIsSystem());
-		if (box.getId() == 0) {
-			box.setIsSystem(false);
-			this.actorService.getActorLogged().getBoxes().add(box);
+		final Box result = this.boxRepository.save(box);
+		final Actor a = this.actorService.getActorLogged();
+		final List<Box> boxes = (List<Box>) a.getBoxes();
+		Assert.isNull(result);
+		Assert.isTrue(!result.getIsSystem());
+		if (result.getId() == 0) {
+			result.setIsSystem(false);
+			boxes.add(result);
+			a.setBoxes(boxes);
+			this.actorService.save(a);
 		} else {
-			Assert.isTrue(this.actorService.getActorLogged().getBoxes().contains(box));
-			this.actorService.getActorLogged().getBoxes().remove(box);
-			this.actorService.getActorLogged().getBoxes().add(box);
+			Assert.isTrue(boxes.contains(result));
+			boxes.remove(result);
+			boxes.add(result);
+			a.setBoxes(boxes);
+			this.actorService.save(a);
 		}
-		return this.boxRepository.save(box);
+		return result;
 	}
 	public void delete(final Box box) {
 		Assert.isNull(box);

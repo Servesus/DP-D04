@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class MiscRecordService {
 	//Simple CRUD methods
 	public MiscRecord create() {
 		final MiscRecord miscRecord = new MiscRecord();
+		miscRecord.setComments(new ArrayList<String>());
 		return miscRecord;
 	}
 

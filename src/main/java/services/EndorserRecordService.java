@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class EndorserRecordService {
 	//Simple CRUD methods
 	public EndorserRecord create() {
 		final EndorserRecord endorserRecord = new EndorserRecord();
+		endorserRecord.setComments(new ArrayList<String>());
 		return endorserRecord;
 	}
 

@@ -2,6 +2,7 @@
 package services;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Random;
@@ -13,7 +14,12 @@ import org.springframework.util.Assert;
 
 import repositories.CurriculaRepository;
 import domain.Curricula;
+import domain.EducationalRecord;
+import domain.EndorserRecord;
+import domain.HandyWorker;
+import domain.MiscRecord;
 import domain.PersonalRecord;
+import domain.ProfessionalRecord;
 
 @Service
 @Transactional
@@ -38,9 +44,12 @@ public class CurriculaService {
 		final PersonalRecord personalRecord = this.personalRecordService.create();
 		curricula.setTicker(CurriculaService.generadorDeTickers());
 		curricula.setPersonalRecord(personalRecord);
+		curricula.setEducationalRecord(new ArrayList<EducationalRecord>());
+		curricula.setEndorserRecord(new ArrayList<EndorserRecord>());
+		curricula.setProfessionalRecord(new ArrayList<ProfessionalRecord>());
+		curricula.setMiscRecord(new ArrayList<MiscRecord>());
 		return curricula;
 	}
-
 	public Collection<Curricula> findAll() {
 		return this.curriculaRepository.findAll();
 	}
@@ -51,14 +60,19 @@ public class CurriculaService {
 
 	public Curricula save(final Curricula curricula) {
 		Assert.isNull(curricula);
-		if (curricula.getId() == 0)
-			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).setCurricula(curricula);
-		else {
-			Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getId() == curricula.getId());
-			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).setCurricula(curricula);
+		final Curricula result = this.curriculaRepository.save(curricula);
+		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
+		if (curricula.getId() == 0) {
+			hw.setCurricula(result);
+			this.handyWorkerService.save(hw);
+		} else {
+			Assert.isTrue(hw.getCurricula().getId() == result.getId());
+			hw.setCurricula(result);
+			this.handyWorkerService.save(hw);
 		}
-		return this.curriculaRepository.save(curricula);
+		return result;
 	}
+
 	public void delete(final Curricula curricula) {
 		Assert.isNull(curricula);
 		Assert.isTrue(curricula.getId() == 0);
