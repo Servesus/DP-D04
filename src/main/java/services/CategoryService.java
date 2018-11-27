@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.util.Assert;
 import repositories.CategoryRepository;
 import security.LoginService;
 import security.UserAccount;
+import domain.Actor;
+import domain.Administrator;
 import domain.Category;
 
 @Service
@@ -19,11 +22,20 @@ public class CategoryService {
 
 	//Managed Repository
 	@Autowired
-	private CategoryRepository	categoryRepository;
+	private CategoryRepository		categoryRepository;
+
+	//Supporting services
+	@Autowired
+	private ActorService			actorService;
+	private AdministratorService	administratorService;
 
 
 	//Simple CRUD methods
 	public Category create() {
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+
+		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		Category result;
 		result = new Category();
 		return result;
@@ -47,23 +59,37 @@ public class CategoryService {
 	}
 
 	public Category save(final Category c) {
-		UserAccount userAccount;
-		userAccount = LoginService.getPrincipal();
+		Actor a;
+		a = this.actorService.getActorLogged();
 
-		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
+		Assert.isTrue(a.getUserAccount().getAuthorities().contains("ADMIN"));
 		Assert.notNull(c);
+
+		Administrator admin;
+		admin = this.administratorService.findOne(a.getId());
 
 		Category result;
 		result = this.categoryRepository.save(c);
+		Collection<Category> categories;
+		categories = admin.getCategories();
+		categories.add(c);
+		admin.setCategories(categories);
 
 		return result;
 	}
 
+	//TODO: query para recorrer todos los administradores
 	public void delete(final Category c) {
-		UserAccount userAccount;
-		userAccount = LoginService.getPrincipal();
+		Actor a;
+		a = this.actorService.getActorLogged();
 
-		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
+		Assert.isTrue(a.getUserAccount().getAuthorities().contains("ADMIN"));
+		Assert.notNull(c);
+
+		Administrator admin;
+		admin = this.administratorService.findOne(a.getId());
+
+		final Collection<Category> categories;
 
 		Assert.notNull(c);
 		Assert.isTrue(c.getName() != "CATEGORY");
