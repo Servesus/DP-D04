@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -25,14 +26,20 @@ public class ApplicationService {
 	
 	public Application create() {
 		Application result;
+		Collection<String> customerComments;
+		Collection<String> hwComments;
 		
 		final Date moment = new Date();
 		final Integer status = 0;
+		customerComments= new ArrayList<String>();
+		hwComments= new ArrayList<String>();
 
 		result = new Application();
 		
 		result.setMoment(moment);
 		result.setStatus(status);
+		result.setCustomerComments(customerComments);
+		result.setHwComments(hwComments);
 
 		return result;
 	}

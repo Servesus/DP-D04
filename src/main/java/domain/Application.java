@@ -22,7 +22,6 @@ public class Application extends DomainEntity {
 
 	private Date				moment;
 	private double				price;
-	private Collection<String>	comments;
 	private int					status;
 	private Collection<String>	customerComments;
 	private Collection<String>	hwComments;
@@ -38,10 +37,6 @@ public class Application extends DomainEntity {
 
 	public double getPrice() {
 		return this.price;
-	}
-	@ElementCollection
-	public Collection<String> getComments() {
-		return this.comments;
 	}
 
 	@Range(min = -1, max = 1)
@@ -63,10 +58,6 @@ public class Application extends DomainEntity {
 
 	public void setPrice(final double price) {
 		this.price = price;
-	}
-
-	public void setComments(final Collection<String> comments) {
-		this.comments = comments;
 	}
 
 	public void setStatus(final int status) {

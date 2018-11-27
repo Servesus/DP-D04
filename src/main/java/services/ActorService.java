@@ -87,4 +87,14 @@ public class ActorService {
 		return actor;
 	}
 	
+	public Actor save(Actor actor) {
+		Assert.notNull(actor);
+
+		Actor result;
+
+		result = actorRepository.save(actor);
+
+		return result;
+	}
+	
 }

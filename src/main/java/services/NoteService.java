@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,12 @@ public class NoteService {
 	//Managed Repository
 	@Autowired
 	private NoteRepository	noteRepository;
+	
+	@Autowired
+	private ActorService actorService;
+	
+	@Autowired
+	private ReportService reportService;
 
 
 	//Simple CRUD methods
@@ -41,9 +48,18 @@ public class NoteService {
 		Assert.notNull(n);
 		Note result;
 		Date currentMoment;
+		String authorName;
+		Collection<Note> notes;
+		
+		authorName= actorService.getActorLogged().getName() + 
+				actorService.getActorLogged().getMiddleName() +
+				actorService.getActorLogged().getSurname();
 
 		currentMoment = new Date();
 		n.setMoment(currentMoment);
+		n.setAuthor(authorName);
+		
+		
 		result = this.noteRepository.save(n);
 
 		return result;

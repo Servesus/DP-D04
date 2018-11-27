@@ -1,10 +1,12 @@
 
 package domain;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,12 +22,13 @@ public class Note extends DomainEntity {
 	private String	author;
 	private Date	moment;
 	private String	authorComment;
-	private String	hwComment;
-	private String	customerComment;
+	private Collection<String>	hwComments;
+	private Collection<String>	customerComments;
+	private Collection<String> refereeComments;
 
 
 	//Getters and setters
-	@NotBlank
+	@NotNull
 	public String getAuthor() {
 		return this.author;
 	}
@@ -40,9 +43,10 @@ public class Note extends DomainEntity {
 	public String getAuthorComment() {
 		return this.authorComment;
 	}
-
-	public String getCustomerComment() {
-		return this.customerComment;
+	
+	@ElementCollection
+	public Collection<String> getCustomerComments() {
+		return this.customerComments;
 	}
 
 	public void setAuthor(final String author) {
@@ -57,15 +61,25 @@ public class Note extends DomainEntity {
 		this.authorComment = authorComment;
 	}
 
-	public void setCustomerComment(final String customerComment) {
-		this.customerComment = customerComment;
+	public void setCustomerComments(final Collection<String> customerComments) {
+		this.customerComments = customerComments;
+	}
+	
+	@ElementCollection
+	public Collection<String> getHwComments() {
+		return this.hwComments;
 	}
 
-	public String getHwComment() {
-		return this.hwComment;
+	public void setHwComments(final Collection<String> hwComments) {
+		this.hwComments = hwComments;
 	}
-
-	public void setHwComment(final String hwComment) {
-		this.hwComment = hwComment;
+	
+	@ElementCollection
+	public Collection<String> getRefereeComments(){
+		return this.refereeComments;
+	}
+	
+	public void setRefereeComments(final Collection<String> refereeComments){
+		this.refereeComments= refereeComments;
 	}
 }

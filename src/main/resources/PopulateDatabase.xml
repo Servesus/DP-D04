@@ -1564,26 +1564,65 @@
 	</bean>
 	<!-- Note -->
 	<bean id="note1" class="domain.Note">
-		<property name="author" value="author"/>
+		<property name="author" value="customer1"/>
 		<property name="moment" value="11/11/2018 20:46"/>
 		<property name="authorComment" value="authorComment"/>
-		<property name="hwComment" value="hwComment"/>
-		<property name="customerComment" value="customerComment"/>
+		<property name="hwComments">
+		<list>
+			<value>Handyworker comment 1</value>
+		</list>
+		</property>
+		<property name="customerComments">
+		<list>
+			<value>Customer comment 1</value>
+		</list>
+		</property>
+		<property name="refereeComments">
+		<list>
+			<value>Referee comment 1</value>
+		</list>
+		</property>
 	</bean>
 	<bean id="note2" class="domain.Note">
 		<property name="author" value="referee1"/>
 		<property name="moment" value="11/11/2018 20:46"/>
 		<property name="authorComment" value="authorComment"/>
-		<property name="hwComment" value="hwComment"/>
-		<property name="customerComment" value="customerComment"/>
+		<property name="hwComments">
+		<list>
+			<value>Handyworker comment 1</value>
+		</list>
+		</property>
+		<property name="customerComments">
+		<list>
+			<value>Customer comment 1</value>
+		</list>
+		</property>
+		<property name="refereeComments">
+		<list>
+			<value>Referee comment 1</value>
+		</list>
+		</property>
 	</bean>
 	
 	<bean id="note3" class="domain.Note">
-		<property name="author" value="referee2"/>
+		<property name="author" value="handyWorker1"/>
 		<property name="moment" value="11/11/2018 20:46"/>
 		<property name="authorComment" value="authorComment"/>
-		<property name="hwComment" value="hwComment"/>
-		<property name="customerComment" value="customerComment"/>
+		<property name="hwComments">
+		<list>
+			<value>Handyworker comment 1</value>
+		</list>
+		</property>
+		<property name="customerComments">
+		<list>
+			<value>Customer comment 1</value>
+		</list>
+		</property>
+		<property name="refereeComments">
+		<list>
+			<value>Referee comment 1</value>
+		</list>
+		</property>
 	</bean>
 	<!-- COMPLAINT -->
 	<bean id="complaint1" class="domain.Complaint">
@@ -1831,11 +1870,6 @@
 	<bean id="application1" class="domain.Application">
 		<property name="moment" value="15:30:00 11/11/2018"/>
 		<property name="price" value="2000.0"/>
-		<property name="comments">
-			<list>
-				<value>Comentario 1 de Application</value>
-			</list>
-		</property>
 		<property name="status" value="1"/>
 		<property name="customerComments">
 		<list>
@@ -1853,13 +1887,6 @@
 	<bean id="application2" class="domain.Application">
 		<property name="moment" value="15:40:03 13/11/2018"/>
 		<property name="price" value="1453.4"/>
-		<property name="comments">
-			<list>
-				<value>Comentario 1 de Application 2</value>
-				<value>Comentario 2 de Application 3</value>
-				<value>I LOVE TRAINS FUUUUUUUUUUUUU</value>
-			</list>
-		</property>
 		<property name="status" value="1"/>
 		<property name="customerComments">
 		<list>
@@ -1878,11 +1905,6 @@
 	<bean id="application3" class="domain.Application">
 		<property name="moment" value="12:11:23 8/10/2017"/>
 		<property name="price" value="500.99"/>
-		<property name="comments">
-			<list>
-				<value>Comentario 1 de Application 3</value>
-			</list>
-		</property>
 		<property name="status" value="-1"/>
 		<property name="customerComments">
 		<list>
@@ -1901,11 +1923,6 @@
 	<bean id="application4" class="domain.Application">
 		<property name="moment" value="19:34:00 25/12/2018"/>
 		<property name="price" value="35.0"/>
-		<property name="comments">
-			<list>
-				<value>Comentario 1 de Application</value>
-			</list>
-		</property>
 		<property name="status" value="0"/>
 		<property name="customerComments">
 		<list>
@@ -1924,11 +1941,6 @@
 	<bean id="application5" class="domain.Application">
 		<property name="moment" value="15:30:00 11/12/2020"/>
 		<property name="price" value="2034.0"/>
-		<property name="comments">
-			<list>
-				<value>Comentario 1 de Application 5</value>
-			</list>
-		</property>
 		<property name="status" value="0"/>
 		<property name="customerComments">
 		<list>
@@ -1947,11 +1959,6 @@
 	<bean id="application6" class="domain.Application">
 		<property name="moment" value="15:49:02 13/11/2018"/>
 		<property name="price" value="2150.0"/>
-		<property name="comments">
-			<list>
-				<value>Comentario 1 de Application 6</value>
-			</list>
-		</property>
 		<property name="status" value="1"/>
 		<property name="customerComments">
 		<list>
@@ -1970,11 +1977,6 @@
 	<bean id="application7" class="domain.Application">
 		<property name="moment" value="11:11 11/11/2011"/>
 		<property name="price" value="2000.11"/>
-		<property name="comments">
-			<list>
-				<value>Comentario 1 de Application 7</value>
-			</list>
-		</property>
 		<property name="status" value="-1"/>
 		<property name="customerComments">
 		<list>
