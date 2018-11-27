@@ -86,4 +86,14 @@ public class RefereeService {
 		return result;
 	}
 
+	//Other business methods
+	//TODO
+	//	public List<Complaint> getComplaintNoSelfAssigned() {
+	//
+	//		final List<Complaint> result = this.complaintRepository.findAll();
+	//		final List<Complaint> apoyo = this.getComplaintSelfAssigned();
+	//		result.removeAll(apoyo);
+	//		return result;
+	//	}
+
 }
