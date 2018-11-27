@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.PersonalRecordRepository;
+import domain.HandyWorker;
 import domain.PersonalRecord;
 
 @Service
@@ -23,6 +24,8 @@ public class PersonalRecordService {
 	private ActorService				actorService;
 	@Autowired
 	private HandyWorkerService			handyWorkerService;
+	@Autowired
+	private CurriculaService			curriculaService;
 
 
 	//Simple CRUD methods
@@ -40,16 +43,19 @@ public class PersonalRecordService {
 	}
 
 	public PersonalRecord save(final PersonalRecord personalRecord) {
-		Assert.isNull(personalRecord);
-		if (personalRecord.getId() == 0)
-			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().setPersonalRecord(personalRecord);
-		else {
-			Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getPersonalRecord().getId() == personalRecord.getId());
-			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().setPersonalRecord(personalRecord);
+		final PersonalRecord result = personalRecord;
+		Assert.isNull(result);
+		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
+		if (result.getId() == 0) {
+			hw.getCurricula().setPersonalRecord(result);
+			this.curriculaService.save(hw.getCurricula());
+		} else {
+			Assert.isTrue(hw.getCurricula().getPersonalRecord().getId() == result.getId());
+			hw.getCurricula().setPersonalRecord(result);
+			this.curriculaService.save(hw.getCurricula());
 		}
-		return this.personalRecordRepository.save(personalRecord);
+		return result;
 	}
-
 	public void delete(final PersonalRecord personalRecord) {
 		Assert.isNull(personalRecord);
 		Assert.isTrue(personalRecord.getId() == 0);

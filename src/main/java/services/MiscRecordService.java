@@ -3,6 +3,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.MiscRecordRepository;
+import domain.HandyWorker;
 import domain.MiscRecord;
 
 @Service
@@ -24,6 +26,8 @@ public class MiscRecordService {
 	private ActorService			actorService;
 	@Autowired
 	private HandyWorkerService		handyWorkerService;
+	@Autowired
+	private CurriculaService		curriculaService;
 
 
 	//Simple CRUD methods
@@ -42,14 +46,22 @@ public class MiscRecordService {
 	}
 
 	public MiscRecord save(final MiscRecord miscRecord) {
-		Assert.isNull(miscRecord);
-		if (miscRecord.getId() == 0)
-			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getMiscRecord().add(miscRecord);
-		else {
-			Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getMiscRecord().contains(miscRecord));
-			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getMiscRecord().add(miscRecord);
+		final MiscRecord result = this.miscRecordRepository.save(miscRecord);
+		Assert.isNull(result);
+		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
+		if (result.getId() == 0) {
+			final List<MiscRecord> mR = (List<MiscRecord>) hw.getCurricula().getMiscRecord();
+			mR.add(result);
+			hw.getCurricula().setMiscRecord(mR);
+			this.curriculaService.save(hw.getCurricula());
+		} else {
+			Assert.isTrue(hw.getCurricula().getEndorserRecord().contains(result));
+			final List<MiscRecord> mR = (List<MiscRecord>) hw.getCurricula().getMiscRecord();
+			mR.add(result);
+			hw.getCurricula().setMiscRecord(mR);
+			this.curriculaService.save(hw.getCurricula());
 		}
-		return this.miscRecordRepository.save(miscRecord);
+		return result;
 	}
 
 	public void delete(final MiscRecord miscRecord) {

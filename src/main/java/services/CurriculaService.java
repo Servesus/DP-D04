@@ -59,10 +59,10 @@ public class CurriculaService {
 	}
 
 	public Curricula save(final Curricula curricula) {
-		Assert.isNull(curricula);
 		final Curricula result = this.curriculaRepository.save(curricula);
+		Assert.isNull(result);
 		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
-		if (curricula.getId() == 0) {
+		if (result.getId() == 0) {
 			hw.setCurricula(result);
 			this.handyWorkerService.save(hw);
 		} else {

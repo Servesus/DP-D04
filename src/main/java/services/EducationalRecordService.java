@@ -3,6 +3,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.util.Assert;
 
 import repositories.EducationalRecordRepository;
 import domain.EducationalRecord;
+import domain.HandyWorker;
 
 @Service
 @Transactional
@@ -24,6 +26,8 @@ public class EducationalRecordService {
 	private ActorService				actorService;
 	@Autowired
 	private HandyWorkerService			handyWorkerService;
+	@Autowired
+	private CurriculaService			curriculaService;
 
 
 	//Simple CRUD methods
@@ -42,14 +46,22 @@ public class EducationalRecordService {
 	}
 
 	public EducationalRecord save(final EducationalRecord educationalRecord) {
-		Assert.isNull(educationalRecord);
-		if (educationalRecord.getId() == 0)
-			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getEducationalRecord().add(educationalRecord);
-		else {
-			Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getEducationalRecord().contains(educationalRecord));
-			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getEducationalRecord().add(educationalRecord);
+		final EducationalRecord result = this.educationalRecordRepository.save(educationalRecord);
+		Assert.isNull(result);
+		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
+		if (result.getId() == 0) {
+			final List<EducationalRecord> eR = (List<EducationalRecord>) hw.getCurricula().getEducationalRecord();
+			eR.add(result);
+			hw.getCurricula().setEducationalRecord(eR);
+			this.curriculaService.save(hw.getCurricula());
+		} else {
+			Assert.isTrue(hw.getCurricula().getEducationalRecord().contains(result));
+			final List<EducationalRecord> eR = (List<EducationalRecord>) hw.getCurricula().getEducationalRecord();
+			eR.add(result);
+			hw.getCurricula().setEducationalRecord(eR);
+			this.curriculaService.save(hw.getCurricula());
 		}
-		return this.educationalRecordRepository.save(educationalRecord);
+		return result;
 	}
 
 	public void delete(final EducationalRecord educationalRecord) {

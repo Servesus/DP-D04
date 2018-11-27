@@ -3,6 +3,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.ProfessionalRecordRepository;
+import domain.HandyWorker;
 import domain.ProfessionalRecord;
 
 @Service
@@ -24,6 +26,8 @@ public class ProfessionalRecordService {
 	private ActorService					actorService;
 	@Autowired
 	private HandyWorkerService				handyWorkerService;
+	@Autowired
+	private CurriculaService				curriculaService;
 
 
 	//Simple CRUD methods
@@ -42,14 +46,22 @@ public class ProfessionalRecordService {
 	}
 
 	public ProfessionalRecord save(final ProfessionalRecord professionalRecord) {
-		Assert.isNull(professionalRecord);
-		if (professionalRecord.getId() == 0)
-			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getProfessionalRecord().add(professionalRecord);
-		else {
-			Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getProfessionalRecord().contains(professionalRecord));
-			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getProfessionalRecord().add(professionalRecord);
+		final ProfessionalRecord result = this.professionalRecordRepository.save(professionalRecord);
+		Assert.isNull(result);
+		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
+		if (result.getId() == 0) {
+			final List<ProfessionalRecord> pR = (List<ProfessionalRecord>) hw.getCurricula().getProfessionalRecord();
+			pR.add(result);
+			hw.getCurricula().setProfessionalRecord(pR);
+			this.curriculaService.save(hw.getCurricula());
+		} else {
+			Assert.isTrue(hw.getCurricula().getEndorserRecord().contains(result));
+			final List<ProfessionalRecord> pR = (List<ProfessionalRecord>) hw.getCurricula().getProfessionalRecord();
+			pR.add(result);
+			hw.getCurricula().setProfessionalRecord(pR);
+			this.curriculaService.save(hw.getCurricula());
 		}
-		return this.professionalRecordRepository.save(professionalRecord);
+		return result;
 	}
 
 	public void delete(final ProfessionalRecord professionalRecord) {
