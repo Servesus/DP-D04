@@ -94,6 +94,7 @@ public class ComplaintService {
 			result.add(apoyo[i].getComplaint());
 		return result;
 	}
+
 	public List<Complaint> getComplaintNoSelfAssigned() {
 
 		final List<Complaint> result = this.complaintRepository.findAll();

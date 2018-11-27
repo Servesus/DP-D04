@@ -3,7 +3,6 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,16 +56,29 @@ public class RefereeService {
 
 		return result;
 	}
-	public List<Referee> findAll() {
-		return this.refereeRepository.findAll();
+	public Collection<Referee> findAll() {
+		Collection<Referee> result;
+
+		result = this.refereeRepository.findAll();
+		Assert.notNull(result);
+
+		return result;
 	}
 
 	public Referee findOne(final Integer refereeId) {
 		Assert.isTrue(refereeId != 0);
-		return this.refereeRepository.findOne(refereeId);
+		Referee result;
+
+		result = this.refereeRepository.findOne(refereeId);
+		Assert.notNull(result);
+
+		return result;
 	}
 
 	public Referee save(final Referee r) {
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		Assert.notNull(r);
 
 		Referee result;

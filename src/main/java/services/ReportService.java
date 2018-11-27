@@ -10,6 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.ReportRepository;
+import security.LoginService;
+import security.UserAccount;
+import domain.Actor;
+import domain.Referee;
 import domain.Report;
 
 @Service
@@ -20,17 +24,35 @@ public class ReportService {
 	@Autowired
 	private ReportRepository	reportRepository;
 
+	//Supporting services
+	@Autowired
+	private ActorService		actorService;
+	private RefereeService		refereeService;
+
 
 	//Simple CRUD methods
 	public Report create() {
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+
+		Assert.isTrue(userAccount.getAuthorities().contains("REFEREE"));
+		Actor a;
+		a = this.actorService.getActorLogged();
+		Referee r;
+		r = this.refereeService.findOne(a.getId());
+
+		Collection<Report> reports;
+		reports = r.getReports();
 		Report result;
 
 		result = new Report();
 		result.setIsFinal(false);
+		reports.add(result);
+		r.setReports(reports);
+		this.refereeService.save(r);
 
 		return result;
 	}
-
 	public Collection<Report> findAll() {
 		Collection<Report> result;
 
@@ -55,8 +77,12 @@ public class ReportService {
 		Report result;
 		Date currentMoment;
 
-		currentMoment = new Date();
-		r.setMoment(currentMoment);
+		if (r.getId() == 0) {
+			Assert.isTrue(r.getIsFinal() == true);
+			currentMoment = new Date();
+			r.setMoment(currentMoment);
+			result = this.reportRepository.save(r);
+		}
 		result = this.reportRepository.save(r);
 
 		return result;
@@ -64,7 +90,12 @@ public class ReportService {
 
 	//TODO
 	public void delete(final Report r) {
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+
+		Assert.isTrue(userAccount.getAuthorities().contains("REFEREE"));
 		Assert.notNull(r);
+		Assert.isTrue(r.getId() != 0);
 		this.reportRepository.delete(r);
 	}
 

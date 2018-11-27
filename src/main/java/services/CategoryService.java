@@ -72,12 +72,14 @@ public class CategoryService {
 		result = this.categoryRepository.save(c);
 		Collection<Category> categories;
 		categories = admin.getCategories();
-		categories.add(c);
+		categories.add(result);
 		admin.setCategories(categories);
+		this.administratorService.save(admin);
 
 		return result;
 	}
 
+	//TODO: revisar
 	public void delete(final Category c) {
 		Actor a;
 		a = this.actorService.getActorLogged();
