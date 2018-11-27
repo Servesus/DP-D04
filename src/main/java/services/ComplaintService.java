@@ -15,6 +15,7 @@ import repositories.ComplaintRepository;
 import security.LoginService;
 import security.UserAccount;
 import domain.Complaint;
+import domain.FixUpTask;
 import domain.Referee;
 import domain.Report;
 
@@ -41,9 +42,14 @@ public class ComplaintService {
 		result.setTicker(CurriculaService.generadorDeTickers());
 		final Date moment = new Date();
 		final Integer idCustomer = this.actorService.getActorLogged().getId();
+		final Collection<String> attch = new ArrayList<String>();
+		final Collection<Report> reports = new ArrayList<Report>();
+		result.setAttachment(attch);
+		result.setReports(reports);
 		result.setMoment(moment);
 		result.setFixUpTasks(this.fixUpTaskService.findOne(idFixUpTask));
 		result.setCustomer(this.customerService.findOne(idCustomer));
+
 		return result;
 	}
 
@@ -69,6 +75,14 @@ public class ComplaintService {
 		userAccount = LoginService.getPrincipal();
 		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER"));
 		Assert.notNull(complaint);
+		if (complaint.getId() == 0) {
+			final Complaint result1 = this.complaintRepository.save(complaint);
+			final FixUpTask f = complaint.getFixUpTasks();
+			final Collection<Complaint> c = f.getComplaints();
+			c.add(result1);
+			f.setComplaints(c);
+			this.fixUpTaskService.save(f);
+		}
 		result = this.complaintRepository.save(complaint);
 		return result;
 	}
@@ -81,24 +95,25 @@ public class ComplaintService {
 		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER"));
 		assert complaint.getId() != 0;
 		Assert.isTrue(this.complaintRepository.exists(complaint.getId()));
+		final FixUpTask f = complaint.getFixUpTasks();
+		final Collection<Complaint> c = f.getComplaints();
+		c.remove(complaint);
+		f.setComplaints(c);
+		this.fixUpTaskService.save(f);
 		this.complaintRepository.delete(complaint);
 	}
 
 	public List<Complaint> getComplaintSelfAssigned() {
 
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+		Assert.isTrue(userAccount.getAuthorities().contains("REFEREE"));
 		final Integer idReferee = this.actorService.getActorLogged().getId();
 		final Referee referee = this.refereeService.findOne(idReferee);
 		final List<Complaint> result = new ArrayList<Complaint>();
 		final Report[] apoyo = (Report[]) referee.getReports().toArray();
 		for (int i = 0; i < apoyo.length; i++)
 			result.add(apoyo[i].getComplaint());
-		return result;
-	}
-	public List<Complaint> getComplaintNoSelfAssigned() {
-
-		final List<Complaint> result = this.complaintRepository.findAll();
-		final List<Complaint> apoyo = this.getComplaintSelfAssigned();
-		result.removeAll(apoyo);
 		return result;
 	}
 }
