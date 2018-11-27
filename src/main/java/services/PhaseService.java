@@ -53,12 +53,14 @@ public class PhaseService {
 		Assert.isTrue(phase.getStartMoment().after(currentMoment));
 		Assert.isTrue(phase.getStartMoment().before(phase.getFinishMoment()));
 		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains(Authority.HANDYWORKER));
-		final HandyWorker h = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
-		final Collection<Phase> phases = h.getPhases();
-		phases.add(phase);
-		h.setPhases(phases);
-		//HAY QUE HACER el save de handyWorker?
 		result = this.phaseRepository.save(phase);
+		if (phase.getId() == 0) {
+			final HandyWorker h = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
+			final Collection<Phase> phases = h.getPhases();
+			phases.add(result);
+			h.setPhases(phases);
+			this.handyWorkerService.save(h);
+		}
 
 		return result;
 	}
@@ -73,7 +75,10 @@ public class PhaseService {
 	public void delete(final Phase phase) {
 		Assert.notNull(phase);
 		Assert.isTrue(phase.getId() != 0);
-
+		final HandyWorker h = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
+		final Collection<Phase> phases = h.getPhases();
+		phases.remove(phase);
+		this.handyWorkerService.save(h);
 		this.phaseRepository.delete(phase);
 	}
 	public Collection<Phase> phasesByFixUpTask(final int idFixUpTask) {

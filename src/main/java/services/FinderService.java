@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -34,8 +35,10 @@ public class FinderService {
 	public Finder create() {
 		Finder result;
 		result = new Finder();
+		final Collection<FixUpTask> fixUps = new ArrayList<FixUpTask>();
 		final Configuration configuration = this.configurationService.create();
 		result.setConfiguration(configuration);
+		result.setFixUpTask(fixUps);
 		return result;
 	}
 	public void delete(final Finder finder) {
