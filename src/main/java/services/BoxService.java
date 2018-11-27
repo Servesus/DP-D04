@@ -51,15 +51,19 @@ public class BoxService {
 		final Actor a = this.actorService.getActorLogged();
 		final List<Box> boxes = (List<Box>) a.getBoxes();
 		Assert.isNull(result);
-		Assert.isTrue(!result.getIsSystem());
 		if (result.getId() == 0) {
+			Assert.isTrue(result.getIsSystem());
 			result.setIsSystem(false);
 			boxes.add(result);
 			a.setBoxes(boxes);
 			this.actorService.save(a);
 		} else {
+			if (result.getIsSystem()) {
+				final Box systemBox = boxes.get(boxes.indexOf(this.findOne(result.getId())));
+				Assert.isTrue(!systemBox.getName().equals(result.getName()) && result.getChildBoxes().isEmpty() && result.getParentBoxes().isEmpty());
+			}
 			Assert.isTrue(boxes.contains(result));
-			boxes.remove(result);
+			boxes.remove(this.findOne(result.getId()));
 			boxes.add(result);
 			a.setBoxes(boxes);
 			this.actorService.save(a);
@@ -109,6 +113,17 @@ public class BoxService {
 		res.add(spamBox);
 		//result
 		return res;
+	}
+
+	public void makeParentChildBoxes(final Box parents, final Box child) {
+		final List<Box> childSParents = (List<Box>) child.getParentBoxes();
+		childSParents.add(parents);
+		child.setParentBoxes(childSParents);
+		this.boxRepository.save(child);
+		final List<Box> parentsSChilds = (List<Box>) parents.getChildBoxes();
+		parentsSChilds.add(child);
+		parents.setParentBoxes(parentsSChilds);
+		this.boxRepository.save(parents);
 	}
 
 }
