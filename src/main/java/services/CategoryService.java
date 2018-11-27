@@ -27,6 +27,7 @@ public class CategoryService {
 	//Supporting services
 	@Autowired
 	private ActorService			actorService;
+	@Autowired
 	private AdministratorService	administratorService;
 
 
@@ -79,7 +80,6 @@ public class CategoryService {
 		return result;
 	}
 
-	//TODO: revisar
 	public void delete(final Category c) {
 		Actor a;
 		a = this.actorService.getActorLogged();
