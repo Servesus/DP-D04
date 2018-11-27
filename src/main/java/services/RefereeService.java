@@ -12,8 +12,10 @@ import org.springframework.util.Assert;
 
 import repositories.RefereeRepository;
 import security.Authority;
+import security.LoginService;
 import security.UserAccount;
 import domain.Referee;
+import domain.Report;
 
 @Service
 @Transactional
@@ -31,22 +33,30 @@ public class RefereeService {
 		Authority aut;
 		Collection<Authority> auts;
 
+		UserAccount nowUserAccount;
+		nowUserAccount = LoginService.getPrincipal();
+
+		Assert.isTrue(nowUserAccount.getAuthorities().contains("ADMIN"));
+
 		auts = new ArrayList<Authority>();
 		aut = new Authority();
 		userAccount = new UserAccount();
 		result = new Referee();
+
+		Collection<Report> reports;
+		reports = new ArrayList<Report>();
 
 		aut.setAuthority(Authority.REFEREE);
 		auts.add(aut);
 		userAccount.setAuthorities(auts);
 
 		result.setUserAccount(userAccount);
+		result.setReports(reports);
 		result.setIsBanned(false);
 		result.setIsSuspicious(false);
 
 		return result;
 	}
-
 	public List<Referee> findAll() {
 		return this.refereeRepository.findAll();
 	}

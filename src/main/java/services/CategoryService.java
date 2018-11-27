@@ -78,19 +78,25 @@ public class CategoryService {
 		return result;
 	}
 
-	//TODO: query para recorrer todos los administradores
 	public void delete(final Category c) {
 		Actor a;
 		a = this.actorService.getActorLogged();
+		Collection<Category> categories;
 
 		Assert.isTrue(a.getUserAccount().getAuthorities().contains("ADMIN"));
 		Assert.notNull(c);
 
-		Administrator admin;
-		admin = this.administratorService.findOne(a.getId());
+		Collection<Administrator> admins;
+		admins = this.administratorService.findAll();
 
-		final Collection<Category> categories;
+		for (final Administrator admin : admins)
+			if (admin.getCategories().contains(c)) {
 
+				categories = admin.getCategories();
+				categories.remove(c);
+				admin.setCategories(categories);
+				this.administratorService.save(admin);
+			}
 		Assert.notNull(c);
 		Assert.isTrue(c.getName() != "CATEGORY");
 		if (!(c.getChilds().isEmpty())) {

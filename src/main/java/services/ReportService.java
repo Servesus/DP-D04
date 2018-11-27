@@ -1,8 +1,8 @@
 
 package services;
 
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,13 +31,23 @@ public class ReportService {
 		return result;
 	}
 
-	public List<Report> findAll() {
-		return this.reportRepository.findAll();
+	public Collection<Report> findAll() {
+		Collection<Report> result;
+
+		result = this.reportRepository.findAll();
+		Assert.notNull(result);
+
+		return result;
 	}
 
 	public Report findOne(final Integer reportId) {
 		Assert.isTrue(reportId != 0);
-		return this.reportRepository.findOne(reportId);
+		Report result;
+
+		result = this.reportRepository.findOne(reportId);
+		Assert.notNull(result);
+
+		return result;
 	}
 
 	public Report save(final Report r) {

@@ -17,6 +17,8 @@ import security.UserAccount;
 import domain.Actor;
 import domain.Administrator;
 import domain.Box;
+import domain.Category;
+import domain.Configuration;
 import domain.Customer;
 import domain.HandyWorker;
 
@@ -35,13 +37,17 @@ public class AdministratorService {
 
 
 	//Simple CRUD methods
-	//TODO: pasar id en category?
 	public Administrator create() {
 		UserAccount userAccount;
 		UserAccount nowUserAccount;
 		Authority aut;
 		Administrator result;
 		Collection<Authority> auts;
+		Collection<Category> categories;
+		Collection<Configuration> configurations;
+
+		categories = new ArrayList<Category>();
+		configurations = new ArrayList<Configuration>();
 
 		userAccount = LoginService.getPrincipal();
 		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
@@ -55,6 +61,8 @@ public class AdministratorService {
 		auts.add(aut);
 		userAccount.setAuthorities(auts);
 
+		result.setCategories(categories);
+		result.setConfigurations(configurations);
 		result.setUserAccount(nowUserAccount);
 		result.setIsBanned(false);
 		result.setIsSuspicious(false);
@@ -321,7 +329,6 @@ public class AdministratorService {
 		return result;
 	}
 
-	//TODO revisar
 	public void banActor(final Integer id) {
 		UserAccount userAccount;
 		userAccount = LoginService.getPrincipal();
@@ -329,8 +336,9 @@ public class AdministratorService {
 		Actor a;
 		a = this.actorService.findOne(id);
 		a.setIsBanned(true);
+		this.actorService.save(a);
 	}
-	//TODO revisar
+
 	public void unbanActor(final Integer id) {
 		UserAccount userAccount;
 		userAccount = LoginService.getPrincipal();
@@ -338,5 +346,17 @@ public class AdministratorService {
 		Actor a;
 		a = this.actorService.findOne(id);
 		a.setIsBanned(false);
+		this.actorService.save(a);
+	}
+
+	public List<Actor> getSuspicious() {
+		Collection<Actor> actors;
+		List<Actor> result;
+		result = new ArrayList<Actor>();
+		actors = this.actorService.findAll();
+		for (final Actor a : actors)
+			if (a.getIsSuspicious() == true)
+				result.add(a);
+		return result;
 	}
 }
