@@ -177,5 +177,4 @@ public interface AdministratorRepository extends JpaRepository<Administrator, In
 	@Query("select h.name from HandyWorker h join h.applications a join a.fixUpTasks t group by h.id order by t.complaints.size DESC")
 	List<HandyWorker> getTop3HandyWorkerOfComplaints();
 
-	;
 }
