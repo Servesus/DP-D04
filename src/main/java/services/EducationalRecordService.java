@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class EducationalRecordService {
 	//Simple CRUD methods
 	public EducationalRecord create() {
 		final EducationalRecord educationalRecord = new EducationalRecord();
+		educationalRecord.setComments(new ArrayList<String>());
 		return educationalRecord;
 	}
 
