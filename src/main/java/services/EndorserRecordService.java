@@ -3,6 +3,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.util.Assert;
 
 import repositories.EndorserRecordRepository;
 import domain.EndorserRecord;
+import domain.HandyWorker;
 
 @Service
 @Transactional
@@ -24,6 +26,8 @@ public class EndorserRecordService {
 	private ActorService				actorService;
 	@Autowired
 	private HandyWorkerService			handyWorkerService;
+	@Autowired
+	private CurriculaService			curriculaService;
 
 
 	//Simple CRUD methods
@@ -42,14 +46,22 @@ public class EndorserRecordService {
 	}
 
 	public EndorserRecord save(final EndorserRecord endorserRecord) {
-		Assert.isNull(endorserRecord);
-		if (endorserRecord.getId() == 0)
-			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getEndorserRecord().add(endorserRecord);
-		else {
-			Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getEndorserRecord().contains(endorserRecord));
-			this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula().getEndorserRecord().add(endorserRecord);
+		final EndorserRecord result = this.endorserRecordRepository.save(endorserRecord);
+		Assert.isNull(result);
+		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
+		if (result.getId() == 0) {
+			final List<EndorserRecord> eR = (List<EndorserRecord>) hw.getCurricula().getEndorserRecord();
+			eR.add(result);
+			hw.getCurricula().setEndorserRecord(eR);
+			this.curriculaService.save(hw.getCurricula());
+		} else {
+			Assert.isTrue(hw.getCurricula().getEndorserRecord().contains(result));
+			final List<EndorserRecord> eR = (List<EndorserRecord>) hw.getCurricula().getEndorserRecord();
+			eR.add(result);
+			hw.getCurricula().setEndorserRecord(eR);
+			this.curriculaService.save(hw.getCurricula());
 		}
-		return this.endorserRecordRepository.save(endorserRecord);
+		return result;
 	}
 
 	public void delete(final EndorserRecord endorserRecord) {
