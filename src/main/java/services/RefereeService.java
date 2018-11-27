@@ -3,6 +3,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import repositories.RefereeRepository;
 import security.Authority;
 import security.LoginService;
 import security.UserAccount;
+import domain.Complaint;
 import domain.Referee;
 import domain.Report;
 
@@ -87,13 +89,13 @@ public class RefereeService {
 	}
 
 	//Other business methods
-	//TODO
-	//	public List<Complaint> getComplaintNoSelfAssigned() {
-	//
-	//		final List<Complaint> result = this.complaintRepository.findAll();
-	//		final List<Complaint> apoyo = this.getComplaintSelfAssigned();
-	//		result.removeAll(apoyo);
-	//		return result;
-	//	}
+	public List<Complaint> getComplaintNoSelfAssigned() {
+		Collection<Complaint> complaintsWithoutReport;
+		complaintsWithoutReport = this.refereeRepository.getComplaintsWithoutReport();
+		List<Complaint> result;
+		result = new ArrayList<Complaint>();
+		result.addAll(complaintsWithoutReport);
+		return result;
+	}
 
 }
