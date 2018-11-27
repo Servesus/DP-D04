@@ -72,25 +72,33 @@ public class CategoryService {
 		result = this.categoryRepository.save(c);
 		Collection<Category> categories;
 		categories = admin.getCategories();
-		categories.add(c);
+		categories.add(result);
 		admin.setCategories(categories);
+		this.administratorService.save(admin);
 
 		return result;
 	}
 
-	//TODO: query para recorrer todos los administradores
+	//TODO: revisar
 	public void delete(final Category c) {
 		Actor a;
 		a = this.actorService.getActorLogged();
+		Collection<Category> categories;
 
 		Assert.isTrue(a.getUserAccount().getAuthorities().contains("ADMIN"));
 		Assert.notNull(c);
 
-		Administrator admin;
-		admin = this.administratorService.findOne(a.getId());
+		Collection<Administrator> admins;
+		admins = this.administratorService.findAll();
 
-		final Collection<Category> categories;
+		for (final Administrator admin : admins)
+			if (admin.getCategories().contains(c)) {
 
+				categories = admin.getCategories();
+				categories.remove(c);
+				admin.setCategories(categories);
+				this.administratorService.save(admin);
+			}
 		Assert.notNull(c);
 		Assert.isTrue(c.getName() != "CATEGORY");
 		if (!(c.getChilds().isEmpty())) {

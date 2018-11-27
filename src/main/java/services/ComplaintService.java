@@ -116,4 +116,15 @@ public class ComplaintService {
 			result.add(apoyo[i].getComplaint());
 		return result;
 	}
+<<<<<<< HEAD
+=======
+
+	public List<Complaint> getComplaintNoSelfAssigned() {
+
+		final List<Complaint> result = this.complaintRepository.findAll();
+		final List<Complaint> apoyo = this.getComplaintSelfAssigned();
+		result.removeAll(apoyo);
+		return result;
+	}
+>>>>>>> origin/juanma
 }

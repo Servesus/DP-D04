@@ -3,7 +3,6 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,8 +11,10 @@ import org.springframework.util.Assert;
 
 import repositories.RefereeRepository;
 import security.Authority;
+import security.LoginService;
 import security.UserAccount;
 import domain.Referee;
+import domain.Report;
 
 @Service
 @Transactional
@@ -31,32 +32,53 @@ public class RefereeService {
 		Authority aut;
 		Collection<Authority> auts;
 
+		UserAccount nowUserAccount;
+		nowUserAccount = LoginService.getPrincipal();
+
+		Assert.isTrue(nowUserAccount.getAuthorities().contains("ADMIN"));
+
 		auts = new ArrayList<Authority>();
 		aut = new Authority();
 		userAccount = new UserAccount();
 		result = new Referee();
+
+		Collection<Report> reports;
+		reports = new ArrayList<Report>();
 
 		aut.setAuthority(Authority.REFEREE);
 		auts.add(aut);
 		userAccount.setAuthorities(auts);
 
 		result.setUserAccount(userAccount);
+		result.setReports(reports);
 		result.setIsBanned(false);
 		result.setIsSuspicious(false);
 
 		return result;
 	}
+	public Collection<Referee> findAll() {
+		Collection<Referee> result;
 
-	public List<Referee> findAll() {
-		return this.refereeRepository.findAll();
+		result = this.refereeRepository.findAll();
+		Assert.notNull(result);
+
+		return result;
 	}
 
 	public Referee findOne(final Integer refereeId) {
 		Assert.isTrue(refereeId != 0);
-		return this.refereeRepository.findOne(refereeId);
+		Referee result;
+
+		result = this.refereeRepository.findOne(refereeId);
+		Assert.notNull(result);
+
+		return result;
 	}
 
 	public Referee save(final Referee r) {
+		UserAccount userAccount;
+		userAccount = LoginService.getPrincipal();
+		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		Assert.notNull(r);
 
 		Referee result;

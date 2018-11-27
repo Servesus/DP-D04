@@ -176,4 +176,8 @@ public interface AdministratorRepository extends JpaRepository<Administrator, In
 	//The top-three handy workers in terms of complaints.
 	@Query("select h.name from HandyWorker h join h.applications a join a.fixUpTasks t group by h.id order by t.complaints.size DESC")
 	List<HandyWorker> getTop3HandyWorkerOfComplaints();
+
+	//	/* Other Queries */
+	//	@Query("select a from Actor where a.isSuspicious = true")
+	//	List<Actor> getSuspicious();
 }
