@@ -14,8 +14,10 @@ import domain.Actor;
 import domain.Application;
 import domain.Box;
 import domain.Complaint;
+import domain.CreditCard;
 import domain.Customer;
 import domain.FixUpTask;
+import domain.Profile;
 
 import repositories.CustomerRepository;
 import security.Authority;
@@ -47,12 +49,22 @@ public class CustomerService {
 		Authority auth;
 		UserAccount userAccount;
 		Collection<Authority> authorities;
+		Collection<Profile> profiles;
+		Collection<Box> boxes;
+		Collection<CreditCard> creditCards;
+		Collection<Complaint> complaints;
+		Collection<FixUpTask> fixUpTasks;
 		
 		result = new Customer();
 		userAccount = new UserAccount();
 		auth= new Authority();
 		authorities= new ArrayList<Authority>();
 		
+		profiles= new ArrayList<Profile>();
+		boxes= new ArrayList<Box>();
+		creditCards= new ArrayList<CreditCard>();
+		complaints= new ArrayList<Complaint>();
+		fixUpTasks= new ArrayList<FixUpTask>();
 		
 		auth.setAuthority(Authority.CUSTOMER);
 		authorities.add(auth);
@@ -61,6 +73,11 @@ public class CustomerService {
 		result.setUserAccount(userAccount);
 		result.setIsBanned(false);
 		result.setIsSuspicious(false);
+		result.setProfiles(profiles);
+		result.setBoxes(boxes);
+		result.setCreditCards(creditCards);
+		result.setComplaints(complaints);
+		result.setFixUpTasks(fixUpTasks);
 
 		return result;
 	}
