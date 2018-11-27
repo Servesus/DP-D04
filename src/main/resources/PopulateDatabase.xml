@@ -1882,7 +1882,7 @@
 			</list>
 		</property>
 		<property name="handyWorker" ref="handyWorker1"/>
-		<property name="fixUpTasks" ref="fixUpTask1"/>
+		<property name="fixUpTask" ref="fixUpTask1"/>
 	</bean>
 	<bean id="application2" class="domain.Application">
 		<property name="moment" value="15:40:03 13/11/2018"/>
@@ -1899,7 +1899,7 @@
 			</list>
 		</property>
 		<property name="handyWorker" ref="handyWorker2"/>
-		<property name="fixUpTasks" ref="fixUpTask2"/>
+		<property name="fixUpTask" ref="fixUpTask2"/>
 	</bean>
 	
 	<bean id="application3" class="domain.Application">
@@ -1917,7 +1917,7 @@
 			</list>
 		</property>
 		<property name="handyWorker" ref="handyWorker3"/>
-		<property name="fixUpTasks" ref="fixUpTask3"/>
+		<property name="fixUpTask" ref="fixUpTask3"/>
 	</bean>
 	
 	<bean id="application4" class="domain.Application">
@@ -1935,7 +1935,7 @@
 			</list>
 		</property>
 		<property name="handyWorker" ref="handyWorker3"/>
-		<property name="fixUpTasks" ref="fixUpTask3"/>
+		<property name="fixUpTask" ref="fixUpTask3"/>
 	</bean>
 	
 	<bean id="application5" class="domain.Application">
@@ -1953,7 +1953,7 @@
 			</list>
 		</property>
 		<property name="handyWorker" ref="handyWorker4"/>
-		<property name="fixUpTasks" ref="fixUpTask4"/>
+		<property name="fixUpTask" ref="fixUpTask4"/>
 	</bean>
 	
 	<bean id="application6" class="domain.Application">
@@ -1971,7 +1971,7 @@
 			</list>
 		</property>
 		<property name="handyWorker" ref="handyWorker4"/>
-		<property name="fixUpTasks" ref="fixUpTask4"/>
+		<property name="fixUpTask" ref="fixUpTask4"/>
 	</bean>
 	
 	<bean id="application7" class="domain.Application">
@@ -1989,6 +1989,6 @@
 			</list>
 		</property>
 		<property name="handyWorker" ref="handyWorker5"/>
-		<property name="fixUpTasks" ref="fixUpTask5"/>
+		<property name="fixUpTask" ref="fixUpTask5"/>
 	</bean>
 </beans>

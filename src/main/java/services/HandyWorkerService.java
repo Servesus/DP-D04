@@ -116,7 +116,7 @@ public class HandyWorkerService {
 		final Integer id = this.actorService.getActorLogged().getId();
 		final List<Application> applications = this.handyWorkerRepository.getAcceptedApplicationsByHW(id);
 		for (final Application a : applications)
-			result.addAll(a.getFixUpTasks().getComplaints());
+			result.addAll(a.getFixUpTask().getComplaints());
 		return result;
 	}
 }

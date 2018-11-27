@@ -26,7 +26,7 @@ public class Application extends DomainEntity {
 	private Collection<String>	customerComments;
 	private Collection<String>	hwComments;
 	private HandyWorker			handyWorker;
-	private FixUpTask			fixUpTasks;
+	private FixUpTask			fixUpTask;
 
 
 	@NotNull
@@ -84,12 +84,12 @@ public class Application extends DomainEntity {
 	}
 
 	@ManyToOne(optional = false)
-	public FixUpTask getFixUpTasks() {
-		return this.fixUpTasks;
+	public FixUpTask getFixUpTask() {
+		return this.fixUpTask;
 	}
 
-	public void setFixUpTasks(final FixUpTask fixUpTasks) {
-		this.fixUpTasks = fixUpTasks;
+	public void setFixUpTask(final FixUpTask fixUpTask) {
+		this.fixUpTask = fixUpTask;
 	}
 
 }
