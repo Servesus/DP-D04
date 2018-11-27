@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.PhaseRepository;
+import security.Authority;
+import security.LoginService;
+import domain.FixUpTask;
+import domain.HandyWorker;
 import domain.Phase;
 
 @Service
@@ -18,13 +23,24 @@ public class PhaseService {
 
 	//Managed repository
 	@Autowired
-	private PhaseRepository	phaseRepository;
+	private PhaseRepository		phaseRepository;
+
+	@Autowired
+	private FixUpTaskService	fixUpTaskService;
+
+	@Autowired
+	private ActorService		actorService;
+
+	@Autowired
+	private HandyWorkerService	handyWorkerService;
 
 
 	//Simple CRUD methods
-	public Phase create() {
+	public Phase create(final int idFixUp) {
 		Phase result;
 		result = new Phase();
+		final FixUpTask fixUpTask = this.fixUpTaskService.findOne(idFixUp);
+		result.setFixUpTask(fixUpTask);
 		return result;
 	}
 
@@ -36,7 +52,12 @@ public class PhaseService {
 
 		Assert.isTrue(phase.getStartMoment().after(currentMoment));
 		Assert.isTrue(phase.getStartMoment().before(phase.getFinishMoment()));
-
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains(Authority.HANDYWORKER));
+		final HandyWorker h = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
+		final Collection<Phase> phases = h.getPhases();
+		phases.add(phase);
+		h.setPhases(phases);
+		//HAY QUE HACER el save de handyWorker?
 		result = this.phaseRepository.save(phase);
 
 		return result;
@@ -54,5 +75,9 @@ public class PhaseService {
 		Assert.isTrue(phase.getId() != 0);
 
 		this.phaseRepository.delete(phase);
+	}
+	public Collection<Phase> phasesByFixUpTask(final int idFixUpTask) {
+		final Collection<Phase> result = this.phaseRepository.findPhasesByFixUpTaskId(idFixUpTask);
+		return result;
 	}
 }
