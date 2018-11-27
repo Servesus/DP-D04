@@ -19,6 +19,7 @@ import domain.Complaint;
 import domain.Finder;
 import domain.FixUpTask;
 import domain.HandyWorker;
+import domain.Phase;
 
 @Service
 @Transactional
@@ -44,6 +45,8 @@ public class HandyWorkerService {
 		Authority aut;
 		Collection<Authority> auts;
 		Finder finder;
+		final Collection<Application> apps = new ArrayList<Application>();
+		final Collection<Phase> phases = new ArrayList<Phase>();
 
 		auts = new ArrayList<Authority>();
 		aut = new Authority();
@@ -59,6 +62,8 @@ public class HandyWorkerService {
 		result.setIsBanned(false);
 		result.setIsSuspicious(false);
 		result.setFinder(finder);
+		result.setApplications(apps);
+		result.setPhases(phases);
 		return result;
 	}
 
