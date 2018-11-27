@@ -23,7 +23,9 @@ public class WarrantyService {
 
 	public Warranty create() {
 		Warranty result;
+		final Boolean res = false;
 		result = new Warranty();
+		result.setIsFinal(res);
 		return result;
 	}
 
@@ -54,7 +56,8 @@ public class WarrantyService {
 		userAccount = LoginService.getPrincipal();
 		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		Assert.notNull(warranty);
-		Assert.isTrue(warranty.getIsFinal() == true);
+		if (warranty.getId() == 0)
+			Assert.isTrue(warranty.getIsFinal() == true);
 		Warranty result;
 		result = this.warrantyRepository.save(warranty);
 		return result;
