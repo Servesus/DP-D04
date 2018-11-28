@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.EducationalRecordRepository;
-import security.LoginService;
+import security.UserAccount;
 import domain.EducationalRecord;
 import domain.HandyWorker;
 
@@ -33,7 +33,9 @@ public class EducationalRecordService {
 
 	//Simple CRUD methods
 	public EducationalRecord create() {
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		UserAccount userAccount;
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		final EducationalRecord educationalRecord = new EducationalRecord();
 		educationalRecord.setComments(new ArrayList<String>());
@@ -49,7 +51,9 @@ public class EducationalRecordService {
 	}
 
 	public EducationalRecord save(final EducationalRecord educationalRecord) {
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		UserAccount userAccount;
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		final EducationalRecord result = this.educationalRecordRepository.save(educationalRecord);
 		Assert.isNull(result);
@@ -70,7 +74,9 @@ public class EducationalRecordService {
 	}
 
 	public void delete(final EducationalRecord educationalRecord) {
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		UserAccount userAccount;
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		Assert.isNull(educationalRecord);
 		Assert.isTrue(educationalRecord.getId() != 0);

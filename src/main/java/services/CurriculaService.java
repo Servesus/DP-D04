@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.CurriculaRepository;
-import security.LoginService;
+import security.UserAccount;
 import domain.Curricula;
 import domain.EducationalRecord;
 import domain.EndorserRecord;
@@ -41,7 +41,9 @@ public class CurriculaService {
 
 	//Simple CRUD methods
 	public Curricula create() {
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		UserAccount userAccount;
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		final Curricula curricula = new Curricula();
 		final PersonalRecord personalRecord = this.personalRecordService.create();
 		curricula.setTicker(CurriculaService.generadorDeTickers());
@@ -65,12 +67,16 @@ public class CurriculaService {
 		Assert.isNull(result);
 		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
 		if (result.getId() == 0) {
-			Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+			UserAccount userAccount;
+			userAccount = this.actorService.getActorLogged().getUserAccount();
+			Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 			hw.setCurricula(result);
 			this.handyWorkerService.save(hw);
 		} else {
 			Assert.isTrue(hw.getCurricula().getId() == result.getId());
-			Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+			UserAccount userAccount;
+			userAccount = this.actorService.getActorLogged().getUserAccount();
+			Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 			hw.setCurricula(result);
 			this.handyWorkerService.save(hw);
 		}
@@ -80,7 +86,9 @@ public class CurriculaService {
 	public void delete(final Curricula curricula) {
 		Assert.isNull(curricula);
 		Assert.isTrue(curricula.getId() != 0);
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		UserAccount userAccount;
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
 		Assert.isTrue(hw.getCurricula().getId() == curricula.getId());
 

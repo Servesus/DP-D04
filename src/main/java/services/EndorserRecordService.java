@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.EndorserRecordRepository;
-import security.LoginService;
+import security.UserAccount;
 import domain.EndorserRecord;
 import domain.HandyWorker;
 
@@ -33,7 +33,9 @@ public class EndorserRecordService {
 
 	//Simple CRUD methods
 	public EndorserRecord create() {
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		UserAccount userAccount;
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		final EndorserRecord endorserRecord = new EndorserRecord();
 		endorserRecord.setComments(new ArrayList<String>());
@@ -49,7 +51,9 @@ public class EndorserRecordService {
 	}
 
 	public EndorserRecord save(final EndorserRecord endorserRecord) {
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		UserAccount userAccount;
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		final EndorserRecord result = this.endorserRecordRepository.save(endorserRecord);
 		Assert.isNull(result);
@@ -70,7 +74,9 @@ public class EndorserRecordService {
 	}
 
 	public void delete(final EndorserRecord endorserRecord) {
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		UserAccount userAccount;
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		Assert.isNull(endorserRecord);
 		Assert.isTrue(endorserRecord.getId() != 0);

@@ -58,7 +58,7 @@ public class MessageService {
 		final Message result = this.messageRepository.save(message);
 		//Asserts y sacar sender y recipient
 		Assert.notNull(result);
-		Assert.isTrue(result.getId() != 0);
+		Assert.isTrue(result.getId() == 0);
 		final Actor sender = result.getSender();
 		final List<Actor> recipients = (List<Actor>) result.getRecipient();
 		for (int i = 0; i < recipients.size(); i++) {
@@ -106,7 +106,7 @@ public class MessageService {
 
 	public void delete(final Message message) {
 		Assert.notNull(message);
-		Assert.isTrue(message.getId() == 0);
+		Assert.isTrue(message.getId() != 0);
 		this.messageRepository.delete(message);
 	}
 
@@ -115,7 +115,7 @@ public class MessageService {
 	public void moveMessage(final Message message, final Box boxR) {
 		//Asserts e inicializaciones
 		Assert.notNull(message);
-		Assert.isTrue(message.getId() == 0);
+		Assert.isTrue(message.getId() != 0);
 		final Actor a = message.getSender();
 		final List<Box> boxesActor = (List<Box>) a.getBoxes();
 		Box originBox = null;
@@ -145,7 +145,7 @@ public class MessageService {
 	public void deleteMessage(final Message message) {
 		//Asserts e inicializaciones
 		Assert.notNull(message);
-		Assert.isTrue(message.getId() == 0);
+		Assert.isTrue(message.getId() != 0);
 		final Actor a = message.getSender();
 		final List<Box> boxesActor = (List<Box>) a.getBoxes();
 		Box originBox = null;
@@ -155,7 +155,7 @@ public class MessageService {
 				originBox = boxesActor.get(i);
 				msgInActor = true;
 			}
-		Assert.isTrue(!msgInActor);
+		Assert.isTrue(msgInActor);
 		//Si no es trashbox, mover a trashbox
 		if (boxesActor.get(2) != originBox) {
 			final Box trashBox = boxesActor.get(2);
@@ -190,7 +190,7 @@ public class MessageService {
 	public Message adminMessage(final Message message) {
 		//Asserts e inicializaciones
 		Assert.notNull(message);
-		Assert.isTrue(message.getId() != 0);
+		Assert.isTrue(message.getId() == 0);
 		//Mandar mensaje a todos los actores del sistema
 		final Actor admin = this.administratorService.findOne(this.actorService.getActorLogged().getId());
 		final List<Actor> recipient = new ArrayList<Actor>();
