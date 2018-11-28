@@ -87,4 +87,13 @@ public class CreditCardService {
 		creditCardRepository.delete(creditCard);
 	}
 
+	public CreditCard findOne(Integer id) {
+		Assert.notNull(id);
+		UserAccount userAccount = actorService.getActorLogged().getUserAccount();
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority()
+				.equals("CUSTOMER"));
+		
+		return creditCardRepository.findOne(id);
+	}
+
 }
