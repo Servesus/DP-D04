@@ -21,6 +21,7 @@ import domain.Category;
 import domain.Configuration;
 import domain.Customer;
 import domain.HandyWorker;
+import domain.Profile;
 
 @Service
 @Transactional
@@ -46,9 +47,11 @@ public class AdministratorService {
 		Collection<Authority> auts;
 		Collection<Category> categories;
 		Collection<Configuration> configurations;
+		Collection<Profile> profiles;
 
 		categories = new ArrayList<Category>();
 		configurations = new ArrayList<Configuration>();
+		profiles = new ArrayList<Profile>();
 
 		userAccount = LoginService.getPrincipal();
 		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
@@ -60,10 +63,11 @@ public class AdministratorService {
 
 		aut.setAuthority(Authority.ADMIN);
 		auts.add(aut);
-		userAccount.setAuthorities(auts);
+		nowUserAccount.setAuthorities(auts);
 
 		result.setCategories(categories);
 		result.setConfigurations(configurations);
+		result.setProfiles(profiles);
 		result.setUserAccount(nowUserAccount);
 		result.setIsBanned(false);
 		result.setIsSuspicious(false);

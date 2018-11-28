@@ -2,7 +2,6 @@
 package services;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,12 +41,17 @@ public class CategoryService {
 		return result;
 	}
 
-	public List<Category> findAll() {
+	public Collection<Category> findAll() {
+		Collection<Category> result;
+
 		UserAccount userAccount;
 		userAccount = LoginService.getPrincipal();
 
 		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
-		return this.categoryRepository.findAll();
+		result = this.categoryRepository.findAll();
+		Assert.notNull(result);
+
+		return result;
 	}
 
 	public Category findOne(final Integer categoryId) {

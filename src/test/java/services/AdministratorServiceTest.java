@@ -29,21 +29,21 @@ public class AdministratorServiceTest extends AbstractTest {
 
 	@Test
 	//TODO : Probar inicializando profiles en el create de Admin
-	public void createAdministrator() {
+	public void create() {
 		super.authenticate("admin1");
 
 		Administrator a;
 		a = this.administratorService.create();
 		a.setName("admin2");
-		a.setSurname("admin 2");
+		a.setSurname("admin2");
 		a.setEmail("admin2@gmail.com");
-		System.out.println("Entro en create");
+		Assert.isNull(a);
 
 		super.authenticate(null);
 	}
 
 	@Test
-	public void saveAdministrator() {
+	public void save() {
 		Administrator a;
 		Administrator saved;
 		final Collection<Administrator> admins;
@@ -63,7 +63,7 @@ public class AdministratorServiceTest extends AbstractTest {
 	@Test
 	public void findOne() {
 		Integer id;
-		id = 2681;
+		id = this.getEntityId("admin1");
 		Administrator a;
 		a = this.administratorService.findOne(id);
 		Assert.isTrue(a.getName().equals("admin1"));
