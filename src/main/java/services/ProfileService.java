@@ -1,7 +1,7 @@
 
 package services;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,18 +25,12 @@ public class ProfileService {
 		return result;
 	}
 
-	public Collection<Profile> findAll() {
-		Collection<Profile> result;
-		Assert.notNull(this.profileRepository);
-		result = this.profileRepository.findAll();
-		return result;
+	public List<Profile> findAll() {
+		return this.profileRepository.findAll();
 	}
 
-	public Profile findOne(final int profileId) {
-		Profile result;
-		Assert.notNull(this.profileRepository);
-		result = this.profileRepository.findOne(profileId);
-		return result;
+	public Profile findOne(final Integer arg0) {
+		return this.profileRepository.findOne(arg0);
 	}
 
 	public Profile save(final Profile profile) {
