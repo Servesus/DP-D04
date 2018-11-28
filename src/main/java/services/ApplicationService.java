@@ -25,38 +25,39 @@ public class ApplicationService {
 	//Managed respositories
 	@Autowired
 	private ApplicationRepository	applicationRepository;
-	
+
 	@Autowired
-	private FixUpTaskService fixUpTaskService;
-	
+	private FixUpTaskService		fixUpTaskService;
+
 	@Autowired
-	private HandyWorkerService handyWorkerService;
-	
+	private HandyWorkerService		handyWorkerService;
+
 	@Autowired
-	private ActorService actorService;
-	
-	public Application create(int fixUpTaskId) {
+	private ActorService			actorService;
+
+
+	public Application create(final int fixUpTaskId) {
 		Application result;
 		Collection<String> customerComments;
 		Collection<String> hwComments;
 		FixUpTask fixUpTask;
 		HandyWorker handyWorker;
 		UserAccount userAccount;
-		
-		userAccount = actorService.getActorLogged().getUserAccount();
-		
+
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+
 		Assert.isTrue(userAccount.getAuthorities().contains("HANDYWORKER"));
-		
-		fixUpTask= fixUpTaskService.findOne(fixUpTaskId);
-		handyWorker= handyWorkerService.findOne(actorService.getActorLogged().getId());
-		
+
+		fixUpTask = this.fixUpTaskService.findOne(fixUpTaskId);
+		handyWorker = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
+
 		final Date moment = new Date();
 		final Integer status = 0;
-		customerComments= new ArrayList<String>();
-		hwComments= new ArrayList<String>();
+		customerComments = new ArrayList<String>();
+		hwComments = new ArrayList<String>();
 
 		result = new Application();
-		
+
 		result.setMoment(moment);
 		result.setStatus(status);
 		result.setCustomerComments(customerComments);
@@ -90,30 +91,29 @@ public class ApplicationService {
 		UserAccount userAccount;
 		FixUpTask fixUpTask;
 		HandyWorker handyWorker;
-		
-		userAccount= LoginService.getPrincipal();
-		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER") || 
-				userAccount.getAuthorities().contains("HANDYWORKER"));
+
+		userAccount = LoginService.getPrincipal();
+		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER") || userAccount.getAuthorities().contains("HANDYWORKER"));
 
 		Application result;
-		
-		fixUpTask= application.getFixUpTask();
-		handyWorker= application.getHandyWorker();
-		
+
+		fixUpTask = application.getFixUpTask();
+		handyWorker = application.getHandyWorker();
+
 		result = this.applicationRepository.save(application);
-		
-		if(application.getId()==0){
-			Collection<Application> apps= fixUpTask.getApplications();
+
+		if (application.getId() == 0) {
+			final Collection<Application> apps = fixUpTask.getApplications();
 			apps.add(result);
 			fixUpTask.setApplications(apps);
-			fixUpTaskService.save(fixUpTask);
+			this.fixUpTaskService.save(fixUpTask);
 		}
-	
-		if(application.getId()==0){
-			Collection<Application> apps= handyWorker.getApplications();
+
+		if (application.getId() == 0) {
+			final Collection<Application> apps = handyWorker.getApplications();
 			apps.add(result);
 			handyWorker.setApplications(apps);
-			handyWorkerService.save(handyWorker);
+			this.handyWorkerService.save(handyWorker);
 		}
 
 		return result;
