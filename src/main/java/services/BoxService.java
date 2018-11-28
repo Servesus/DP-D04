@@ -85,7 +85,7 @@ public class BoxService {
 	//Other business methods
 
 	public Collection<Box> createSystemBoxes() {
-		final Collection<Box> res = Collections.emptyList();
+		final List<Box> res = new ArrayList<Box>();
 		//crear cajas memoria vacias
 		final Box inBox = this.create();
 		final Box outBox = this.create();
@@ -101,16 +101,11 @@ public class BoxService {
 		outBox.setIsSystem(true);
 		trashBox.setIsSystem(true);
 		spamBox.setIsSystem(true);
-		//guardar cajas en BD
-		this.boxRepository.save(inBox);
-		this.boxRepository.save(outBox);
-		this.boxRepository.save(trashBox);
-		this.boxRepository.save(spamBox);
 		//añadir cajas al result
-		res.add(inBox);
-		res.add(outBox);
-		res.add(trashBox);
-		res.add(spamBox);
+		res.add(this.boxRepository.save(inBox));
+		res.add(this.boxRepository.save(outBox));
+		res.add(this.boxRepository.save(trashBox));
+		res.add(this.boxRepository.save(spamBox));
 		//result
 		return res;
 	}
