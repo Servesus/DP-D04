@@ -1,6 +1,8 @@
 
 package services;
 
+import java.util.Collection;
+
 import javax.transaction.Transactional;
 
 import org.junit.Test;
@@ -34,7 +36,18 @@ public class HandyWorkerServiceTest extends AbstractTest {
 	@Test
 	public void testSave() {
 		final HandyWorker h = this.handyWorkerService.create();
+		HandyWorker saved;
+		h.setName("name");
+		h.setMiddleName("middleName");
+		h.setSurname("surname");
+		h.setPhoto("htts://www.google.com/photo");
+		h.setEmail("a@email.com");
+		h.setPhoneNumber("652914587");
 		h.setAddress("hola");
+		saved = this.handyWorkerService.save(h);
+		final Collection<HandyWorker> hws = this.handyWorkerService.findAll();
+		Assert.isTrue(hws.contains(saved));
+
 	}
 
 }

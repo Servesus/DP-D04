@@ -46,7 +46,8 @@ public class PhaseServiceTest extends AbstractTest {
 		Phase phase;
 		final Phase saved;
 		Collection<Phase> phases;
-		phase = this.phaseService.create(2696);
+		final int fixUpTaskId = this.getEntityId("fixUpTask1");
+		phase = this.phaseService.create(fixUpTaskId);
 
 		final Date startDate = new GregorianCalendar(2020, Calendar.NOVEMBER, 30).getTime();
 		final Date finishDate = new GregorianCalendar(2021, Calendar.NOVEMBER, 30).getTime();
@@ -59,6 +60,17 @@ public class PhaseServiceTest extends AbstractTest {
 		saved = this.phaseService.save(phase);
 		phases = this.phaseService.findAll();
 		Assert.isTrue(phases.contains(saved));
+		super.authenticate(null);
+
+	}
+	@Test
+	public void testDeletePhase() {
+		super.authenticate("handyWorker1");
+		final int phaseId = this.getEntityId("phase1");
+		final Phase delete = this.phaseService.findOne(phaseId);
+		this.phaseService.delete(delete);
+		final Collection<Phase> phases = this.phaseService.findAll();
+		Assert.isTrue(!phases.contains(delete));
 		super.authenticate(null);
 
 	}
