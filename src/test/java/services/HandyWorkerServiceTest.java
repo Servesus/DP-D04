@@ -5,6 +5,7 @@ import javax.transaction.Transactional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
@@ -20,6 +21,7 @@ import domain.HandyWorker;
 public class HandyWorkerServiceTest extends AbstractTest {
 
 	//Service under test
+	@Autowired
 	private HandyWorkerService	handyWorkerService;
 
 
@@ -27,6 +29,12 @@ public class HandyWorkerServiceTest extends AbstractTest {
 	public void testCreate() {
 		final HandyWorker h = this.handyWorkerService.create();
 		Assert.notNull(h);
+	}
+
+	@Test
+	public void testSave() {
+		final HandyWorker h = this.handyWorkerService.create();
+		h.setAddress("hola");
 	}
 
 }

@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.PhaseRepository;
-import security.Authority;
 import security.LoginService;
 import domain.FixUpTask;
 import domain.HandyWorker;
@@ -53,7 +52,7 @@ public class PhaseService {
 
 		Assert.isTrue(phase.getStartMoment().after(currentMoment));
 		Assert.isTrue(phase.getStartMoment().before(phase.getFinishMoment()));
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains(Authority.HANDYWORKER));
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
 		result = this.phaseRepository.save(phase);
 		if (phase.getId() == 0) {
 			final HandyWorker h = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());

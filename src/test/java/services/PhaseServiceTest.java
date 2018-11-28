@@ -1,17 +1,22 @@
 
 package services;
 
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.transaction.Transactional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
+import domain.HandyWorker;
 import domain.Phase;
 
 @ContextConfiguration(locations = {
@@ -22,30 +27,44 @@ import domain.Phase;
 public class PhaseServiceTest extends AbstractTest {
 
 	//Service Testing
-	private PhaseService	phaseService;
+	@Autowired
+	private PhaseService		phaseService;
+	@Autowired
+	private HandyWorkerService	handyWorkerService;
 
 
 	//2696 id fixUp crear fase 5
 	@Test
 	public void testCreatePhase() {
-		System.out.println("Entro");
 		final int fixUpTaskId = this.getEntityId("fixUpTask1");
-		System.out.println(fixUpTaskId);
 		final Phase p;
 		System.out.println("Fase creada");
-		try {
-			p = this.phaseService.create(fixUpTaskId);
-			p.setTitle("titulo");
-			p.setDescription("descr");
-			p.setStartMoment(new Date("2016/01/02 12:12"));
-			p.setFinishMoment(new Date("2018/01/02 12:12"));
-			p.setNumber(5);
-		} catch (final Exception e) {
-			System.out.println("Error" + e.getMessage());
-		}
+		p = this.phaseService.create(fixUpTaskId);
+		Assert.notNull(p.getFixUpTask());
+		Assert.notNull(p);
+	}
 
-		//Assert.notNull(p.getFixUpTask());
-		//Assert.notNull(p);
-		Assert.isTrue(true);
+	@Test
+	public void testSavePhase() {
+		Phase phase;
+		final Phase saved;
+		Collection<Phase> phases;
+		phase = this.phaseService.create(2696);
+
+		final Date startDate = new GregorianCalendar(2020, Calendar.NOVEMBER, 30).getTime();
+		final Date finishDate = new GregorianCalendar(2021, Calendar.NOVEMBER, 30).getTime();
+		phase.setTitle("phase5");
+		phase.setDescription("description");
+		phase.setStartMoment(startDate);
+		phase.setFinishMoment(finishDate);
+		phase.setNumber(5);
+		final Integer id = this.getEntityId("handyWorker1");
+		final HandyWorker h = this.handyWorkerService.findOne(id);
+		super.authenticate(h.getUserAccount().getUsername());
+		saved = this.phaseService.save(phase);
+		phases = this.phaseService.findAll();
+		Assert.isTrue(phases.contains(saved));
+		super.authenticate(null);
+
 	}
 }
