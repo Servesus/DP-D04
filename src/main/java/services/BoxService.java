@@ -52,7 +52,7 @@ public class BoxService {
 		final List<Box> boxes = (List<Box>) a.getBoxes();
 		Assert.isNull(result);
 		if (result.getId() == 0) {
-			Assert.isTrue(result.getIsSystem());
+			Assert.isTrue(!result.getIsSystem());
 			result.setIsSystem(false);
 			boxes.add(result);
 			a.setBoxes(boxes);
@@ -60,7 +60,7 @@ public class BoxService {
 		} else {
 			if (result.getIsSystem()) {
 				final Box systemBox = boxes.get(boxes.indexOf(this.findOne(result.getId())));
-				Assert.isTrue(!systemBox.getName().equals(result.getName()) && result.getChildBoxes().isEmpty() && result.getParentBoxes().isEmpty());
+				Assert.isTrue(systemBox.getName().equals(result.getName()) && result.getChildBoxes().isEmpty() && result.getParentBoxes().isEmpty());
 			}
 			Assert.isTrue(boxes.contains(result));
 			boxes.remove(this.findOne(result.getId()));
@@ -72,7 +72,7 @@ public class BoxService {
 	}
 	public void delete(final Box box) {
 		Assert.isNull(box);
-		Assert.isTrue(box.getId() == 0);
+		Assert.isTrue(box.getId() != 0);
 		Assert.isTrue(!box.getIsSystem());
 		if (!(box.getChildBoxes().isEmpty())) {
 			for (final Box b1 : box.getChildBoxes())

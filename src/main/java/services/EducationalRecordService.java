@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.EducationalRecordRepository;
+import security.LoginService;
 import domain.EducationalRecord;
 import domain.HandyWorker;
 
@@ -32,6 +33,8 @@ public class EducationalRecordService {
 
 	//Simple CRUD methods
 	public EducationalRecord create() {
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		final EducationalRecord educationalRecord = new EducationalRecord();
 		educationalRecord.setComments(new ArrayList<String>());
 		return educationalRecord;
@@ -46,6 +49,8 @@ public class EducationalRecordService {
 	}
 
 	public EducationalRecord save(final EducationalRecord educationalRecord) {
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		final EducationalRecord result = this.educationalRecordRepository.save(educationalRecord);
 		Assert.isNull(result);
 		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
@@ -65,8 +70,10 @@ public class EducationalRecordService {
 	}
 
 	public void delete(final EducationalRecord educationalRecord) {
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		Assert.isNull(educationalRecord);
-		Assert.isTrue(educationalRecord.getId() == 0);
+		Assert.isTrue(educationalRecord.getId() != 0);
 		this.educationalRecordRepository.delete(educationalRecord);
 	}
 

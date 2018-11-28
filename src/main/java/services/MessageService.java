@@ -34,6 +34,7 @@ public class MessageService {
 
 	//Simple CRUD Methods
 	public Message create() {
+		//Assert.isTrue
 		Message result;
 		result = new Message();
 		final Actor sender = this.actorService.getActorLogged();

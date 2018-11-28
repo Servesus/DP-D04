@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.PersonalRecordRepository;
+import security.LoginService;
 import domain.HandyWorker;
 import domain.PersonalRecord;
 
@@ -30,6 +31,7 @@ public class PersonalRecordService {
 
 	//Simple CRUD methods
 	public PersonalRecord create() {
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
 		final PersonalRecord personalRecord = new PersonalRecord();
 		return personalRecord;
 	}
@@ -43,6 +45,7 @@ public class PersonalRecordService {
 	}
 
 	public PersonalRecord save(final PersonalRecord personalRecord) {
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
 		final PersonalRecord result = personalRecord;
 		Assert.isNull(result);
 		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
@@ -58,7 +61,8 @@ public class PersonalRecordService {
 	}
 	public void delete(final PersonalRecord personalRecord) {
 		Assert.isNull(personalRecord);
-		Assert.isTrue(personalRecord.getId() == 0);
+		Assert.isTrue(personalRecord.getId() != 0);
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
 		this.personalRecordRepository.delete(personalRecord);
 	}
 
