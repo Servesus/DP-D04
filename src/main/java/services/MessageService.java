@@ -2,6 +2,8 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,8 @@ public class MessageService {
 
 	public Message save(final Message message) {
 		//Declarar result
+		final Date actualDate = Calendar.getInstance().getTime();
+		message.setSendDate(actualDate);
 		final Message result = this.messageRepository.save(message);
 		//Asserts y sacar sender y recipient
 		Assert.notNull(result);
@@ -137,34 +141,6 @@ public class MessageService {
 
 	}
 
-	/*
-	 * public void copyMessage(final Message message, final Box boxR) {
-	 * //Asserts e inicializaciones
-	 * Assert.notNull(message);
-	 * Assert.isTrue(message.getId() == 0);
-	 * final Actor a = message.getSender();
-	 * final List<Box> boxesActor = (List<Box>) a.getBoxes();
-	 * Box originBox = null;
-	 * boolean msgInActor = false;
-	 * boolean boxInActor = false;
-	 * for (int i = 0; i < a.getBoxes().size(); i++) {
-	 * if (boxesActor.get(i).getMessages().contains(message)) {
-	 * originBox = boxesActor.get(i);
-	 * msgInActor = true;
-	 * }
-	 * if (boxesActor.get(i).equals(boxR))
-	 * boxInActor = true;
-	 * }
-	 * Assert.isTrue(!msgInActor || !boxInActor);
-	 * //Mover mensage
-	 * boxR.getMessages().add(message);
-	 * this.boxService.save(originBox);
-	 * this.boxService.save(boxR);
-	 * this.actorService.save(a);
-	 * 
-	 * }
-	 */
-
 	public void deleteMessage(final Message message) {
 		//Asserts e inicializaciones
 		Assert.notNull(message);
@@ -195,9 +171,18 @@ public class MessageService {
 			for (int i = 0; i < a.getBoxes().size(); i++)
 				if (boxesActor.get(i).getMessages().contains(message)) {
 					final Box boxWithMsg = boxesActor.get(i);
-					boxWithMsg.getMessages().remove(message);
+					final List<Message> msgs = (List<Message>) boxWithMsg.getMessages();
+					msgs.remove(message);
+					boxWithMsg.setMessages(msgs);
 					this.boxService.save(boxWithMsg);
-					this.boxService.save(a);
+					/*
+					 * final Box boxWithMsg = boxesActor.get(i);
+					 * boxesActor.remove(boxWithMsg);
+					 * boxWithMsg.getMessages().remove(message);
+					 * boxesActor.add(boxWithMsg);
+					 * a.setBoxes(boxesActor);
+					 * this.boxService.save(boxWithMsg);
+					 */
 				}
 	}
 
