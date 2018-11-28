@@ -13,7 +13,6 @@ import domain.CreditCard;
 import domain.Customer;
 
 import repositories.CreditCardRepository;
-import security.LoginService;
 import security.UserAccount;
 
 
@@ -37,7 +36,7 @@ public class CreditCardService {
 		CreditCard result;
 		UserAccount userAccount;
 		
-		userAccount=LoginService.getPrincipal();
+		userAccount=actorService.getActorLogged().getUserAccount();
 		
 		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER"));
 		

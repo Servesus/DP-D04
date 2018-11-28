@@ -105,9 +105,4 @@ public class Authority implements GrantedAuthority {
 		return result;
 	}
 
-	@Override
-	public String toString() {
-		return this.authority;
-	}
-
 }
