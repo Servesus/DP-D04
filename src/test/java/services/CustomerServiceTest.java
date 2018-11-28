@@ -47,7 +47,7 @@ public class CustomerServiceTest extends AbstractTest{
 		
 		System.out.println("Creo el customer");
 		
-		UserAccount userAccount= new UserAccount();
+		UserAccount userAccount= c.getUserAccount();
 		userAccount.setUsername("customer20");
 		userAccount.setPassword("123468023");
 		c.setUserAccount(userAccount);
@@ -59,10 +59,11 @@ public class CustomerServiceTest extends AbstractTest{
 		
 		System.out.println("He puesto los atributos al customer");
 		
-		customerService.save(c);
+		Customer test = customerService.save(c);
 		System.out.println("Se ha creado el customer y lo compruebo");
 		
-		customerService.findAll();
+		System.out.println(customerService.findAll());
+		System.out.println(test);
 	}
 	
 	
