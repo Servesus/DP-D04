@@ -28,7 +28,6 @@ public class AdministratorServiceTest extends AbstractTest {
 
 
 	@Test
-	//TODO : Probar inicializando profiles en el create de Admin
 	public void create() {
 		super.authenticate("admin1");
 
@@ -43,6 +42,7 @@ public class AdministratorServiceTest extends AbstractTest {
 	}
 
 	@Test
+	//TODO: Revisar BoxService
 	public void save() {
 		Administrator a;
 		Administrator saved;
@@ -51,6 +51,10 @@ public class AdministratorServiceTest extends AbstractTest {
 		super.authenticate("admin1");
 
 		a = this.administratorService.create();
+		a.setName("admin2");
+		a.setSurname("admin2");
+		a.setEmail("admin2@gmail.com");
+
 		saved = this.administratorService.save(a);
 
 		admins = this.administratorService.findAll();
@@ -67,6 +71,7 @@ public class AdministratorServiceTest extends AbstractTest {
 		Administrator a;
 		a = this.administratorService.findOne(id);
 		Assert.isTrue(a.getName().equals("admin1"));
+		Assert.notNull(a);
 	}
 
 	@Test
@@ -74,6 +79,7 @@ public class AdministratorServiceTest extends AbstractTest {
 		Collection<Administrator> admins;
 		admins = this.administratorService.findAll();
 		Assert.isTrue(admins.size() == 1);
+		Assert.notNull(admins);
 	}
 
 }

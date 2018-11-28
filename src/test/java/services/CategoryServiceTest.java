@@ -27,22 +27,38 @@ public class CategoryServiceTest extends AbstractTest {
 	private CategoryService	categoryService;
 
 
-	//TODO Comprobar con login (Falta login)
 	@Test
 	public void create() {
+		super.authenticate("admin1");
 		Category c;
 		c = this.categoryService.create();
 		c.setName("categoryTest");
 
 		Assert.notNull(c);
+		Assert.isTrue(c.getName().equals("categoryTest"));
+		super.authenticate(null);
 	}
 
-	//TODO
+	@Test
 	public void save() {
+		super.authenticate("admin1");
+		Category c;
+		Category saved;
+		Collection<Category> categories;
+
+		c = this.categoryService.create();
+		c.setName("categoryTest");
+
+		saved = this.categoryService.save(c);
+		categories = this.categoryService.findAll();
+
+		Assert.notNull(saved);
+		Assert.isTrue(categories.contains(saved));
+		Assert.notNull(categories);
+
+		super.authenticate(null);
 
 	}
-
-	//TODO Comprobar con login
 	@Test
 	public void findOne() {
 		Integer id;
@@ -52,10 +68,33 @@ public class CategoryServiceTest extends AbstractTest {
 		Assert.isTrue(c.getName().equals("category1"));
 	}
 
+	@Test
 	public void findAll() {
 		Collection<Category> categories;
 		categories = this.categoryService.findAll();
-		Assert.isTrue(categories.size() == 2);
+		Assert.isTrue(categories.size() == 3);
+		Assert.notNull(categories);
+	}
+
+	@Test
+	//TODO
+	public void delete() {
+		super.authenticate("admin1");
+		Collection<Category> categories;
+		Category c;
+		Integer id;
+		id = this.getEntityId("category1");
+
+		categories = this.categoryService.findAll();
+
+		c = this.categoryService.findOne(id);
+		this.categoryService.delete(c);
+
+		Assert.notNull(c);
+		System.out.println(categories.size());
+		//		Assert.isTrue(categories.size() == 1);
+
+		super.authenticate(null);
 	}
 
 }

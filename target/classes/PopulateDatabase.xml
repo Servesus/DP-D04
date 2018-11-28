@@ -1362,7 +1362,7 @@
 	</bean>
 	<!-- Category -->
 	<bean id="category" class = "domain.Category">
-		<property name="name" value="category"/>
+		<property name="name" value="CATEGORY"/>
 		<property name="parents">
 			<list>
 				
@@ -1384,10 +1384,25 @@
 		</property>
 		<property name="childs">
 			<list>
-				
+				<ref bean = "category"/>
 			</list>
 		</property>
 	</bean>
+	
+	<bean id="category2" class = "domain.Category">
+		<property name="name" value="category2"/>
+		<property name="parents">
+			<list>
+				<ref bean = "category1"/>
+			</list>
+		</property>
+		<property name="childs">
+			<list>
+				
+			</list>
+		</property>	
+	</bean>
+	
 	<!-- Referee -->
 	<bean id="referee1" class = "domain.Referee">
 		<property name="name" value="referee1"/>
