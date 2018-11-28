@@ -37,7 +37,7 @@ public class AdministratorServiceTest extends AbstractTest {
 		a.setName("admin2");
 		a.setSurname("admin2");
 		a.setEmail("admin2@gmail.com");
-		Assert.isNull(a);
+		Assert.notNull(a);
 
 		super.authenticate(null);
 	}
