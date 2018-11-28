@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.ConfigurationRepository;
-import security.LoginService;
+import security.UserAccount;
 import domain.Administrator;
 import domain.Configuration;
 
@@ -60,8 +60,14 @@ public class ConfigurationService {
 	}
 	public Configuration save(final Configuration configuration) {
 		Assert.notNull(configuration);
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("ADMIN"));
+		UserAccount userAccount;
+
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("ADMIN"));
+
 		Configuration result;
+
 		result = this.configurationRepository.save(configuration);
 		if (configuration.getId() == 0) {
 			final Administrator a = this.administratorService.findOne(this.actorService.getActorLogged().getId());
