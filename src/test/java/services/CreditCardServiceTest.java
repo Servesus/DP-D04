@@ -1,5 +1,8 @@
 package services;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.transaction.Transactional;
 
 import org.junit.Test;
@@ -12,6 +15,7 @@ import org.springframework.util.Assert;
 import domain.CreditCard;
 import domain.Customer;
 
+import security.Authority;
 import security.UserAccount;
 import utilities.AbstractTest;
 
@@ -25,23 +29,9 @@ public class CreditCardServiceTest extends AbstractTest{
 	@Autowired
 	private CreditCardService creditCardService;
 	
-	@Autowired
-	private CustomerService customerService;
-	
 	@Test
 	public void createTest(){
-		Customer c = customerService.create();
-		
-		UserAccount userAccount = c.getUserAccount();
-		
-		userAccount.setUsername("juanjo");
-		userAccount.setPassword("1234567");
-		
-		c.setUserAccount(userAccount);
-		
-		customerService.save(c);
-		
-		super.authenticate("juanjo");
+		super.authenticate("customer1");
 		System.out.println("Entro en el método");
 		CreditCard creditCard= creditCardService.create();
 		System.out.println("CreditCard creada");
