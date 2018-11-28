@@ -43,7 +43,7 @@ public class Box extends DomainEntity {
 		this.parentBoxes = parentBoxes;
 	}
 
-	@ManyToMany
+	@ManyToMany(mappedBy = "parentBoxes")
 	public Collection<Box> getChildBoxes() {
 		return this.childBoxes;
 	}

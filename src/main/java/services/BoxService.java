@@ -122,7 +122,7 @@ public class BoxService {
 		this.boxRepository.save(child);
 		final List<Box> parentsSChilds = (List<Box>) parents.getChildBoxes();
 		parentsSChilds.add(child);
-		parents.setParentBoxes(parentsSChilds);
+		parents.setChildBoxes(parentsSChilds);
 		this.boxRepository.save(parents);
 	}
 
