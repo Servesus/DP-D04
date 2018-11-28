@@ -44,7 +44,6 @@ public class FixUpTaskService {
 
 	public Collection<FixUpTask> findAll() {
 		Collection<FixUpTask> result;
-		Assert.notNull(this.fixUpTaskRepository);
 		result = this.fixUpTaskRepository.findAll();
 		return result;
 	}
