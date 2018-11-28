@@ -25,10 +25,10 @@ import domain.Phase;
 @Transactional
 public class HandyWorkerService {
 
-	//Managed repository
+	// Managed repository -----------------------------------------------------
 	@Autowired
 	private HandyWorkerRepository	handyWorkerRepository;
-	//Servicios
+	// Supporting services ----------------------------------------------------
 	@Autowired
 	private FinderService			finderService;
 	@Autowired
@@ -37,7 +37,11 @@ public class HandyWorkerService {
 	private ActorService			actorService;
 
 
-	//Simple CRUD Methods
+	// Constructors -----------------------------------------------------------
+	public HandyWorkerService() {
+		super();
+	}
+	// Simple CRUD methods ----------------------------------------------------
 
 	public HandyWorker create() {
 		HandyWorker result;
@@ -107,6 +111,7 @@ public class HandyWorkerService {
 
 		this.handyWorkerRepository.delete(handyWorker);
 	}
+	// Other business methods -------------------------------------------------
 
 	public List<Application> showApplicationsByHandyWorker() {
 		final Integer id = this.actorService.getActorLogged().getId();
