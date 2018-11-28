@@ -32,8 +32,8 @@ public class ProfileServiceTest extends AbstractTest {
 	}
 	@Test
 	public void testFindOneProfile() {
-		Integer id;
-		id = 2631;
+
+		final int id = this.getEntityId("profile1");
 		Profile a;
 		a = this.profileService.findOne(id);
 		Assert.isTrue(a.getName().equals("valenciano"));

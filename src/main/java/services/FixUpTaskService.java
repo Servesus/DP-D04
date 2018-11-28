@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.FixUpTaskRepository;
-import security.LoginService;
 import security.UserAccount;
 import domain.Application;
 import domain.Complaint;
@@ -60,8 +59,10 @@ public class FixUpTaskService {
 
 		FixUpTask result;
 		UserAccount userAccount;
-		userAccount = LoginService.getPrincipal();
-		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER"));
+
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("CUSTOMER"));
 		Assert.notNull(fixUpTask);
 		if (fixUpTask.getId() == 0) {
 			final FixUpTask result1 = this.fixUpTaskRepository.save(fixUpTask);
@@ -78,8 +79,10 @@ public class FixUpTaskService {
 	public void delete(final FixUpTask fixUpTask) {
 
 		UserAccount userAccount;
-		userAccount = LoginService.getPrincipal();
-		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER"));
+
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("CUSTOMER"));
 		Assert.notNull(fixUpTask);
 		assert fixUpTask.getId() != 0;
 		Assert.isTrue(this.fixUpTaskRepository.exists(fixUpTask.getId()));

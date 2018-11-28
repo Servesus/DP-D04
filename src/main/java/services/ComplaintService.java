@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.ComplaintRepository;
-import security.LoginService;
 import security.UserAccount;
 import domain.Complaint;
 import domain.FixUpTask;
@@ -73,8 +72,10 @@ public class ComplaintService {
 
 		Complaint result;
 		UserAccount userAccount;
-		userAccount = LoginService.getPrincipal();
-		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER"));
+
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("CUSTOMER"));
 		Assert.notNull(complaint);
 		if (complaint.getId() == 0) {
 			final Complaint result1 = this.complaintRepository.save(complaint);
@@ -92,8 +93,10 @@ public class ComplaintService {
 
 		Assert.notNull(complaint);
 		UserAccount userAccount;
-		userAccount = LoginService.getPrincipal();
-		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER"));
+
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("CUSTOMER"));
 		assert complaint.getId() != 0;
 		Assert.isTrue(this.complaintRepository.exists(complaint.getId()));
 		final FixUpTask f = complaint.getFixUpTasks();
@@ -107,8 +110,10 @@ public class ComplaintService {
 	public List<Complaint> getComplaintSelfAssigned() {
 
 		UserAccount userAccount;
-		userAccount = LoginService.getPrincipal();
-		Assert.isTrue(userAccount.getAuthorities().contains("REFEREE"));
+
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("REFEREE"));
 		final Integer idReferee = this.actorService.getActorLogged().getId();
 		final Referee referee = this.refereeService.findOne(idReferee);
 		final List<Complaint> result = new ArrayList<Complaint>();
