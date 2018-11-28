@@ -38,7 +38,8 @@ public class CreditCardService {
 		
 		userAccount=actorService.getActorLogged().getUserAccount();
 		
-		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER"));
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority()
+				.equals("CUSTOMER"));
 		
 		result= new CreditCard();
 		

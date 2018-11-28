@@ -46,7 +46,8 @@ public class ApplicationService {
 
 		userAccount = this.actorService.getActorLogged().getUserAccount();
 
-		Assert.isTrue(userAccount.getAuthorities().contains("HANDYWORKER"));
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority()
+				.equals("HANDYWORKER"));
 
 		fixUpTask = this.fixUpTaskService.findOne(fixUpTaskId);
 		handyWorker = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
@@ -93,7 +94,10 @@ public class ApplicationService {
 		HandyWorker handyWorker;
 
 		userAccount = LoginService.getPrincipal();
-		Assert.isTrue(userAccount.getAuthorities().contains("CUSTOMER") || userAccount.getAuthorities().contains("HANDYWORKER"));
+		Assert.isTrue(userAccount.getAuthorities().iterator().next()
+				.getAuthority().equals("CUSTOMER") || 
+				userAccount.getAuthorities().iterator().next()
+				.getAuthority().equals("HANDYWORKER"));
 
 		Application result;
 
