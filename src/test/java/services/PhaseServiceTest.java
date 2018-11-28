@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
-import domain.HandyWorker;
 import domain.Phase;
 
 @ContextConfiguration(locations = {
@@ -28,9 +27,7 @@ public class PhaseServiceTest extends AbstractTest {
 
 	//Service Testing
 	@Autowired
-	private PhaseService		phaseService;
-	@Autowired
-	private HandyWorkerService	handyWorkerService;
+	private PhaseService	phaseService;
 
 
 	//2696 id fixUp crear fase 5
@@ -58,9 +55,7 @@ public class PhaseServiceTest extends AbstractTest {
 		phase.setStartMoment(startDate);
 		phase.setFinishMoment(finishDate);
 		phase.setNumber(5);
-		final Integer id = this.getEntityId("handyWorker1");
-		final HandyWorker h = this.handyWorkerService.findOne(id);
-		super.authenticate(h.getUserAccount().getUsername());
+		super.authenticate("handyWorker1");
 		saved = this.phaseService.save(phase);
 		phases = this.phaseService.findAll();
 		Assert.isTrue(phases.contains(saved));
