@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.ProfessionalRecordRepository;
+import security.LoginService;
 import domain.HandyWorker;
 import domain.ProfessionalRecord;
 
@@ -32,6 +33,8 @@ public class ProfessionalRecordService {
 
 	//Simple CRUD methods
 	public ProfessionalRecord create() {
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		final ProfessionalRecord professionalRecord = new ProfessionalRecord();
 		professionalRecord.setComment(new ArrayList<String>());
 		return professionalRecord;
@@ -46,6 +49,8 @@ public class ProfessionalRecordService {
 	}
 
 	public ProfessionalRecord save(final ProfessionalRecord professionalRecord) {
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		final ProfessionalRecord result = this.professionalRecordRepository.save(professionalRecord);
 		Assert.isNull(result);
 		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
@@ -65,8 +70,10 @@ public class ProfessionalRecordService {
 	}
 
 	public void delete(final ProfessionalRecord professionalRecord) {
+		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		Assert.isNull(professionalRecord);
-		Assert.isTrue(professionalRecord.getId() == 0);
+		Assert.isTrue(professionalRecord.getId() != 0);
 		this.professionalRecordRepository.delete(professionalRecord);
 	}
 
