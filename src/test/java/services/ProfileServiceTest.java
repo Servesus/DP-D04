@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,14 +21,14 @@ import domain.Profile;
 @Transactional
 public class ProfileServiceTest extends AbstractTest {
 
+	@Autowired
 	private ProfileService	profileService;
 
 
 	@Test
 	public void testCreateProfile() {
 		final Profile create = this.profileService.create();
-		final Profile busqueda = this.profileService.findOne(0);
-		Assert.isTrue(create.equals(busqueda));
+		Assert.notNull(create);
 	}
 	@Test
 	public void testFindOneProfile() {
@@ -42,5 +43,18 @@ public class ProfileServiceTest extends AbstractTest {
 	public void testFindAllProfile() {
 		final Collection<Profile> res = this.profileService.findAll();
 		Assert.isTrue(res.size() == 5);
+	}
+	@Test
+	public void testSaveProfile() {
+		final Profile profile = this.profileService.create();
+		final Profile profileG = this.profileService.save(profile);
+		Assert.isTrue(!profileG.equals(null));
+	}
+	@Test
+	public void testDeleteProfile() {
+
+		final Profile a = this.profileService.findOne(2632);
+		this.profileService.delete(a);
+		Assert.isTrue(this.profileService.findAll().size() == 4);
 	}
 }
