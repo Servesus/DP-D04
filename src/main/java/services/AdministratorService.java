@@ -33,6 +33,7 @@ public class AdministratorService {
 	//Supporting services
 	@Autowired
 	private BoxService				boxService;
+	@Autowired
 	private ActorService			actorService;
 
 

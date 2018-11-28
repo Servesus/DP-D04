@@ -13,6 +13,6 @@ import domain.Referee;
 @Repository
 public interface RefereeRepository extends JpaRepository<Referee, Integer> {
 
-	@Query("selec c from Complaint where c.reports.size = 0")
+	@Query("select c from Complaint c where c.reports.size = 0")
 	Collection<Complaint> getComplaintsWithoutReport();
 }

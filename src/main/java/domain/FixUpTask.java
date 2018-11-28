@@ -102,7 +102,7 @@ public class FixUpTask extends DomainEntity {
 		this.applications = applications;
 	}
 
-	@OneToMany(mappedBy = "fixUpTask")
+	@OneToMany(mappedBy = "fixUpTasks")
 	public Collection<Complaint> getComplaints() {
 		return this.complaints;
 	}

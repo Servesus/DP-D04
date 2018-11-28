@@ -27,6 +27,7 @@ public class ReportService {
 	//Supporting services
 	@Autowired
 	private ActorService		actorService;
+	@Autowired
 	private RefereeService		refereeService;
 
 
@@ -88,12 +89,12 @@ public class ReportService {
 		return result;
 	}
 
-	//TODO
 	public void delete(final Report r) {
 		UserAccount userAccount;
 		userAccount = LoginService.getPrincipal();
 
 		Assert.isTrue(userAccount.getAuthorities().contains("REFEREE"));
+		Assert.isTrue(r.getIsFinal() == true);
 		Assert.notNull(r);
 		Assert.isTrue(r.getId() != 0);
 		this.reportRepository.delete(r);

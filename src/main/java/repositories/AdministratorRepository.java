@@ -39,15 +39,15 @@ public interface AdministratorRepository extends JpaRepository<Administrator, In
 	Double getAvgApplicationsPerFixUpTask();
 
 	//The maximum of the number of applications per fix-up task.
-	@Query("selec max(f.applications.size) from FixUpTask f")
+	@Query("select max(f.applications.size) from FixUpTask f")
 	Double getMaxApplicationsPerFixUpTask();
 
 	//The minimum of the number of applications per fix-up task.
-	@Query("selec min(f.applications.size) from FixUpTask f")
+	@Query("select min(f.applications.size) from FixUpTask f")
 	Double getMinApplicationsPerFixUpTask();
 
 	//The standard deviation of the number of applications per fix-up task.
-	@Query("selec stddev(f.applications.size) from FixUpTask f")
+	@Query("select stddev(f.applications.size) from FixUpTask f")
 	Double getStddevApplicationsPerFixUpTask();
 
 	/* Q3 */
@@ -57,15 +57,15 @@ public interface AdministratorRepository extends JpaRepository<Administrator, In
 	Double getAvgMaxPricePerFixUpTask();
 
 	//The maximum of the maximum price per fix-up task.
-	@Query("selec max(f.maxPrice) from FixUpTask f")
+	@Query("select max(f.maxPrice) from FixUpTask f")
 	Double getMaxMaxPricePerFixUpTask();
 
 	//The minimum of the maximum price per fix-up task.
-	@Query("selec min(f.maxPrice) from FixUpTask f")
+	@Query("select min(f.maxPrice) from FixUpTask f")
 	Double getMinMaxPricePerFixUpTask();
 
 	//The standard deviation of the maximum price per fix-up task.
-	@Query("selec stddev(f.maxPrice) from FixUpTask f")
+	@Query("select stddev(f.maxPrice) from FixUpTask f")
 	Double getStddevMaxPricePerFixUpTask();
 
 	/* Q4 */
@@ -107,13 +107,13 @@ public interface AdministratorRepository extends JpaRepository<Administrator, In
 	/* Q8 */
 
 	//The ratio of pending applications that cannot change its status because their time period has elapsed
-	@Query("select 100.0*(select count(a) from Application a  where (a.status = 0) and (a.fixUpTasks.startDate < CURRENT_TIMESTAMP()))/count(a) from Application a")
+	@Query("select 100.0*(select count(a) from Application a  where (a.status = 0) and (a.fixUpTask.startDate < CURRENT_TIMESTAMP()))/count(a) from Application a")
 	Double getRatioOfPendingApplicationsCanNotChangeStatus();
 
 	/* Q9 */
 
 	//The listing of customers who have published at least 10% more fix-up tasks than the average, ordered by number of applications.
-	@Query("select c.name from Customer c join c.fixUpTasks f where(c.fixUpTasks.size >= 1.1*(select avg(c.fixUpTasks.size) from Customer c))group by c.id order by f.applications.size DESC")
+	@Query("select c from Customer c join c.fixUpTasks f where(c.fixUpTasks.size >= 1.1*(select avg(c.fixUpTasks.size) from Customer c))group by c.id order by f.applications.size DESC")
 	List<Customer> getCustomerMoreAcceptedThanAvg();
 
 	/* Q10 */
@@ -130,15 +130,15 @@ public interface AdministratorRepository extends JpaRepository<Administrator, In
 	Double getAvgComplaintsPerFixUpTask();
 
 	//The maximum of complaints per fix-up task.
-	@Query("selec max(f.complaints.size) from FixUpTask f")
+	@Query("select max(f.complaints.size) from FixUpTask f")
 	Double getMaxComplaintsPerFixUpTask();
 
 	//The minimum of the complaints per fix-up task.
-	@Query("selec min(f.complaints.size) from FixUpTask f")
+	@Query("select min(f.complaints.size) from FixUpTask f")
 	Double getMinComplaintsPerFixUpTask();
 
 	//The standard deviation of the complaints per fix-up task.
-	@Query("selec stddev(f.complaints.size) from FixUpTask f")
+	@Query("select stddev(f.complaints.size) from FixUpTask f")
 	Double getStddevComplaintsPerFixUpTask();
 
 	/* Q12 */
@@ -168,16 +168,29 @@ public interface AdministratorRepository extends JpaRepository<Administrator, In
 	/* Q14 */
 
 	//The top-three customers in terms of complaints.
-	@Query("select c.name from Customer c join c.complaints com group by c.id order by com.size DESC")
+	@Query("select c from Customer c join c.complaints com group by c.id order by com.size DESC")
 	List<Customer> getTop3CustomersOfComplaints();
 
 	/* Q15 */
 
 	//The top-three handy workers in terms of complaints.
-	@Query("select h.name from HandyWorker h join h.applications a join a.fixUpTasks t group by h.id order by t.complaints.size DESC")
+	@Query("select h from HandyWorker h join h.applications a join a.fixUpTask t group by h.id order by t.complaints.size DESC")
 	List<HandyWorker> getTop3HandyWorkerOfComplaints();
 
-	//	/* Other Queries */
-	//	@Query("select a from Actor where a.isSuspicious = true")
-	//	List<Actor> getSuspicious();
+	//The average of the number of notes per referee report
+	@Query("select avg(r.notes.size) from Report r")
+	Double getAvgNotes();
+
+	//The maximum of the number of notes per referee report
+	@Query("select max(r.notes.size) from Report r")
+	Integer getMaxNotes();
+
+	//The minimum of the number of notes per referee report
+	@Query("select min(r.notes.size) from Report r")
+	Integer getMinNotes();
+
+	//The standard deviation of the number of notes per referee report
+	@Query("select stddev(r.notes.size) from Report r")
+	Double getSteddevNotes();
+
 }
