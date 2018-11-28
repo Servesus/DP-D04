@@ -1,6 +1,8 @@
 
 package services;
 
+import java.util.Collection;
+
 import javax.transaction.Transactional;
 
 import org.junit.Test;
@@ -48,6 +50,12 @@ public class CategoryServiceTest extends AbstractTest {
 		Category c;
 		c = this.categoryService.findOne(id);
 		Assert.isTrue(c.getName().equals("category1"));
+	}
+
+	public void findAll() {
+		Collection<Category> categories;
+		categories = this.categoryService.findAll();
+		Assert.isTrue(categories.size() == 2);
 	}
 
 }

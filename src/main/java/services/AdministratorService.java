@@ -54,7 +54,7 @@ public class AdministratorService {
 		profiles = new ArrayList<Profile>();
 
 		userAccount = LoginService.getPrincipal();
-		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("ADMIN"));
 
 		auts = new ArrayList<Authority>();
 		aut = new Authority();
