@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.ProfessionalRecordRepository;
-import security.LoginService;
+import security.UserAccount;
 import domain.HandyWorker;
 import domain.ProfessionalRecord;
 
@@ -33,7 +33,9 @@ public class ProfessionalRecordService {
 
 	//Simple CRUD methods
 	public ProfessionalRecord create() {
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		UserAccount userAccount;
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		final ProfessionalRecord professionalRecord = new ProfessionalRecord();
 		professionalRecord.setComment(new ArrayList<String>());
@@ -49,7 +51,9 @@ public class ProfessionalRecordService {
 	}
 
 	public ProfessionalRecord save(final ProfessionalRecord professionalRecord) {
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		UserAccount userAccount;
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		final ProfessionalRecord result = this.professionalRecordRepository.save(professionalRecord);
 		Assert.isNull(result);
@@ -70,7 +74,9 @@ public class ProfessionalRecordService {
 	}
 
 	public void delete(final ProfessionalRecord professionalRecord) {
-		Assert.isTrue(LoginService.getPrincipal().getAuthorities().contains("HANDYWORKER"));
+		UserAccount userAccount;
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		Assert.isNull(professionalRecord);
 		Assert.isTrue(professionalRecord.getId() != 0);
