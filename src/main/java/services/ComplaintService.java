@@ -38,6 +38,7 @@ public class ComplaintService {
 
 
 	public Complaint create(final Integer idFixUpTask) {
+
 		final Complaint result = new Complaint();
 		result.setTicker(CurriculaService.generadorDeTickers());
 		final Date moment = new Date();
