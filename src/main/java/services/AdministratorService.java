@@ -96,11 +96,10 @@ public class AdministratorService {
 	public Administrator save(final Administrator a) {
 		UserAccount userAccount;
 		userAccount = LoginService.getPrincipal();
-
-		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("ADMIN"));
 		Assert.notNull(a);
 
-		final Administrator result;
+		Administrator result;
 
 		if (a.getId() == 0) {
 			Collection<Box> boxSystem;
@@ -113,9 +112,10 @@ public class AdministratorService {
 	}
 	public void delete(final Administrator a) {
 		UserAccount userAccount;
-		userAccount = LoginService.getPrincipal();
 
-		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
+		userAccount = LoginService.getPrincipal();
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("ADMIN"));
+
 		Assert.notNull(a);
 		Assert.isTrue(a.getId() != 0);
 		this.administratorRepository.delete(a);

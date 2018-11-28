@@ -35,19 +35,17 @@ public class CategoryService {
 		UserAccount userAccount;
 		userAccount = LoginService.getPrincipal();
 
-		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("ADMIN"));
+
 		Category result;
 		result = new Category();
+
 		return result;
 	}
 
 	public Collection<Category> findAll() {
 		Collection<Category> result;
 
-		UserAccount userAccount;
-		userAccount = LoginService.getPrincipal();
-
-		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		result = this.categoryRepository.findAll();
 		Assert.notNull(result);
 
@@ -55,10 +53,6 @@ public class CategoryService {
 	}
 
 	public Category findOne(final Integer categoryId) {
-		UserAccount userAccount;
-		userAccount = LoginService.getPrincipal();
-
-		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
 		Assert.isTrue(categoryId != 0);
 		return this.categoryRepository.findOne(categoryId);
 	}
@@ -67,7 +61,7 @@ public class CategoryService {
 		Actor a;
 		a = this.actorService.getActorLogged();
 
-		Assert.isTrue(a.getUserAccount().getAuthorities().contains("ADMIN"));
+		Assert.isTrue(a.getUserAccount().getAuthorities().iterator().next().getAuthority().equals("ADMIN"));
 		Assert.notNull(c);
 
 		Administrator admin;
@@ -89,7 +83,7 @@ public class CategoryService {
 		a = this.actorService.getActorLogged();
 		Collection<Category> categories;
 
-		Assert.isTrue(a.getUserAccount().getAuthorities().contains("ADMIN"));
+		Assert.isTrue(a.getUserAccount().getAuthorities().iterator().next().getAuthority().equals("ADMIN"));
 		Assert.notNull(c);
 
 		Collection<Administrator> admins;
