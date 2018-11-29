@@ -52,7 +52,7 @@ public class ComplaintServiceTest extends AbstractTest {
 		final int id = this.getEntityId("complaint1");
 		final Complaint caso1 = this.complaintService.findOne(id);
 		this.complaintService.delete(caso1);
-		Assert.isNull(this.complaintService.findOne(2715));
+		Assert.isNull(this.complaintService.findOne(id));
 		super.authenticate(null);
 	}
 	@Test
