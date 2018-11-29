@@ -30,10 +30,6 @@ public class FixUpTaskService {
 
 
 	public FixUpTask create() {
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/miguel
 		UserAccount userAccount;
 		userAccount = this.actorService.getActorLogged().getUserAccount();
 		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("CUSTOMER"));
@@ -69,13 +65,8 @@ public class FixUpTaskService {
 
 		userAccount = this.actorService.getActorLogged().getUserAccount();
 
-<<<<<<< HEAD
 		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("CUSTOMER") || userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
-=======
-		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("CUSTOMER")
-				|| userAccount.getAuthorities().iterator().next().getAuthority()
-				.equals("HANDYWORKER"));
->>>>>>> origin/miguel
+
 		Assert.notNull(fixUpTask);
 		if (fixUpTask.getId() == 0) {
 			final FixUpTask result1 = this.fixUpTaskRepository.save(fixUpTask);
