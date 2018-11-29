@@ -67,6 +67,8 @@ public class NoteServiceTest extends AbstractTest {
 		final Note n = this.noteService.save(note, reportId);
 
 		Assert.notNull(this.noteService.findOne(n.getId()));
+		Assert.isTrue(this.noteService.findOne(n.getId()).getCustomerComments()
+				.equals(customerComments));
 		Assert.isTrue(this.reportService.findOne(reportId).getNotes().contains(n));
 	}
 
@@ -81,7 +83,7 @@ public class NoteServiceTest extends AbstractTest {
 
 		this.noteService.delete(note);
 		Assert.isNull(this.noteService.findOne(noteId));
-
+		
 		Assert.isTrue(!r.getNotes().contains(note));
 	}
 
