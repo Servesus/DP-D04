@@ -24,11 +24,6 @@ public class CurriculaServiceTest extends AbstractTest {
 
 	@Autowired
 	private CurriculaService	curriculaService;
-<<<<<<< HEAD
-	@Autowired
-	private HandyWorkerService	handyWorkerService;
-=======
->>>>>>> jesus
 
 
 	@Test
