@@ -30,12 +30,6 @@ public class CurriculaService {
 	//Supporting services
 	@Autowired
 	private PersonalRecordService	personalRecordService;
-	@Autowired
-	private ActorService			actorService;
-	@Autowired
-	private HandyWorkerService		handyWorkerService;
-
-
 	//Simple CRUD methods
 	public Curricula create() {
 		final Curricula curricula = new Curricula();
