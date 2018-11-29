@@ -22,10 +22,6 @@ public class PersonalRecordService {
 	//Supporting repositories
 	@Autowired
 	private ActorService				actorService;
-	@Autowired
-	private HandyWorkerService			handyWorkerService;
-	@Autowired
-	private CurriculaService			curriculaService;
 
 
 	//Simple CRUD methods
@@ -63,7 +59,6 @@ public class PersonalRecordService {
 		return result;
 	}
 	public void delete(final PersonalRecord personalRecord) {
-		Assert.isNull(personalRecord);
 		Assert.isTrue(personalRecord.getId() != 0);
 		UserAccount userAccount;
 		userAccount = this.actorService.getActorLogged().getUserAccount();

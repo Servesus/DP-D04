@@ -56,7 +56,6 @@ public class MiscRecordService {
 		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		final MiscRecord result = this.miscRecordRepository.save(miscRecord);
-		Assert.isNull(result);
 		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
 		if (result.getId() == 0) {
 			final List<MiscRecord> mR = (List<MiscRecord>) hw.getCurricula().getMiscRecord();
@@ -64,7 +63,6 @@ public class MiscRecordService {
 			hw.getCurricula().setMiscRecord(mR);
 			this.curriculaService.save(hw.getCurricula());
 		} else {
-			Assert.isTrue(hw.getCurricula().getEndorserRecord().contains(result));
 			final List<MiscRecord> mR = (List<MiscRecord>) hw.getCurricula().getMiscRecord();
 			mR.add(result);
 			hw.getCurricula().setMiscRecord(mR);
@@ -78,7 +76,6 @@ public class MiscRecordService {
 		userAccount = this.actorService.getActorLogged().getUserAccount();
 		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
-		Assert.isNull(miscRecord);
 		Assert.isTrue(miscRecord.getId() != 0);
 		this.miscRecordRepository.delete(miscRecord);
 	}
