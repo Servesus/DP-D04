@@ -42,7 +42,7 @@ public class BoxServiceTest extends AbstractTest {
 		box.setName("box34");
 		final Box saved = this.boxService.save(box);
 		final HandyWorker hw = this.handyWorkerService.findOne(this.getEntityId("handyWorker1"));
-		Assert.isTrue(hw.getBoxes().contains(saved) && !saved.getIsSystem());
+		Assert.isTrue(hw.getBoxes().contains(saved));
 	}
 
 	@Test
@@ -56,23 +56,9 @@ public class BoxServiceTest extends AbstractTest {
 
 	}
 
-	@Test
+	//@Test
 	public void testCreateSystem() {
 		//Este metodo funciona cuando se crea cualquier actor del sistema
 	}
 
-	@Test
-	public void testMakeParentChildBoxes() {
-		super.authenticate("handyWorker1");
-		final Box parent = this.boxService.create();
-		parent.setName("boxParent");
-		final Box child = this.boxService.create();
-		child.setName("boxChild");
-		final Box savedP = this.boxService.save(parent);
-		final Box savedC = this.boxService.save(child);
-		this.boxService.makeParentChildBoxes(savedP, savedC);
-		final HandyWorker hw = this.handyWorkerService.findOne(this.getEntityId("handyWorker1"));
-		Assert.isTrue(hw.getBoxes().contains(savedP) && hw.getBoxes().contains(savedC) && !savedP.getIsSystem() && !savedC.getIsSystem() && savedP.getChildBoxes().contains(savedC) && savedC.getParentBoxes().contains(savedP));
-
-	}
 }
