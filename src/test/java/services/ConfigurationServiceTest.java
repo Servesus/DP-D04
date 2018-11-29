@@ -36,6 +36,16 @@ public class ConfigurationServiceTest extends AbstractTest {
 		final Configuration c = this.configurationService.create();
 		final Configuration saved = this.configurationService.save(c);
 		Assert.notNull(saved);
+		super.authenticate(null);
 
+	}
+	@Test
+	public void testDeleteConfiguration() {
+		super.authenticate("admin1");
+		final int configId = this.getEntityId("configuration1");
+		final Configuration c = this.configurationService.findOne(configId);
+		this.configurationService.delete(c);
+		Assert.isNull(this.configurationService.findOne(c.getId()));
+		super.authenticate(null);
 	}
 }
