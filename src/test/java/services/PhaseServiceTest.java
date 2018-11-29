@@ -35,7 +35,6 @@ public class PhaseServiceTest extends AbstractTest {
 	public void testCreatePhase() {
 		final int fixUpTaskId = this.getEntityId("fixUpTask1");
 		final Phase p;
-		System.out.println("Fase creada");
 		p = this.phaseService.create(fixUpTaskId);
 		Assert.notNull(p.getFixUpTask());
 		Assert.notNull(p);

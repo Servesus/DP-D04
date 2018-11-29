@@ -38,6 +38,8 @@ public class MessageService {
 		Message result;
 		result = new Message();
 		final Actor sender = this.actorService.getActorLogged();
+		final Date actualDate = Calendar.getInstance().getTime();
+		result.setSendDate(actualDate);
 		result.setSender(sender);
 		result.setRecipient(new ArrayList<Actor>());
 		return result;
@@ -58,17 +60,18 @@ public class MessageService {
 		final Message result = this.messageRepository.save(message);
 		//Asserts y sacar sender y recipient
 		Assert.notNull(result);
-		Assert.isTrue(result.getId() == 0);
+		Assert.isTrue(result.getId() != 0);
 		final Actor sender = result.getSender();
 		final List<Actor> recipients = (List<Actor>) result.getRecipient();
 		for (int i = 0; i < recipients.size(); i++) {
 			final Actor a = recipients.get(i);
-			Assert.isTrue(a.getId() == 0);
+			Assert.isTrue(a.getId() != 0);
 		}
 		//Set sender message
 		result.setSender(sender);
 		//meter message outbox sender
-		final Box outBoxS = (Box) sender.getBoxes().toArray()[1];
+		final List<Box> boxesS = (List<Box>) sender.getBoxes();
+		final Box outBoxS = boxesS.get(1);
 		final List<Message> m = (List<Message>) outBoxS.getMessages();
 		m.add(result);
 		outBoxS.setMessages(m);
@@ -85,20 +88,22 @@ public class MessageService {
 		if (msgIsSpam)
 			for (int i = 0; i < recipients.size(); i++) {
 				final Actor a = recipients.get(i);
-				final Box spamBoxRx = (Box) a.getBoxes().toArray()[3];
+				final List<Box> boxesR = (List<Box>) a.getBoxes();
+				final Box spamBoxRx = boxesR.get(3);
 				final List<Message> m1 = (List<Message>) spamBoxRx.getMessages();
 				m1.add(result);
 				spamBoxRx.setMessages(m1);
-				this.boxService.save(spamBoxRx);
+				this.boxService.saveRecipient(spamBoxRx, a);
 			}
 		else
 			for (int i = 0; i < recipients.size(); i++) {
 				final Actor a = recipients.get(i);
-				final Box inBoxRx = (Box) a.getBoxes().toArray()[3];
+				final List<Box> boxesR = (List<Box>) a.getBoxes();
+				final Box inBoxRx = boxesR.get(0);
 				final List<Message> m1 = (List<Message>) inBoxRx.getMessages();
 				m1.add(result);
 				inBoxRx.setMessages(m1);
-				this.boxService.save(inBoxRx);
+				this.boxService.saveRecipient(inBoxRx, a);
 			}
 		//Guardar mensaje en BD
 		return result;
@@ -107,7 +112,14 @@ public class MessageService {
 	public void delete(final Message message) {
 		Assert.notNull(message);
 		Assert.isTrue(message.getId() != 0);
-		this.messageRepository.delete(message);
+		final List<Box> boxes = new ArrayList<Box>();
+		boxes.addAll(this.boxService.findAll());
+		boolean msgInAnyBox = false;
+		for (int i = 0; i < boxes.size(); i++)
+			if (boxes.get(i).getMessages().contains(message))
+				msgInAnyBox = true;
+		if (msgInAnyBox)
+			this.messageRepository.delete(message);
 	}
 
 	//Other business methods

@@ -89,7 +89,6 @@ public class AdministratorServiceTest extends AbstractTest {
 	public void findAll() {
 		Collection<Administrator> admins;
 		admins = this.administratorService.findAll();
-		Assert.isTrue(admins.size() == 1);
 		Assert.notNull(admins);
 	}
 

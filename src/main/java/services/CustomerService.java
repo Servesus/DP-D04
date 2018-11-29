@@ -115,13 +115,6 @@ public class CustomerService {
 		return result;
 	}
 	
-	public void delete(Customer customer) {
-		Assert.notNull(customer);
-		Assert.isTrue(customer.getId() != 0);
-
-		customerRepository.delete(customer);
-	}
-	
 	public List<FixUpTask> showFixUpTasks(){
 		Actor actor;
 		List <FixUpTask> result;
