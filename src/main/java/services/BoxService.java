@@ -44,7 +44,8 @@ public class BoxService {
 	public Box findOne(final int boxID) {
 		return this.boxRepository.findOne(boxID);
 	}
-
+	//fallo: cuando va metiendo en spambox o inbox en el if estas buscando en boxes del actor
+	//logeado las cajas del reciever y da -1 en index por eso
 	public Box save(final Box box) {
 		if (box.getIsSystem() == null)
 			box.setIsSystem(false);
@@ -52,8 +53,9 @@ public class BoxService {
 		final Actor a = this.actorService.getActorLogged();
 		final List<Box> boxes = (List<Box>) a.getBoxes();
 		if (result.getIsSystem()) {
-			final Box systemBox = boxes.get(boxes.indexOf(this.findOne(result.getId())));
-			Assert.isTrue(systemBox.getName().equals(result.getName()) && result.getChildBoxes().isEmpty() && result.getParentBoxes().isEmpty());
+			final int index = boxes.indexOf(this.findOne(result.getId()));
+			final Box systemBox = boxes.get(index);
+			Assert.isTrue(systemBox.getName().equals(result.getName()) && result.getParentBoxes().isEmpty());
 		}
 		boxes.remove(this.findOne(result.getId()));
 		boxes.add(result);
