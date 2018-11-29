@@ -56,7 +56,7 @@ public class ProfessionalRecordService {
 		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		final ProfessionalRecord result = this.professionalRecordRepository.save(professionalRecord);
-		Assert.isNull(result);
+		Assert.notNull(result);
 		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
 		if (result.getId() == 0) {
 			final List<ProfessionalRecord> pR = (List<ProfessionalRecord>) hw.getCurricula().getProfessionalRecord();
@@ -64,7 +64,6 @@ public class ProfessionalRecordService {
 			hw.getCurricula().setProfessionalRecord(pR);
 			this.curriculaService.save(hw.getCurricula());
 		} else {
-			Assert.isTrue(hw.getCurricula().getEndorserRecord().contains(result));
 			final List<ProfessionalRecord> pR = (List<ProfessionalRecord>) hw.getCurricula().getProfessionalRecord();
 			pR.add(result);
 			hw.getCurricula().setProfessionalRecord(pR);
@@ -78,7 +77,7 @@ public class ProfessionalRecordService {
 		userAccount = this.actorService.getActorLogged().getUserAccount();
 		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
-		Assert.isNull(professionalRecord);
+		Assert.notNull(professionalRecord);
 		Assert.isTrue(professionalRecord.getId() != 0);
 		this.professionalRecordRepository.delete(professionalRecord);
 	}
