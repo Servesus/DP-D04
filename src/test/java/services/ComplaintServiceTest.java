@@ -1,6 +1,9 @@
 
 package services;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,52 +24,43 @@ public class ComplaintServiceTest extends AbstractTest {
 
 	@Autowired
 	private ComplaintService	complaintService;
-	@Autowired
-	private CustomerService		customerService;
-	@Autowired
-	private FixUpTaskService	fixUpTaskService;
-	@Autowired
-	private RefereeService		refereeService;
 
 
 	@Test
 	public void testCreateComplaint() {
 
+		super.authenticate("customer1");
 		final Complaint result = this.complaintService.create(2696);
 		result.setDescription("");
 		Assert.notNull(result);
+		super.authenticate(null);
 
 	}
-	//	@Test
-	//	public void testSaveComplaint() {
-	//
-	//		super.authenticate("customer1");
-	//		final Complaint creado = this.complaintService.create(2696);
-	//		creado.setDescription("");
-	//		this.complaintService.save(creado);
-	//		final Complaint prueba = this.complaintService.findOne(0);
-	//		Assert.isTrue(creado.equals(prueba));
-	//		super.authenticate(null);
-	//	}
-	//	@Test
-	//	public void testDeleteComplaint() {
-	//		super.authenticate("customer1");
-	//		final Complaint caso1 = this.complaintService.findOne(2715);
-	//		this.complaintService.delete(caso1);
-	//		final Collection<Complaint> all = this.complaintService.findAll();
-	//		Assert.isTrue(!(all.contains(caso1)));
-	//		super.authenticate(null);
-	//	}
-	//	@Test
-	//	public void testSelfAssignedComplaint() {
-	//		super.authenticate("referee1");
-	//		final Collection<Complaint> result = this.complaintService.getComplaintSelfAssigned();
-	//		final Referee nuevo = this.refereeService.findOne(2684);
-	//		final Collection<Complaint> res = new ArrayList<Complaint>();
-	//		final Report[] apoyo = (Report[]) nuevo.getReports().toArray();
-	//		for (int i = 0; i < apoyo.length; i++)
-	//			res.add(apoyo[i].getComplaint());
-	//		Assert.isTrue(result.containsAll(res));
-	//		super.authenticate(null);
-	//	}
+	@Test
+	public void testSaveComplaint() {
+
+		super.authenticate("customer1");
+		final int id = this.getEntityId("fixUpTask1");
+		final Complaint a = this.complaintService.create(id);
+		final Complaint b = this.complaintService.save(a);
+		Assert.isTrue(!b.equals(null));
+		super.authenticate(null);
+	}
+	@Test
+	public void testDeleteComplaint() {
+		super.authenticate("customer1");
+		final int id = this.getEntityId("complaint1");
+		final Complaint caso1 = this.complaintService.findOne(id);
+		this.complaintService.delete(caso1);
+		Assert.isNull(this.complaintService.findOne(2715));
+		super.authenticate(null);
+	}
+	@Test
+	public void testSelfAssignedComplaint() {
+		super.authenticate("referee1");
+		Collection<Complaint> result = new ArrayList<Complaint>();
+		result = this.complaintService.getComplaintSelfAssigned();
+		Assert.isTrue(result.size() >= 0);
+		super.authenticate(null);
+	}
 }

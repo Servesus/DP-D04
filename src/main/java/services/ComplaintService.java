@@ -93,9 +93,7 @@ public class ComplaintService {
 
 		Assert.notNull(complaint);
 		UserAccount userAccount;
-
 		userAccount = this.actorService.getActorLogged().getUserAccount();
-
 		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("CUSTOMER"));
 		assert complaint.getId() != 0;
 		Assert.isTrue(this.complaintRepository.exists(complaint.getId()));
@@ -110,17 +108,15 @@ public class ComplaintService {
 	public List<Complaint> getComplaintSelfAssigned() {
 
 		UserAccount userAccount;
-
 		userAccount = this.actorService.getActorLogged().getUserAccount();
-
 		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("REFEREE"));
 		final Integer idReferee = this.actorService.getActorLogged().getId();
 		final Referee referee = this.refereeService.findOne(idReferee);
 		final List<Complaint> result = new ArrayList<Complaint>();
-		final Report[] apoyo = (Report[]) referee.getReports().toArray();
-		for (int i = 0; i < apoyo.length; i++)
-			result.add(apoyo[i].getComplaint());
+		Collection<Report> result1 = new ArrayList<Report>();
+		result1 = referee.getReports();
+		for (final Report r : result1)
+			result.add(r.getComplaint());
 		return result;
 	}
-
 }
