@@ -37,16 +37,15 @@ public class FinderServiceTest extends AbstractTest {
 
 	@Test
 	public void testSaveFinder() {
-		super.authenticate("handyWorker1");
 		final Finder f = this.finderService.create();
 		final Date startDate = new GregorianCalendar(2020, Calendar.NOVEMBER, 30).getTime();
 		final Date finishDate = new GregorianCalendar(2021, Calendar.NOVEMBER, 30).getTime();
 		f.setDateFinishRange(finishDate);
 		f.setDateStartRange(startDate);
+		f.setSingleKeyWord("a");
 		final Finder saved = this.finderService.save(f);
 		final Collection<Finder> finders = this.finderService.findAll();
 		Assert.isTrue(finders.contains(saved));
-		super.authenticate("null");
 	}
 
 }
