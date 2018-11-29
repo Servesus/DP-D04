@@ -22,19 +22,9 @@ import domain.PersonalRecord;
 public class CurriculaServiceTest extends AbstractTest {
 
 	@Autowired
-	private CurriculaService			curriculaService;
+	private CurriculaService	curriculaService;
 	@Autowired
-	private PersonalRecordService		personalRecordService;
-	@Autowired
-	private EducationalRecordService	educationalRecordService;
-	@Autowired
-	private EndorserRecordService		endorserRecordService;
-	@Autowired
-	private ProfessionalRecordService	professionalRecordService;
-	@Autowired
-	private MiscRecordService			miscRecordService;
-	@Autowired
-	private HandyWorkerService			handyWorkerService;
+	private HandyWorkerService	handyWorkerService;
 
 
 	@Test
