@@ -29,23 +29,14 @@ public class CustomerServiceTest extends AbstractTest{
 	
 	@Test
 	public void createTest(){
-		System.out.println("Entro en el create");
-		
 		Customer c =customerService.create();
 		
 		Assert.notNull(c);
-		
-		System.out.println("Se ha creado el customer y lo compruebo");
-		System.out.println(c);
 	}
 	
 	@Test
 	public void saveTest(){
-		System.out.println("Entro en el save");
-		
 		Customer c = customerService.create();
-		
-		System.out.println("Creo el customer");
 		
 		UserAccount userAccount= c.getUserAccount();
 		userAccount.setUsername("customer20");
@@ -57,29 +48,9 @@ public class CustomerServiceTest extends AbstractTest{
 		c.setSurname("Velasco");
 		c.setPhoneNumber("625817204");
 		
-		System.out.println("He puesto los atributos al customer");
-		
 		Customer test = customerService.save(c);
-		System.out.println("Se ha creado el customer y lo compruebo");
 		
-		System.out.println(customerService.findAll());
-		System.out.println(test);
+		Assert.isTrue(customerService.findAll().contains(test));
 	}
-	
-	@Test
-	public void deleteTest(){
-		int customerId = this.getEntityId("customer1");
-		Customer c = customerService.findOne(customerId);
-		
-		System.out.println("Entro en el delete");
-		
-		customerService.delete(c);
-		
-		System.out.println("Lo borro y compruebo que se ha borrado");
-		Assert.isNull(customerService.findOne(customerId));
-		
-	}
-	
-	
 
 }
