@@ -52,13 +52,29 @@ public class BoxService {
 		final Box result = this.boxRepository.save(box);
 		final Actor a = this.actorService.getActorLogged();
 		final List<Box> boxes = (List<Box>) a.getBoxes();
+		final int index = boxes.indexOf(this.findOne(result.getId()));
 		if (result.getIsSystem()) {
-			final int index = boxes.indexOf(this.findOne(result.getId()));
 			final Box systemBox = boxes.get(index);
 			Assert.isTrue(systemBox.getName().equals(result.getName()) && result.getParentBoxes().isEmpty());
 		}
 		boxes.remove(this.findOne(result.getId()));
-		boxes.add(result);
+		boxes.add(index, result);
+		a.setBoxes(boxes);
+		this.actorService.save(a);
+		return result;
+	}
+	public Box saveRecipient(final Box box, final Actor a) {
+		if (box.getIsSystem() == null)
+			box.setIsSystem(false);
+		final Box result = this.boxRepository.save(box);
+		final List<Box> boxes = (List<Box>) a.getBoxes();
+		final int index = boxes.indexOf(this.findOne(result.getId()));
+		if (result.getIsSystem()) {
+			final Box systemBox = boxes.get(index);
+			Assert.isTrue(systemBox.getName().equals(result.getName()) && result.getParentBoxes().isEmpty());
+		}
+		boxes.remove(this.findOne(result.getId()));
+		boxes.add(index, result);
 		a.setBoxes(boxes);
 		this.actorService.save(a);
 		return result;

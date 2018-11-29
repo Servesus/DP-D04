@@ -93,7 +93,7 @@ public class MessageService {
 				final List<Message> m1 = (List<Message>) spamBoxRx.getMessages();
 				m1.add(result);
 				spamBoxRx.setMessages(m1);
-				this.boxService.save(spamBoxRx);
+				this.boxService.saveRecipient(spamBoxRx, a);
 			}
 		else
 			for (int i = 0; i < recipients.size(); i++) {
@@ -103,7 +103,7 @@ public class MessageService {
 				final List<Message> m1 = (List<Message>) inBoxRx.getMessages();
 				m1.add(result);
 				inBoxRx.setMessages(m1);
-				this.boxService.save(inBoxRx);
+				this.boxService.saveRecipient(inBoxRx, a);
 			}
 		//Guardar mensaje en BD
 		return result;

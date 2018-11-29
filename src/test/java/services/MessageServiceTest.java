@@ -106,7 +106,7 @@ public class MessageServiceTest extends AbstractTest {
 		spam.setSubject("Hola");
 		final Message savedS = this.messageService.save(spam);
 		final Message savedM = this.messageService.save(message);
-		final HandyWorker sender = this.handyWorkerService.findOne(this.getEntityId("handyWorker1"));
+		final HandyWorker sender = saved;
 		final List<Box> senderBoxes = (List<Box>) sender.getBoxes();
 		final List<Box> receiverBoxes = (List<Box>) receiver.getBoxes();
 		Assert.isTrue(senderBoxes.get(1).getMessages().contains(savedS) && senderBoxes.get(1).getMessages().contains(savedM) && receiverBoxes.get(0).getMessages().contains(savedM) && receiverBoxes.get(3).getMessages().contains(savedS));
