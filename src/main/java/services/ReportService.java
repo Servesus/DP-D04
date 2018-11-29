@@ -47,7 +47,7 @@ public class ReportService {
 		Report result;
 
 		result = new Report();
-		result.setIsFinal(false);
+		result.setIsFinal(true);
 		reports.add(result);
 		r.setReports(reports);
 		this.refereeService.save(r);
