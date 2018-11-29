@@ -106,7 +106,7 @@ public class MessageServiceTest extends AbstractTest {
 		spam.setSubject("Hola");
 		final Message savedS = this.messageService.save(spam);
 		final Message savedM = this.messageService.save(message);
-		final HandyWorker sender = this.handyWorkerService.findOne(this.getEntityId("handyWorker1"));
+		final HandyWorker sender = saved;
 		final List<Box> senderBoxes = (List<Box>) sender.getBoxes();
 		final List<Box> receiverBoxes = (List<Box>) receiver.getBoxes();
 		Assert.isTrue(senderBoxes.get(1).getMessages().contains(savedS) && senderBoxes.get(1).getMessages().contains(savedM) && receiverBoxes.get(0).getMessages().contains(savedM) && receiverBoxes.get(3).getMessages().contains(savedS));
@@ -118,4 +118,51 @@ public class MessageServiceTest extends AbstractTest {
 	 * 
 	 * }
 	 */
+	@Test
+	public void testMoveMessage() {
+		//crear handyWorkers con cajas por defecto
+		//h1
+		final HandyWorker h1 = this.handyWorkerService.create();
+		HandyWorker saved;
+		h1.setName("name1");
+		h1.setMiddleName("middleName1");
+		h1.setSurname("surname1");
+		h1.setPhoto("https://www.google.com/photo1");
+		h1.setEmail("a@email.com");
+		h1.setPhoneNumber("652914587");
+		h1.setAddress("hola1");
+		h1.getUserAccount().setUsername("manuelmanuel");
+		h1.getUserAccount().setPassword("password1231");
+
+		final Curricula curricula = h1.getCurricula();
+		final PersonalRecord pers = curricula.getPersonalRecord();
+		pers.setEmail("email@email.com");
+		pers.setLinkedInProfile("https://www.linkedin.com/perfil");
+		pers.setMiddleName("middlename");
+		pers.setName("name1");
+		pers.setPhone("652915587");
+		pers.setPhoto("https://google.com/photo1");
+		pers.setSurname("surname1");
+		curricula.setPersonalRecord(pers);
+		h1.setCurricula(curricula);
+		saved = this.handyWorkerService.save(h1);
+		//test moveMessage
+		final Message message = this.messageService.create();
+		message.setPriority(0);
+		message.setBody("Esto es una prueba");
+		message.getRecipient().add(receiver);
+		message.setSubject("Prueba");
+		final Message spam = this.messageService.create();
+		spam.setPriority(0);
+		spam.setBody("Vendo viagra");
+		spam.getRecipient().add(receiver);
+		spam.setSubject("Hola");
+		final Message savedS = this.messageService.save(spam);
+		final Message savedM = this.messageService.save(message);
+		final HandyWorker sender = saved;
+		final List<Box> senderBoxes = (List<Box>) sender.getBoxes();
+		final List<Box> receiverBoxes = (List<Box>) receiver.getBoxes();
+		Assert.isTrue(senderBoxes.get(1).getMessages().contains(savedS) && senderBoxes.get(1).getMessages().contains(savedM) && receiverBoxes.get(0).getMessages().contains(savedM) && receiverBoxes.get(3).getMessages().contains(savedS));
+
+	}
 }
