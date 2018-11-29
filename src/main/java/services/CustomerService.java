@@ -96,7 +96,6 @@ public class CustomerService {
 		Customer result;
 
 		result = customerRepository.findOne(customerId);
-		Assert.notNull(result);
 
 		return result;
 	}
