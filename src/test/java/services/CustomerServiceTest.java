@@ -66,6 +66,20 @@ public class CustomerServiceTest extends AbstractTest{
 		System.out.println(test);
 	}
 	
+	@Test
+	public void deleteTest(){
+		int customerId = this.getEntityId("customer1");
+		Customer c = customerService.findOne(customerId);
+		
+		System.out.println("Entro en el delete");
+		
+		customerService.delete(c);
+		
+		System.out.println("Lo borro y compruebo que se ha borrado");
+		Assert.isNull(customerService.findOne(customerId));
+		
+	}
+	
 	
 
 }

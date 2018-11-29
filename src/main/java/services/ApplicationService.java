@@ -73,7 +73,6 @@ public class ApplicationService {
 		Collection<Application> result;
 
 		result = this.applicationRepository.findAll();
-		Assert.notNull(result);
 
 		return result;
 	}
@@ -82,7 +81,6 @@ public class ApplicationService {
 		Application result;
 
 		result = this.applicationRepository.findOne(applicationId);
-		Assert.notNull(result);
 
 		return result;
 	}
