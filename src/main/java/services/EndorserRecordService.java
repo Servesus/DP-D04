@@ -56,7 +56,6 @@ public class EndorserRecordService {
 		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		final EndorserRecord result = this.endorserRecordRepository.save(endorserRecord);
-		Assert.isNull(result);
 		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
 		if (result.getId() == 0) {
 			final List<EndorserRecord> eR = (List<EndorserRecord>) hw.getCurricula().getEndorserRecord();
@@ -64,7 +63,6 @@ public class EndorserRecordService {
 			hw.getCurricula().setEndorserRecord(eR);
 			this.curriculaService.save(hw.getCurricula());
 		} else {
-			Assert.isTrue(hw.getCurricula().getEndorserRecord().contains(result));
 			final List<EndorserRecord> eR = (List<EndorserRecord>) hw.getCurricula().getEndorserRecord();
 			eR.add(result);
 			hw.getCurricula().setEndorserRecord(eR);
@@ -78,7 +76,6 @@ public class EndorserRecordService {
 		userAccount = this.actorService.getActorLogged().getUserAccount();
 		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
-		Assert.isNull(endorserRecord);
 		Assert.isTrue(endorserRecord.getId() != 0);
 		this.endorserRecordRepository.delete(endorserRecord);
 	}
