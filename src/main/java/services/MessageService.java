@@ -3,6 +3,7 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -116,8 +117,10 @@ public class MessageService {
 		boxes.addAll(this.boxService.findAll());
 		boolean msgInAnyBox = false;
 		for (int i = 0; i < boxes.size(); i++)
-			if (boxes.get(i).getMessages().contains(message))
+			if (boxes.get(i).getMessages().contains(message)) {
 				msgInAnyBox = true;
+				break;
+			}
 		if (msgInAnyBox)
 			this.messageRepository.delete(message);
 	}
@@ -141,7 +144,6 @@ public class MessageService {
 			if (boxesActor.get(i).equals(boxR))
 				boxInActor = true;
 		}
-		Assert.isTrue(!msgInActor || !boxInActor);
 		//Mover mensage
 		final List<Message> oM = (List<Message>) originBox.getMessages();
 		oM.remove(message);
@@ -181,21 +183,29 @@ public class MessageService {
 			this.boxService.save(trashBox);
 			//Si trashbox, borrar de actor
 		} else
-			for (int i = 0; i < a.getBoxes().size(); i++)
-				if (boxesActor.get(i).getMessages().contains(message)) {
-					final Box boxWithMsg = boxesActor.get(i);
-					final List<Message> msgs = (List<Message>) boxWithMsg.getMessages();
-					msgs.remove(message);
-					boxWithMsg.setMessages(msgs);
-					this.boxService.save(boxWithMsg);
-					/*
-					 * final Box boxWithMsg = boxesActor.get(i);
-					 * boxesActor.remove(boxWithMsg);
-					 * boxWithMsg.getMessages().remove(message);
-					 * boxesActor.add(boxWithMsg);
-					 * a.setBoxes(boxesActor);
-					 * this.boxService.save(boxWithMsg);
-					 */
+			/*
+			 * for (int i = 0; i < a.getBoxes().size(); i++)
+			 * if (boxesActor.get(i).getMessages().contains(message)) {
+			 * final Box boxWithMsg = boxesActor.get(i);
+			 * final List<Message> msgs = (List<Message>) boxWithMsg.getMessages();
+			 * msgs.remove(message);
+			 * boxWithMsg.setMessages(msgs);
+			 * this.boxService.save(boxWithMsg);
+			 * /*
+			 * final Box boxWithMsg = boxesActor.get(i);
+			 * boxesActor.remove(boxWithMsg);
+			 * boxWithMsg.getMessages().remove(message);
+			 * boxesActor.add(boxWithMsg);
+			 * a.setBoxes(boxesActor);
+			 * this.boxService.save(boxWithMsg);
+			 */
+			for (final Box b : a.getBoxes())
+				if (b.getMessages().contains(message)) {
+					final Collection<Message> messages = b.getMessages();
+					messages.remove(message);
+					b.setMessages(messages);
+					this.boxService.save(b);
+					this.delete(message);
 				}
 	}
 
