@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.ReportRepository;
-import security.LoginService;
 import security.UserAccount;
 import domain.Actor;
 import domain.Referee;
@@ -34,9 +33,10 @@ public class ReportService {
 	//Simple CRUD methods
 	public Report create() {
 		UserAccount userAccount;
-		userAccount = LoginService.getPrincipal();
 
-		Assert.isTrue(userAccount.getAuthorities().contains("REFEREE"));
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("REFEREE"));
 		Actor a;
 		a = this.actorService.getActorLogged();
 		Referee r;
@@ -68,7 +68,6 @@ public class ReportService {
 		Report result;
 
 		result = this.reportRepository.findOne(reportId);
-		Assert.notNull(result);
 
 		return result;
 	}
@@ -91,9 +90,10 @@ public class ReportService {
 
 	public void delete(final Report r) {
 		UserAccount userAccount;
-		userAccount = LoginService.getPrincipal();
 
-		Assert.isTrue(userAccount.getAuthorities().contains("REFEREE"));
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("REFEREE"));
 		Assert.isTrue(r.getIsFinal() == true);
 		Assert.notNull(r);
 		Assert.isTrue(r.getId() != 0);
