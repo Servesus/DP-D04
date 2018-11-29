@@ -42,6 +42,8 @@ public class ProfesionalRecordServiceTest extends AbstractTest {
 		p.setJobEnding(jobEnding);
 		p.setRol("Ingeniero");
 
+		Assert.notNull(p);
+
 		super.authenticate(null);
 	}
 
