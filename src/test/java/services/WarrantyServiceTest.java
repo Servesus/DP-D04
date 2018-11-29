@@ -50,16 +50,19 @@ public class WarrantyServiceTest extends AbstractTest {
 	}
 	@Test
 	public void testSaveWarranty() {
+		super.authenticate("admin1");
 		final Warranty a = this.warrantyService.create();
 		final Warranty b = this.warrantyService.save(a);
 		Assert.notNull(b);
+		super.authenticate(null);
 
 	}
 	@Test
 	public void testDeleteWarranty() {
 
 		super.authenticate("admin1");
-		final Warranty a = this.warrantyService.findOne(2715);
+		final int id = this.getEntityId("warranty1");
+		final Warranty a = this.warrantyService.findOne(id);
 		this.warrantyService.delete(a);
 		Assert.isNull(this.warrantyService.findOne(2715));
 		super.authenticate(null);

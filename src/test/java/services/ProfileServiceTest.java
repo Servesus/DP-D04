@@ -53,7 +53,8 @@ public class ProfileServiceTest extends AbstractTest {
 	@Test
 	public void testDeleteProfile() {
 
-		final Profile a = this.profileService.findOne(2632);
+		final int id = this.getEntityId("profile1");
+		final Profile a = this.profileService.findOne(id);
 		this.profileService.delete(a);
 		Assert.isTrue(this.profileService.findAll().size() == 4);
 	}
