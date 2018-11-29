@@ -78,7 +78,6 @@ public class AdministratorService {
 		Collection<Administrator> result;
 
 		result = this.administratorRepository.findAll();
-		Assert.notNull(result);
 
 		return result;
 	}
@@ -88,7 +87,6 @@ public class AdministratorService {
 		Administrator result;
 
 		result = this.administratorRepository.findOne(administratorId);
-		Assert.notNull(result);
 
 		return result;
 	}
@@ -334,14 +332,19 @@ public class AdministratorService {
 		return result;
 	}
 
-	public void banActor(final Integer id) {
+	public Actor banActor(final Integer id) {
 		UserAccount userAccount;
 		userAccount = LoginService.getPrincipal();
-		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("ADMIN"));
+		Assert.isTrue(id != 0);
+		final boolean banned = true;
 		Actor a;
+		Actor saved;
 		a = this.actorService.findOne(id);
-		a.setIsBanned(true);
-		this.actorService.save(a);
+		a.setIsBanned(banned);
+		saved = this.actorService.save(a);
+		return saved;
+
 	}
 
 	public void unbanActor(final Integer id) {

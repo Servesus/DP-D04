@@ -12,7 +12,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
+import security.UserAccount;
 import utilities.AbstractTest;
+import domain.Actor;
 import domain.Administrator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -25,6 +27,10 @@ public class AdministratorServiceTest extends AbstractTest {
 	//Service testing
 	@Autowired
 	private AdministratorService	administratorService;
+
+	//Other services
+	@Autowired
+	private ActorService			actorService;
 
 
 	@Test
@@ -42,15 +48,20 @@ public class AdministratorServiceTest extends AbstractTest {
 	}
 
 	@Test
-	//TODO: Revisar BoxService
 	public void save() {
-		Administrator a;
-		Administrator saved;
-		final Collection<Administrator> admins;
 
 		super.authenticate("admin1");
 
+		Administrator a;
+		Administrator saved;
+		UserAccount userAccount;
+		Collection<Administrator> admins;
+
 		a = this.administratorService.create();
+		userAccount = a.getUserAccount();
+		userAccount.setUsername("admin2");
+		userAccount.setPassword("02061997");
+		a.setUserAccount(userAccount);
 		a.setName("admin2");
 		a.setSurname("admin2");
 		a.setEmail("admin2@gmail.com");
@@ -63,7 +74,6 @@ public class AdministratorServiceTest extends AbstractTest {
 
 		super.authenticate(null);
 	}
-
 	@Test
 	public void findOne() {
 		Integer id;
@@ -82,4 +92,33 @@ public class AdministratorServiceTest extends AbstractTest {
 		Assert.notNull(admins);
 	}
 
+	@Test
+	public void delete() {
+		super.authenticate("admin1");
+
+		Administrator a;
+		Integer id;
+		id = this.getEntityId("admin1");
+		a = this.administratorService.findOne(id);
+		this.administratorService.delete(a);
+		Assert.isNull(this.administratorService.findOne(id));
+
+		super.authenticate(null);
+	}
+
+	@Test
+	public void banActor() {
+		super.authenticate("admin1");
+		Integer id;
+		//		Actor a;
+		Actor saved;
+		id = this.getEntityId("customer1");
+		System.out.println(id);
+		saved = this.administratorService.banActor(id);
+		//		a = this.actorService.findOne(id);
+		System.out.println(saved);
+		Assert.isTrue(saved.getIsBanned());
+		super.authenticate(null);
+
+	}
 }
