@@ -112,7 +112,14 @@ public class MessageService {
 	public void delete(final Message message) {
 		Assert.notNull(message);
 		Assert.isTrue(message.getId() != 0);
-		this.messageRepository.delete(message);
+		final List<Box> boxes = new ArrayList<Box>();
+		boxes.addAll(this.boxService.findAll());
+		boolean msgInAnyBox = false;
+		for (int i = 0; i < boxes.size(); i++)
+			if (boxes.get(i).getMessages().contains(message))
+				msgInAnyBox = true;
+		if (msgInAnyBox)
+			this.messageRepository.delete(message);
 	}
 
 	//Other business methods
