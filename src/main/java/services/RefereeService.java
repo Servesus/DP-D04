@@ -26,12 +26,12 @@ public class RefereeService {
 	//Managed Repository
 	@Autowired
 	private RefereeRepository	refereeRepository;
-	
+
 	@Autowired
-	private ActorService actorService;
-	
+	private ActorService		actorService;
+
 	@Autowired
-	private BoxService boxService;
+	private BoxService			boxService;
 
 
 	//Simple CRUD methods
@@ -40,11 +40,10 @@ public class RefereeService {
 		UserAccount userAccount;
 		Authority aut;
 		Collection<Authority> auts;
-		
-		UserAccount nowUserAccount=actorService.getActorLogged().getUserAccount();
-		
-		Assert.isTrue(nowUserAccount.getAuthorities().iterator().next().getAuthority()
-				.equals("ADMIN"));
+
+		final UserAccount nowUserAccount = this.actorService.getActorLogged().getUserAccount();
+
+		Assert.isTrue(nowUserAccount.getAuthorities().iterator().next().getAuthority().equals("ADMIN"));
 
 		auts = new ArrayList<Authority>();
 		aut = new Authority();
@@ -86,12 +85,11 @@ public class RefereeService {
 	public Referee save(final Referee r) {
 		UserAccount userAccount;
 		userAccount = LoginService.getPrincipal();
-		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority()
-				.equals("ADMIN"));
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("ADMIN") || userAccount.getAuthorities().iterator().next().getAuthority().equals("REFEREE"));
 		Assert.notNull(r);
-		
-		if(r.getId()==0){
-			Collection<Box> systemBox = boxService.createSystemBoxes();
+
+		if (r.getId() == 0) {
+			final Collection<Box> systemBox = this.boxService.createSystemBoxes();
 			r.setBoxes(systemBox);
 		}
 

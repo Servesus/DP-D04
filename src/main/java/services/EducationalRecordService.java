@@ -56,7 +56,7 @@ public class EducationalRecordService {
 		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
 		final EducationalRecord result = this.educationalRecordRepository.save(educationalRecord);
-		Assert.isNull(result);
+		Assert.notNull(result);
 		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
 		if (result.getId() == 0) {
 			final List<EducationalRecord> eR = (List<EducationalRecord>) hw.getCurricula().getEducationalRecord();
@@ -64,7 +64,7 @@ public class EducationalRecordService {
 			hw.getCurricula().setEducationalRecord(eR);
 			this.curriculaService.save(hw.getCurricula());
 		} else {
-			Assert.isTrue(hw.getCurricula().getEducationalRecord().contains(result));
+
 			final List<EducationalRecord> eR = (List<EducationalRecord>) hw.getCurricula().getEducationalRecord();
 			eR.add(result);
 			hw.getCurricula().setEducationalRecord(eR);
@@ -78,7 +78,6 @@ public class EducationalRecordService {
 		userAccount = this.actorService.getActorLogged().getUserAccount();
 		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.isTrue(this.handyWorkerService.findOne(this.actorService.getActorLogged().getId()).getCurricula() != null);
-		Assert.isNull(educationalRecord);
 		Assert.isTrue(educationalRecord.getId() != 0);
 		this.educationalRecordRepository.delete(educationalRecord);
 	}
