@@ -2,6 +2,7 @@
 package services;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -16,6 +17,7 @@ import security.UserAccount;
 import utilities.AbstractTest;
 import domain.Actor;
 import domain.Administrator;
+import domain.Customer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
@@ -28,9 +30,8 @@ public class AdministratorServiceTest extends AbstractTest {
 	@Autowired
 	private AdministratorService	administratorService;
 
-	//Other services
 	@Autowired
-	private ActorService			actorService;
+	private CustomerService			customerService;
 
 
 	@Test
@@ -107,18 +108,36 @@ public class AdministratorServiceTest extends AbstractTest {
 	}
 
 	@Test
+	public void getSuspicious() {
+		super.authenticate("admin1");
+		List<Actor> suspicious;
+		suspicious = this.administratorService.getSuspicious();
+		Assert.notNull(suspicious);
+		super.authenticate(null);
+	}
+
+	@Test
 	public void banActor() {
 		super.authenticate("admin1");
 		Integer id;
-		//		Actor a;
-		Actor saved;
-		id = this.getEntityId("customer1");
-		System.out.println(id);
-		saved = this.administratorService.banActor(id);
-		//		a = this.actorService.findOne(id);
-		System.out.println(saved);
-		Assert.isTrue(saved.getIsBanned());
+		id = this.getEntityId("customer2");
+		Customer c;
+		c = this.customerService.findOne(id);
+		this.administratorService.banActor(id);
+		Assert.isTrue(c.getIsBanned());
 		super.authenticate(null);
-
 	}
+
+	@Test
+	public void unbanActor() {
+		super.authenticate("admin1");
+		Integer id;
+		id = this.getEntityId("customer3");
+		Customer c;
+		c = this.customerService.findOne(id);
+		this.administratorService.unbanActor(id);
+		Assert.isTrue(!(c.getIsBanned()));
+		super.authenticate(null);
+	}
+
 }

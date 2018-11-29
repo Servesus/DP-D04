@@ -80,19 +80,32 @@ public class CategoryServiceTest extends AbstractTest {
 	//TODO
 	public void delete() {
 		super.authenticate("admin1");
-		Collection<Category> categories;
+		//		Collection<Category> categories;
+		//		Category c;
+		//		Integer id;
+		//		id = this.getEntityId("category1");
+		//
+		//		categories = this.categoryService.findAll();
+		//
+		//		c = this.categoryService.findOne(id);
+		//		this.categoryService.delete(c);
+		//
+		//		Assert.notNull(c);
+		//		System.out.println(categories.size());
+		//		Assert.isTrue(categories.size() == 1);
+
 		Category c;
 		Integer id;
+		Integer childId;
 		id = this.getEntityId("category1");
-
-		categories = this.categoryService.findAll();
-
+		childId = this.getEntityId("category2");
 		c = this.categoryService.findOne(id);
 		this.categoryService.delete(c);
-
-		Assert.notNull(c);
-		System.out.println(categories.size());
-		//		Assert.isTrue(categories.size() == 1);
+		//		categories = this.categoryService.findAll();
+		//		System.out.println(categories);
+		//		Assert.notNull(c);
+		Assert.isNull(this.categoryService.findOne(id));
+		Assert.isNull(this.categoryService.findOne(childId));
 
 		super.authenticate(null);
 	}
