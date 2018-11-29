@@ -35,6 +35,9 @@ public class NoteService {
 	public Note create() {
 		Note result;
 		String authorName;
+		Collection<String> customerComments= new ArrayList<String>();
+		Collection<String> hwComments= new ArrayList<String>();
+		Collection<String> refereeComments= new ArrayList<String>();
 		
 		result = new Note();
 		
@@ -43,6 +46,9 @@ public class NoteService {
 				actorService.getActorLogged().getSurname();
 		
 		result.setAuthor(authorName);
+		result.setCustomerComments(customerComments);
+		result.setHwComments(hwComments);
+		result.setRefereeComments(refereeComments);
 		return result;
 	}
 
@@ -63,9 +69,6 @@ public class NoteService {
 		Actor actor;
 		String actorName;
 		String authorName;
-		Collection<String> customerComments= new ArrayList<String>();
-		Collection<String> hwComments= new ArrayList<String>();
-		Collection<String> refereeComments= new ArrayList<String>();
 		
 		authorName= n.getAuthor();
 		actor= actorService.getActorLogged();
@@ -83,12 +86,6 @@ public class NoteService {
 
 		currentMoment = new Date();
 		n.setMoment(currentMoment);
-		
-		if(n.getId()==0){
-			n.setCustomerComments(customerComments);
-			n.setHwComments(hwComments);
-			n.setRefereeComments(refereeComments);
-		}
 		
 		result = this.noteRepository.save(n);
 		

@@ -41,9 +41,9 @@ public class NoteServiceTest extends AbstractTest {
 		super.authenticate("customer1");
 		final int reportId = this.getEntityId("report1");
 		final Note note = this.noteService.create();
+		String com = "Comentarios de autor";
 
-		note.setAuthorComment("Comentario del autor");
-
+		note.setAuthorComment(com);
 		final Note n = this.noteService.save(note, reportId);
 		final Collection<Note> notes = this.noteService.findAll();
 		Assert.isTrue(notes.contains(n));
@@ -57,13 +57,7 @@ public class NoteServiceTest extends AbstractTest {
 		final int reportId = this.getEntityId("report1");
 		Collection<String> customerComments;
 
-		System.out.println("Entro en el método");
-
 		final Note note = this.noteService.findOne(noteId);
-
-		System.out.println("Cojo la nota para editarla y le añado comentarios en la collection");
-		System.out.println("de customerComments");
-		System.out.println("Cojo los customerComments que ya estaba en la nota");
 
 		customerComments = note.getCustomerComments();
 		customerComments.add("Nuevo comentario del customer");
@@ -72,11 +66,8 @@ public class NoteServiceTest extends AbstractTest {
 
 		final Note n = this.noteService.save(note, reportId);
 
-		System.out.println("Guardo la nota y compruebo que se haya guardado en la nota y el report");
-		System.out.println(this.noteService.findOne(n.getId()));
-		System.out.println(this.noteService.findOne(n.getId()).getCustomerComments());
-		System.out.println("Deberia salir la nota bien y que se añada en el report");
-		System.out.println(this.reportService.findOne(reportId).getNotes().iterator().next().getCustomerComments());
+		Assert.notNull(this.noteService.findOne(n.getId()));
+		Assert.isTrue(this.reportService.findOne(reportId).getNotes().contains(n));
 	}
 
 	@Test
@@ -85,17 +76,13 @@ public class NoteServiceTest extends AbstractTest {
 		final int noteId = this.getEntityId("note1");
 		final int reportId = this.getEntityId("report1");
 
-		System.out.println("Entro en el método");
-
 		final Note note = this.noteService.findOne(noteId);
 		final Report r = this.reportService.findOne(reportId);
 
 		this.noteService.delete(note);
-		System.out.println("Borro la nota y compruebro que el findOne devuelva null");
 		Assert.isNull(this.noteService.findOne(noteId));
 
-		System.out.println("Compruebo que se haya borrado del report");
-		System.out.println(r.getNotes());
+		Assert.isTrue(!r.getNotes().contains(note));
 	}
 
 }
