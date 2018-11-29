@@ -1,6 +1,8 @@
 
 package services;
 
+import java.util.Collection;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,6 @@ import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
 import domain.Curricula;
-import domain.HandyWorker;
 import domain.PersonalRecord;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -22,25 +23,13 @@ import domain.PersonalRecord;
 public class CurriculaServiceTest extends AbstractTest {
 
 	@Autowired
-	private CurriculaService			curriculaService;
-	@Autowired
-	private PersonalRecordService		personalRecordService;
-	@Autowired
-	private EducationalRecordService	educationalRecordService;
-	@Autowired
-	private EndorserRecordService		endorserRecordService;
-	@Autowired
-	private ProfessionalRecordService	professionalRecordService;
-	@Autowired
-	private MiscRecordService			miscRecordService;
-	@Autowired
-	private HandyWorkerService			handyWorkerService;
+	private CurriculaService	curriculaService;
 
 
 	@Test
 	public void testCreateCurricula() {
 
-		super.authenticate("handyWorker1");
+		//super.authenticate("handyWorker1");
 		final Curricula result = this.curriculaService.create();
 		Assert.isTrue(result.getTicker() != null && result.getPersonalRecord() != null && result.getEducationalRecord() != null && result.getEducationalRecord().isEmpty() && result.getEndorserRecord() != null && result.getEndorserRecord().isEmpty()
 			&& result.getEndorserRecord() != null && result.getEndorserRecord().isEmpty() && result.getProfessionalRecord() != null && result.getProfessionalRecord().isEmpty() && result.getMiscRecord() != null && result.getMiscRecord().isEmpty());
@@ -76,19 +65,19 @@ public class CurriculaServiceTest extends AbstractTest {
 	 */
 	@Test
 	public void testSaveCurricula() {
-		super.authenticate("handyWorker1");
+		//super.authenticate("handyWorker1");
 		final Curricula curricula = this.curriculaService.create();
 		final PersonalRecord pR = curricula.getPersonalRecord();
 		pR.setName("Manuel");
 		pR.setPhone("666554433");
-		pR.setPhoto("http//fotito");
+		pR.setPhoto("https://www.fotito.com");
 		pR.setEmail("a@e.com");
-		pR.setLinkedInProfile("http//cgc");
+		pR.setLinkedInProfile("https://www.linkedin.com/profile");
 		pR.setMiddleName("Manuel");
 		pR.setSurname("Manuel");
 		final Curricula saved = this.curriculaService.save(curricula);
-		final HandyWorker hw = this.handyWorkerService.findOne(this.getEntityId("handyWorker1"));
-		Assert.isTrue(hw.getCurricula().equals(saved));
+		final Collection<Curricula> curriculas = this.curriculaService.findAll();
+		Assert.isTrue(curriculas.contains(saved));
 
 	}
 }

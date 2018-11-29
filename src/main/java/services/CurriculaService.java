@@ -10,14 +10,11 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import repositories.CurriculaRepository;
-import security.UserAccount;
 import domain.Curricula;
 import domain.EducationalRecord;
 import domain.EndorserRecord;
-import domain.HandyWorker;
 import domain.MiscRecord;
 import domain.PersonalRecord;
 import domain.ProfessionalRecord;
@@ -41,9 +38,6 @@ public class CurriculaService {
 
 	//Simple CRUD methods
 	public Curricula create() {
-		UserAccount userAccount;
-		userAccount = this.actorService.getActorLogged().getUserAccount();
-		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		final Curricula curricula = new Curricula();
 		final PersonalRecord personalRecord = this.personalRecordService.create();
 		curricula.setTicker(CurriculaService.generadorDeTickers());
@@ -63,14 +57,16 @@ public class CurriculaService {
 	}
 
 	public Curricula save(final Curricula curricula) {
+		final PersonalRecord saved = this.personalRecordService.save(curricula.getPersonalRecord());
+		curricula.setPersonalRecord(saved);
 		final Curricula result = this.curriculaRepository.save(curricula);
-		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
-		UserAccount userAccount;
-		userAccount = this.actorService.getActorLogged().getUserAccount();
-		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
-		hw.setCurricula(result);
-		this.handyWorkerService.save(hw);
-		Assert.isTrue(hw.getCurricula().getId() == result.getId());
+		//final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
+		//UserAccount userAccount;
+		//userAccount = this.actorService.getActorLogged().getUserAccount();
+		//Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
+		//hw.setCurricula(result);
+		//this.handyWorkerService.save(hw);
+		//Assert.isTrue(hw.getCurricula().getId() == result.getId());
 		return result;
 	}
 
