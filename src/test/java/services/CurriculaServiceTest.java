@@ -1,8 +1,6 @@
 
 package services;
 
-import java.util.Collection;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
-import domain.Complaint;
 import domain.Curricula;
-import domain.EducationalRecord;
-import domain.EndorserRecord;
-import domain.MiscRecord;
+import domain.HandyWorker;
 import domain.PersonalRecord;
-import domain.ProfessionalRecord;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
@@ -40,33 +34,34 @@ public class CurriculaServiceTest extends AbstractTest {
 	@Autowired
 	private MiscRecordService			miscRecordService;
 	@Autowired
-	private ActorService				actorService;
-	@Autowired
 	private HandyWorkerService			handyWorkerService;
 
 
 	@Test
 	public void testCreateCurricula() {
 
+		super.authenticate("handyWorker1");
 		final Curricula result = this.curriculaService.create();
 		Assert.isTrue(result.getTicker() != null && result.getPersonalRecord() != null && result.getEducationalRecord() != null && result.getEducationalRecord().isEmpty() && result.getEndorserRecord() != null && result.getEndorserRecord().isEmpty()
 			&& result.getEndorserRecord() != null && result.getEndorserRecord().isEmpty() && result.getProfessionalRecord() != null && result.getProfessionalRecord().isEmpty() && result.getMiscRecord() != null && result.getMiscRecord().isEmpty());
 
 	}
-	@Test
-	public void testFindOneCurricula() {
-
-		final PersonalRecord personalRecord1 = this.personalRecordService.findOne(this.getEntityId("personalRecord1"));
-		final EducationalRecord educationalRecord1 = this.educationalRecordService.findOne(this.getEntityId("educationalRecord1"));
-		final EndorserRecord endorserRecord1 = this.endorserRecordService.findOne(this.getEntityId("endorserRecord1"));
-		final EndorserRecord endorserRecord2 = this.endorserRecordService.findOne(this.getEntityId("endorserRecord2"));
-		final ProfessionalRecord professionalRecord1 = this.professionalRecordService.findOne(this.getEntityId("personalRecord1"));
-		final MiscRecord miscRecord1 = this.miscRecordService.findOne(this.getEntityId("miscRecord1"));
-		final Curricula result = this.curriculaService.findOne(this.getEntityId("curricula1"));
-		Assert.isTrue(result.getTicker() == "111118-e63ty6" && result.getPersonalRecord().equals(personalRecord1) && result.getEducationalRecord().contains(educationalRecord1) && result.getEndorserRecord().contains(endorserRecord1)
-			&& result.getEndorserRecord().contains(endorserRecord2) && result.getProfessionalRecord().contains(professionalRecord1) && result.getMiscRecord().contains(miscRecord1));
-
-	}
+	/*
+	 * @Test
+	 * public void testFindOneCurricula() {
+	 * 
+	 * final PersonalRecord personalRecord1 = this.personalRecordService.findOne(this.getEntityId("personalRecord1"));
+	 * final EducationalRecord educationalRecord1 = this.educationalRecordService.findOne(this.getEntityId("educationalRecord1"));
+	 * final EndorserRecord endorserRecord1 = this.endorserRecordService.findOne(this.getEntityId("endorserRecord1"));
+	 * final EndorserRecord endorserRecord2 = this.endorserRecordService.findOne(this.getEntityId("endorserRecord2"));
+	 * final ProfessionalRecord professionalRecord1 = this.professionalRecordService.findOne(this.getEntityId("personalRecord1"));
+	 * final MiscRecord miscRecord1 = this.miscRecordService.findOne(this.getEntityId("miscRecord1"));
+	 * final Curricula result = this.curriculaService.findOne(this.getEntityId("curricula1"));
+	 * Assert.isTrue(result.getTicker() == "111118-e63ty6" && result.getPersonalRecord().equals(personalRecord1) && result.getEducationalRecord().contains(educationalRecord1) && result.getEndorserRecord().contains(endorserRecord1)
+	 * && result.getEndorserRecord().contains(endorserRecord2) && result.getProfessionalRecord().contains(professionalRecord1) && result.getMiscRecord().contains(miscRecord1));
+	 * 
+	 * }
+	 */
 	/*
 	 * @Test
 	 * public void testFindAllCurricula() {
@@ -81,16 +76,19 @@ public class CurriculaServiceTest extends AbstractTest {
 	 */
 	@Test
 	public void testSaveCurricula() {
+		super.authenticate("handyWorker1");
+		final Curricula curricula = this.curriculaService.create();
+		final PersonalRecord pR = curricula.getPersonalRecord();
+		pR.setName("Manuel");
+		pR.setPhone("666554433");
+		pR.setPhoto("http//fotito");
+		pR.setEmail("a@e.com");
+		pR.setLinkedInProfile("http//cgc");
+		pR.setMiddleName("Manuel");
+		pR.setSurname("Manuel");
+		final Curricula saved = this.curriculaService.save(curricula);
+		final HandyWorker hw = this.handyWorkerService.findOne(this.getEntityId("handyWorker1"));
+		Assert.isTrue(hw.getCurricula().equals(saved));
 
 	}
-	@Test
-	public void testDeleteCurricula() {
-		super.authenticate("customer1");
-		final Complaint caso1 = this.complaintService.findOne(2715);
-		this.complaintService.delete(caso1);
-		final Collection<Complaint> all = this.complaintService.findAll();
-		Assert.isTrue(!(all.contains(caso1)));
-		super.authenticate(null);
-	}
-
 }

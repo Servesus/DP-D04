@@ -64,36 +64,28 @@ public class CurriculaService {
 
 	public Curricula save(final Curricula curricula) {
 		final Curricula result = this.curriculaRepository.save(curricula);
-		Assert.isNull(result);
 		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
-		if (result.getId() == 0) {
-			UserAccount userAccount;
-			userAccount = this.actorService.getActorLogged().getUserAccount();
-			Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
-			hw.setCurricula(result);
-			this.handyWorkerService.save(hw);
-		} else {
-			Assert.isTrue(hw.getCurricula().getId() == result.getId());
-			UserAccount userAccount;
-			userAccount = this.actorService.getActorLogged().getUserAccount();
-			Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
-			hw.setCurricula(result);
-			this.handyWorkerService.save(hw);
-		}
-		return result;
-	}
-
-	public void delete(final Curricula curricula) {
-		Assert.isNull(curricula);
-		Assert.isTrue(curricula.getId() != 0);
 		UserAccount userAccount;
 		userAccount = this.actorService.getActorLogged().getUserAccount();
 		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
-		final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
-		Assert.isTrue(hw.getCurricula().getId() == curricula.getId());
-
-		this.curriculaRepository.delete(curricula);
+		hw.setCurricula(result);
+		this.handyWorkerService.save(hw);
+		Assert.isTrue(hw.getCurricula().getId() == result.getId());
+		return result;
 	}
+
+	/*
+	 * public void delete(final Curricula curricula) {
+	 * Assert.isTrue(curricula.getId() != 0);
+	 * UserAccount userAccount;
+	 * userAccount = this.actorService.getActorLogged().getUserAccount();
+	 * Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
+	 * final HandyWorker hw = this.handyWorkerService.findOne(this.actorService.getActorLogged().getId());
+	 * Assert.isTrue(hw.getCurricula().getId() == curricula.getId());
+	 * 
+	 * this.curriculaRepository.delete(curricula);
+	 * }
+	 */
 
 	//Other business methods
 
