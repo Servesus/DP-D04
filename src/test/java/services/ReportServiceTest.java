@@ -41,9 +41,10 @@ public class ReportServiceTest extends AbstractTest {
 	@Test
 	public void testDeleteReport() {
 		super.authenticate("referee1");
-		final Report a = this.reportService.findOne(2751);
+		final int id = this.getEntityId("report1");
+		final Report a = this.reportService.findOne(id);
 		this.reportService.delete(a);
-		Assert.isNull(this.reportService.findOne(2751));
+		Assert.isNull(this.reportService.findOne(id));
 		super.authenticate(null);
 	}
 
