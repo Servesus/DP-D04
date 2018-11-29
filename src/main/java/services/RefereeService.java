@@ -14,6 +14,7 @@ import repositories.RefereeRepository;
 import security.Authority;
 import security.LoginService;
 import security.UserAccount;
+import domain.Box;
 import domain.Complaint;
 import domain.Referee;
 import domain.Report;
@@ -25,6 +26,12 @@ public class RefereeService {
 	//Managed Repository
 	@Autowired
 	private RefereeRepository	refereeRepository;
+	
+	@Autowired
+	private ActorService actorService;
+	
+	@Autowired
+	private BoxService boxService;
 
 
 	//Simple CRUD methods
@@ -33,11 +40,11 @@ public class RefereeService {
 		UserAccount userAccount;
 		Authority aut;
 		Collection<Authority> auts;
-
-		UserAccount nowUserAccount;
-		nowUserAccount = LoginService.getPrincipal();
-
-		Assert.isTrue(nowUserAccount.getAuthorities().contains("ADMIN"));
+		
+		UserAccount nowUserAccount=actorService.getActorLogged().getUserAccount();
+		
+		Assert.isTrue(nowUserAccount.getAuthorities().iterator().next().getAuthority()
+				.equals("ADMIN"));
 
 		auts = new ArrayList<Authority>();
 		aut = new Authority();
@@ -62,17 +69,16 @@ public class RefereeService {
 		Collection<Referee> result;
 
 		result = this.refereeRepository.findAll();
-		Assert.notNull(result);
 
 		return result;
 	}
 
 	public Referee findOne(final Integer refereeId) {
+		Assert.notNull(refereeId);
 		Assert.isTrue(refereeId != 0);
 		Referee result;
 
 		result = this.refereeRepository.findOne(refereeId);
-		Assert.notNull(result);
 
 		return result;
 	}
@@ -80,8 +86,14 @@ public class RefereeService {
 	public Referee save(final Referee r) {
 		UserAccount userAccount;
 		userAccount = LoginService.getPrincipal();
-		Assert.isTrue(userAccount.getAuthorities().contains("ADMIN"));
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority()
+				.equals("ADMIN"));
 		Assert.notNull(r);
+		
+		if(r.getId()==0){
+			Collection<Box> systemBox = boxService.createSystemBoxes();
+			r.setBoxes(systemBox);
+		}
 
 		Referee result;
 		result = this.refereeRepository.save(r);
