@@ -46,39 +46,41 @@ public class BoxService {
 	}
 
 	public Box save(final Box box) {
+		if (box.getIsSystem() == null)
+			box.setIsSystem(false);
 		final Box result = this.boxRepository.save(box);
 		final Actor a = this.actorService.getActorLogged();
 		final List<Box> boxes = (List<Box>) a.getBoxes();
-		Assert.isNull(result);
-		if (result.getId() == 0) {
-			Assert.isTrue(!result.getIsSystem());
-			result.setIsSystem(false);
-			boxes.add(result);
-			a.setBoxes(boxes);
-			this.actorService.save(a);
-		} else {
-			if (result.getIsSystem()) {
-				final Box systemBox = boxes.get(boxes.indexOf(this.findOne(result.getId())));
-				Assert.isTrue(systemBox.getName().equals(result.getName()) && result.getChildBoxes().isEmpty() && result.getParentBoxes().isEmpty());
-			}
-			Assert.isTrue(boxes.contains(result));
-			boxes.remove(this.findOne(result.getId()));
-			boxes.add(result);
-			a.setBoxes(boxes);
-			this.actorService.save(a);
+		if (result.getIsSystem()) {
+			final Box systemBox = boxes.get(boxes.indexOf(this.findOne(result.getId())));
+			Assert.isTrue(systemBox.getName().equals(result.getName()) && result.getChildBoxes().isEmpty() && result.getParentBoxes().isEmpty());
 		}
+		boxes.remove(this.findOne(result.getId()));
+		boxes.add(result);
+		a.setBoxes(boxes);
+		this.actorService.save(a);
 		return result;
 	}
 	public void delete(final Box box) {
-		Assert.isNull(box);
 		Assert.isTrue(box.getId() != 0);
 		Assert.isTrue(!box.getIsSystem());
+		final Actor a = this.actorService.getActorLogged();
+		final List<Box> boxes = (List<Box>) a.getBoxes();
 		if (!(box.getChildBoxes().isEmpty())) {
-			for (final Box b1 : box.getChildBoxes())
+			for (final Box b1 : box.getChildBoxes()) {
+				boxes.remove(b1);
+				a.setBoxes(boxes);
+				this.actorService.save(a);
 				this.boxRepository.delete(b1);
+			}
+			boxes.remove(box);
+			this.actorService.save(a);
 			this.boxRepository.delete(box);
-		} else
+		} else {
+			boxes.remove(box);
+			this.actorService.save(a);
 			this.boxRepository.delete(box);
+		}
 	}
 
 	//Other business methods
