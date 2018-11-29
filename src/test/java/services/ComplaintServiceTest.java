@@ -38,23 +38,6 @@ public class ComplaintServiceTest extends AbstractTest {
 
 	}
 	//	@Test
-	//	public void testFindOneComplaint() {
-	//
-	//		Integer id;
-	//		id = 2715;
-	//		final Complaint a = this.complaintService.findOne(id);
-	//		Assert.isTrue(a.getDescription().equals("esta es la descripcion de complaint1"));
-	//
-	//	}
-	//	@Test
-	//	public void testFindAllComplaint() {
-	//
-	//		Collection<Complaint> busqueda = new ArrayList<Complaint>();
-	//		busqueda = this.complaintService.findAll();
-	//		Assert.isTrue(busqueda.size() == 5);
-	//
-	//	}
-	//	@Test
 	//	public void testSaveComplaint() {
 	//
 	//		super.authenticate("customer1");
