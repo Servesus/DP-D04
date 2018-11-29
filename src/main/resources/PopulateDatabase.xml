@@ -1579,7 +1579,7 @@
 	</bean>
 	<!-- Note -->
 	<bean id="note1" class="domain.Note">
-		<property name="author" value="customer1"/>
+		<property name="author" value="customer1surname"/>
 		<property name="moment" value="11/11/2018 20:46"/>
 		<property name="authorComment" value="authorComment"/>
 		<property name="hwComments">

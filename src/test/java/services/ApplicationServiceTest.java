@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
 import domain.Application;
+import domain.HandyWorker;
 
 import utilities.AbstractTest;
 
@@ -61,12 +62,11 @@ public class ApplicationServiceTest extends AbstractTest{
 		int applicationId = this.getEntityId("application1");
 		
 		Application a = applicationService.findOne(applicationId);
-		//Hay que hacer los sets y hacer save
-		//Comprobar que el hw se le añade la application con estado nuevo
-		a.setStatus(1);
+		HandyWorker hw = a.getHandyWorker();
+		a.setStatus(-1);
 		System.out.println("Hago los cambios y guardo la application");
 		Application result = applicationService.save(a);
 		System.out.println(result.getStatus());
+		System.out.println(hw.getApplications().iterator().next().getStatus());
 	}
-
 }

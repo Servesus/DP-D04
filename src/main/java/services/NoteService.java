@@ -34,7 +34,15 @@ public class NoteService {
 	//Simple CRUD methods
 	public Note create() {
 		Note result;
+		String authorName;
+		
 		result = new Note();
+		
+		authorName= actorService.getActorLogged().getName() + 
+				actorService.getActorLogged().getMiddleName() +
+				actorService.getActorLogged().getSurname();
+		
+		result.setAuthor(authorName);
 		return result;
 	}
 
@@ -49,28 +57,44 @@ public class NoteService {
 
 	public Note save(final Note n, int reportId) {
 		Assert.notNull(n);
+		Assert.notNull(reportId);
 		Note result;
 		Report report;
+		Actor actor;
+		String actorName;
+		String authorName;
+		Collection<String> customerComments= new ArrayList<String>();
+		Collection<String> hwComments= new ArrayList<String>();
+		Collection<String> refereeComments= new ArrayList<String>();
+		
+		authorName= n.getAuthor();
+		actor= actorService.getActorLogged();
+		actorName= actor.getName()+ actor.getMiddleName()+ actor.getSurname();
+		
+		Assert.isTrue(authorName.equals(actorName));
 		
 		report= reportService.findOne(reportId);
 		
 		Date currentMoment;
-		String authorName;
+		
 		Collection<Note> notes = new ArrayList<Note>();
 		
 		notes= report.getNotes();
-		
-		authorName= actorService.getActorLogged().getName() + 
-				actorService.getActorLogged().getMiddleName() +
-				actorService.getActorLogged().getSurname();
 
 		currentMoment = new Date();
 		n.setMoment(currentMoment);
-		n.setAuthor(authorName);
+		
+		if(n.getId()==0){
+			n.setCustomerComments(customerComments);
+			n.setHwComments(hwComments);
+			n.setRefereeComments(refereeComments);
+		}
 		
 		result = this.noteRepository.save(n);
 		
 		notes.add(result);
+		notes.remove(n);
+		report.setNotes(notes);
 		
 		reportService.save(report);
 
@@ -85,7 +109,7 @@ public class NoteService {
 		Actor actor;
 		
 		actor= actorService.getActorLogged();
-		actorName= actor.getName()+ actor.getSurname()+ actor.getSurname();
+		actorName= actor.getName()+ actor.getMiddleName()+ actor.getSurname();
 		
 		authorName= n.getAuthor();
 		
