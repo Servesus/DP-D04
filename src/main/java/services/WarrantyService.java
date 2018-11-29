@@ -42,11 +42,6 @@ public class WarrantyService {
 
 	public Warranty findOne(final int warrantyId) {
 		Warranty result;
-		UserAccount userAccount;
-
-		userAccount = this.actorService.getActorLogged().getUserAccount();
-
-		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("ADMIN"));
 		Assert.notNull(this.warrantyRepository);
 		result = this.warrantyRepository.findOne(warrantyId);
 		return result;

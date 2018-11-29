@@ -30,6 +30,10 @@ public class FixUpTaskService {
 
 
 	public FixUpTask create() {
+
+		UserAccount userAccount;
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("CUSTOMER"));
 		final FixUpTask result = new FixUpTask();
 		result.setTicker(CurriculaService.generadorDeTickers());
 		final Collection<Application> applications = new ArrayList<Application>();
@@ -62,7 +66,7 @@ public class FixUpTaskService {
 
 		userAccount = this.actorService.getActorLogged().getUserAccount();
 
-		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("CUSTOMER"));
+		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("CUSTOMER") || userAccount.getAuthorities().iterator().next().getAuthority().equals("HANDYWORKER"));
 		Assert.notNull(fixUpTask);
 		if (fixUpTask.getId() == 0) {
 			final FixUpTask result1 = this.fixUpTaskRepository.save(fixUpTask);
@@ -79,9 +83,7 @@ public class FixUpTaskService {
 	public void delete(final FixUpTask fixUpTask) {
 
 		UserAccount userAccount;
-
 		userAccount = this.actorService.getActorLogged().getUserAccount();
-
 		Assert.isTrue(userAccount.getAuthorities().iterator().next().getAuthority().equals("CUSTOMER"));
 		Assert.notNull(fixUpTask);
 		assert fixUpTask.getId() != 0;
@@ -94,5 +96,4 @@ public class FixUpTaskService {
 		this.customerService.save(customer);
 		this.fixUpTaskRepository.delete(fixUpTask);
 	}
-
 }

@@ -1,6 +1,8 @@
 
 package services;
 
+import java.util.Collection;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,46 +25,43 @@ public class WarrantyServiceTest extends AbstractTest {
 	private WarrantyService	warrantyService;
 
 
-	//	@Test
-	//	public void testCreateWarranty() {
-	//
-	//		final Warranty warranty = this.warrantyService.create();
-	//		Assert.notNull(warranty);
-	//	}
-	//	@Test
-	//	public void testFindOneWarranty() {
-	//		super.authenticate("admin1");
-	//		final int id = this.getEntityId("warranty1");
-	//		final Warranty resultado = this.warrantyService.findOne(id);
-	//		Assert.isTrue(resultado.getTitle().equals("Garantia Monitor LG"));
-	//		super.authenticate(null);
-	//
-	//	}
-	//	@Test
-	//	public void testFindAllWarranty() {
-	//		super.authenticate("admin1");
-	//		final Collection<Warranty> res = this.warrantyService.findAll();
-	//		Assert.isTrue(res.size() == 5);
-	//		super.authenticate(null);
-	//
-	//	}
-	//	@Test
-	//	public void testSaveWarranty() {
-	//		super.authenticate("admin1");
-	//		final Warranty a = this.warrantyService.create();
-	//		final Warranty b = this.warrantyService.save(a);
-	//		Assert.notNull(b);
-	//		super.authenticate(null);
-	//
-	//	}
+	@Test
+	public void testCreateWarranty() {
+
+		final Warranty warranty = this.warrantyService.create();
+		Assert.notNull(warranty);
+	}
+	@Test
+	public void testFindOneWarranty() {
+		super.authenticate("admin1");
+		final int id = this.getEntityId("warranty1");
+		final Warranty resultado = this.warrantyService.findOne(id);
+		Assert.isTrue(resultado.getTitle().equals("Garantia Monitor LG"));
+		super.authenticate(null);
+
+	}
+	@Test
+	public void testFindAllWarranty() {
+		super.authenticate("admin1");
+		final Collection<Warranty> res = this.warrantyService.findAll();
+		Assert.isTrue(res.size() == 5);
+		super.authenticate(null);
+
+	}
+	@Test
+	public void testSaveWarranty() {
+		final Warranty a = this.warrantyService.create();
+		final Warranty b = this.warrantyService.save(a);
+		Assert.notNull(b);
+
+	}
 	@Test
 	public void testDeleteWarranty() {
 
 		super.authenticate("admin1");
-		final int id = this.getEntityId("warranty1");
-		final Warranty a = this.warrantyService.findOne(id);
+		final Warranty a = this.warrantyService.findOne(2715);
 		this.warrantyService.delete(a);
-		Assert.isTrue(this.warrantyService.findAll().size() == 4);
+		Assert.isNull(this.warrantyService.findOne(2715));
 		super.authenticate(null);
 
 	}
