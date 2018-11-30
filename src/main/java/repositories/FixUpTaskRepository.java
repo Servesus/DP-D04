@@ -9,4 +9,5 @@ import domain.FixUpTask;
 @Repository
 public interface FixUpTaskRepository extends JpaRepository<FixUpTask, Integer> {
 
+
 }

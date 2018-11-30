@@ -19,7 +19,6 @@ import org.hibernate.validator.constraints.NotBlank;
 public class Note extends DomainEntity {
 
 	//Attributes
-	private String	author;
 	private Date	moment;
 	private String	authorComment;
 	private Collection<String>	hwComments;
@@ -28,10 +27,6 @@ public class Note extends DomainEntity {
 
 
 	//Getters and setters
-	@NotNull
-	public String getAuthor() {
-		return this.author;
-	}
 
 	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
@@ -47,10 +42,6 @@ public class Note extends DomainEntity {
 	@ElementCollection
 	public Collection<String> getCustomerComments() {
 		return this.customerComments;
-	}
-
-	public void setAuthor(final String author) {
-		this.author = author;
 	}
 
 	public void setMoment(final Date moment) {
