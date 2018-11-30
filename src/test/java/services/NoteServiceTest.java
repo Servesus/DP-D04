@@ -32,19 +32,21 @@ public class NoteServiceTest extends AbstractTest {
 
 	@Test
 	public void createTest() {
-		final Note n = this.noteService.create();
+		super.authenticate("customer1");
+		int complaintId= this.getEntityId("complaint1");
+		final Note n = this.noteService.create(complaintId);
 		Assert.notNull(n);
 	}
 
 	@Test
 	public void saveTest() {
 		super.authenticate("customer1");
-		final int reportId = this.getEntityId("report1");
-		final Note note = this.noteService.create();
+		int complaintId = this.getEntityId("complaint1");
+		final Note note = this.noteService.create(complaintId);
 		String com = "Comentarios de autor";
 
 		note.setAuthorComment(com);
-		final Note n = this.noteService.save(note, reportId);
+		final Note n = this.noteService.save(note, complaintId);
 		final Collection<Note> notes = this.noteService.findAll();
 		Assert.isTrue(notes.contains(n));
 
@@ -55,6 +57,7 @@ public class NoteServiceTest extends AbstractTest {
 		super.authenticate("customer1");
 		final int noteId = this.getEntityId("note1");
 		final int reportId = this.getEntityId("report1");
+		int complaintId = this.getEntityId("complaint1");
 		Collection<String> customerComments;
 
 		final Note note = this.noteService.findOne(noteId);
@@ -64,7 +67,7 @@ public class NoteServiceTest extends AbstractTest {
 
 		note.setCustomerComments(customerComments);
 
-		final Note n = this.noteService.save(note, reportId);
+		final Note n = this.noteService.save(note, complaintId);
 
 		Assert.notNull(this.noteService.findOne(n.getId()));
 		Assert.isTrue(this.noteService.findOne(n.getId()).getCustomerComments()

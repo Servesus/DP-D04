@@ -1579,7 +1579,6 @@
 	</bean>
 	<!-- Note -->
 	<bean id="note1" class="domain.Note">
-		<property name="author" value="customer1surname"/>
 		<property name="moment" value="11/11/2018 20:46"/>
 		<property name="authorComment" value="authorComment"/>
 		<property name="hwComments">
@@ -1599,7 +1598,6 @@
 		</property>
 	</bean>
 	<bean id="note2" class="domain.Note">
-		<property name="author" value="referee1"/>
 		<property name="moment" value="11/11/2018 20:46"/>
 		<property name="authorComment" value="authorComment"/>
 		<property name="hwComments">
@@ -1620,7 +1618,6 @@
 	</bean>
 	
 	<bean id="note3" class="domain.Note">
-		<property name="author" value="handyWorker1"/>
 		<property name="moment" value="11/11/2018 20:46"/>
 		<property name="authorComment" value="authorComment"/>
 		<property name="hwComments">

@@ -12,7 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import repositories.NoteRepository;
-import domain.Actor;
+import security.UserAccount;
+import domain.Application;
+import domain.Complaint;
+import domain.Customer;
+import domain.FixUpTask;
+import domain.HandyWorker;
 import domain.Note;
 import domain.Report;
 
@@ -29,26 +34,43 @@ public class NoteService {
 	
 	@Autowired
 	private ReportService reportService;
+	
+	@Autowired
+	private ComplaintService complaintService;
 
 
 	//Simple CRUD methods
-	public Note create() {
+	public Note create(int complaintId) {
+		UserAccount userAccount;
 		Note result;
-		String authorName;
 		Collection<String> customerComments= new ArrayList<String>();
 		Collection<String> hwComments= new ArrayList<String>();
 		Collection<String> refereeComments= new ArrayList<String>();
+		Date moment;
+		Customer customer = complaintService.findOne(complaintId).getCustomer();
+		HandyWorker handyWorker= null;
+		Collection<Application> apps = complaintService.findOne(complaintId)
+				.getFixUpTasks().getApplications();
+		
+		for(int i =0;i<apps.size();i++){
+			Application iterador= apps.iterator().next();
+			if(iterador.getStatus()==1){
+				handyWorker= iterador.getHandyWorker();
+				}
+			}
+
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+
+		Assert.isTrue(userAccount.equals(customer.getUserAccount()) || 
+				userAccount.equals(handyWorker.getUserAccount()));
 		
 		result = new Note();
+		moment = new Date();
 		
-		authorName= actorService.getActorLogged().getName() + 
-				actorService.getActorLogged().getMiddleName() +
-				actorService.getActorLogged().getSurname();
-		
-		result.setAuthor(authorName);
 		result.setCustomerComments(customerComments);
 		result.setHwComments(hwComments);
 		result.setRefereeComments(refereeComments);
+		result.setMoment(moment);
 		return result;
 	}
 
@@ -61,39 +83,51 @@ public class NoteService {
 		return this.noteRepository.findOne(noteId);
 	}
 
-	public Note save(final Note n, int reportId) {
+	public Note save(final Note n, int complaintId) {
 		Assert.notNull(n);
-		Assert.notNull(reportId);
 		Note result;
-		Report report;
-		Actor actor;
-		String actorName;
-		String authorName;
+		UserAccount userAccount;
+		Complaint c = complaintService.findOne(complaintId);
+		Report r= null;
+		Collection<Report> reports = reportService.findAll();
 		
-		authorName= n.getAuthor();
-		actor= actorService.getActorLogged();
-		actorName= actor.getName()+ actor.getMiddleName()+ actor.getSurname();
+		for(int i =0;i<reports.size();i++){
+			Report iterador= reports.iterator().next();
+			if(iterador.getComplaint().equals(c)){
+				r= iterador;
+				}
+			}
 		
-		Assert.isTrue(authorName.equals(actorName));
+		FixUpTask f = c.getFixUpTasks();
+		Collection<Application> apps = f.getApplications();
+		HandyWorker handyWorker=null;
+		Customer customer = c.getCustomer();
 		
-		report= reportService.findOne(reportId);
+		noteRepository.findOne(n.getId());
+		for(int i =0;i<apps.size();i++){
+		Application iterador= apps.iterator().next();
+		if(iterador.getStatus()==1){
+			handyWorker= iterador.getHandyWorker();
+			}
+		}
 		
-		Date currentMoment;
+		userAccount = this.actorService.getActorLogged().getUserAccount();
+		
+		Assert.isTrue(userAccount.equals(customer.getUserAccount()) || 
+				userAccount.equals(handyWorker.getUserAccount()));
 		
 		Collection<Note> notes = new ArrayList<Note>();
 		
-		notes= report.getNotes();
+		notes= r.getNotes();
 
-		currentMoment = new Date();
-		n.setMoment(currentMoment);
 		
 		result = this.noteRepository.save(n);
 		
 		notes.add(result);
 		notes.remove(n);
-		report.setNotes(notes);
+		r.setNotes(notes);
 		
-		reportService.save(report);
+		reportService.save(r);
 
 		return result;
 	}
@@ -101,17 +135,6 @@ public class NoteService {
 	public void delete(final Note n) {
 		Assert.notNull(n);
 		Collection<Report> reports= new ArrayList<Report>();
-		String authorName;
-		String actorName;
-		Actor actor;
-		
-		actor= actorService.getActorLogged();
-		actorName= actor.getName()+ actor.getMiddleName()+ actor.getSurname();
-		
-		authorName= n.getAuthor();
-		
-		Assert.isTrue(authorName.equals(actorName));
-		
 		reports= reportService.findAll();
 		
 		for(Report r : reports){
