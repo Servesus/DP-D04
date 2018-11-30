@@ -14,7 +14,6 @@ import org.springframework.util.Assert;
 
 import utilities.AbstractTest;
 import domain.Note;
-import domain.Report;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
@@ -74,20 +73,4 @@ public class NoteServiceTest extends AbstractTest {
 				.equals(customerComments));
 		Assert.isTrue(this.reportService.findOne(reportId).getNotes().contains(n));
 	}
-
-	@Test
-	public void deleteTest() {
-		super.authenticate("customer1");
-		final int noteId = this.getEntityId("note1");
-		final int reportId = this.getEntityId("report1");
-
-		final Note note = this.noteService.findOne(noteId);
-		final Report r = this.reportService.findOne(reportId);
-
-		this.noteService.delete(note);
-		Assert.isNull(this.noteService.findOne(noteId));
-		
-		Assert.isTrue(!r.getNotes().contains(note));
-	}
-
 }
