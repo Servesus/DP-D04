@@ -14,7 +14,19 @@ import domain.FixUpTask;
 @Repository
 public interface FinderRepository extends JpaRepository<Finder, Integer> {
 
-	@Query("select f from FixUpTask f where (f.ticker like '%?1%' or f.description like '%?1%' or f.address like '%?1%') and (f.estimatedDate BETWEEN ?2 and ?3) and (f.maxPrice BETWEEN ?4 and ?5) and (f.category.name like '%?6%') and (f.warranty.title like '%?7%')")
-	Collection<FixUpTask> searchFixUpTasks(String keyWord, Date dateMin, Date dateMax, Double minPrice, Double maxPrice, String categoryName, String warrantyName);
+	@Query("select f from FixUpTask f where f.ticker like '%?1%' or f.description like '%?1%' or f.address like '%?1%'")
+	Collection<FixUpTask> getFixUpTasksByKeyWord(String keyWord);
+
+	@Query("select f from FixUpTask f where f.estimatedDate BETWEEN ?1 and ?2")
+	Collection<FixUpTask> getFixUpTasksByDateRange(Date dateMin, Date dateMax);
+
+	@Query("select f from FixUpTask f where f.maxPrice BETWEEN ?1 AND ?2")
+	Collection<FixUpTask> getFixUpTasksByPriceRange(Integer minPrice, Integer maxPrice);
+
+	@Query("select f from FixUpTask f where f.category.name like '%?1%'")
+	Collection<FixUpTask> getFixUpTasksByCategory(String categoryName);
+
+	@Query("select f from FixUpTask f where f.warranty.title like '%?1%'")
+	Collection<FixUpTask> getFixUpTasksByWarranty(String warrantyTitle);
 
 }
