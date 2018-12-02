@@ -4,7 +4,6 @@ package domain;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 
 import org.hibernate.validator.constraints.Range;
 
@@ -32,20 +31,6 @@ public class Configuration extends DomainEntity {
 
 	public void setMaxTime(final int maxTime) {
 		this.maxTime = maxTime;
-	}
-
-
-	//Relationships
-	private Finder	finder;
-
-
-	@OneToOne(mappedBy = "configuration")
-	public Finder getFinder() {
-		return this.finder;
-	}
-
-	public void setFinder(final Finder finder) {
-		this.finder = finder;
 	}
 
 }
